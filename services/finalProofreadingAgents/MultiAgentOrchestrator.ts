@@ -15,7 +15,7 @@ import latestAIModels from "../../data/latestAIModels.json";
 
 export interface MultiAgentConfig {
   enableLegalCheck?: boolean; // 法令チェックを実行するか
-  disableAxCampAgent?: boolean; // AX CAMPエージェントを無効化（ファクトチェック用）
+  disableAxCampAgent?: boolean; // 自社サービスエージェントを無効化（ファクトチェック用）
   timeout?: number; // 各エージェントのタイムアウト（ミリ秒）
   parallel?: boolean; // 並列実行するか
   onProgress?: (message: string, progress: number) => void;
@@ -36,7 +36,7 @@ export class MultiAgentOrchestrator {
       new TechnicalAgent(), // 技術仕様
     ];
 
-    // AX CAMPエージェント（記事執筆時のみ）
+    // 自社サービスエージェント（記事執筆時のみ）
     if (!config.disableAxCampAgent) {
       this.phaseOneAgents.push(new AxCampAgent());
     }

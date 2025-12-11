@@ -12,7 +12,7 @@ from datetime import datetime
 OUTPUTS_FOLDER_URL = 'https://drive.google.com/drive/folders/1S1NSTYPEMGmFG3uxI6Duhb6bK5sU3WA-'
 
 # キャッシュファイルのパス
-CACHE_FILE = os.path.join(os.path.dirname(__file__), '..', 'data', 'ax_camp_cache.json')
+CACHE_FILE = os.path.join(os.path.dirname(__file__), '..', 'data', 'company_cache.json')
 
 def read_from_drive():
     """Google Driveから直接読み取り（gdown使用）"""
@@ -24,7 +24,7 @@ def read_from_drive():
         
         with tempfile.TemporaryDirectory() as tmpdir:
             # outputsフォルダをダウンロード試行
-            output_path = os.path.join(tmpdir, 'ax_camp_data')
+            output_path = os.path.join(tmpdir, 'company_data')
             
             # gdownでフォルダダウンロード（エラーの場合はキャッシュを使用）
             try:
@@ -105,8 +105,8 @@ def analyze_keywords(data):
 def build_service_info(data):
     """サービス情報を構築"""
     return {
-        'company': '株式会社AX',
-        'service_name': 'AX CAMP',
+        'company': '',  # 環境変数 COMPANY_NAME で設定
+        'service_name': '',  # 環境変数 SERVICE_NAME で設定
         'description': '法人向けAI研修サービス',
         'main_contents': [
             'AI活用基礎研修',
@@ -179,7 +179,7 @@ def get_cached_data():
         },
         'documents': {
             'pdfs': [
-                'AX CAMPご提案資料_ver.3_2pv.pdf'
+                '提案資料.pdf'
             ]
         },
         'keywords': analyze_keywords({}),

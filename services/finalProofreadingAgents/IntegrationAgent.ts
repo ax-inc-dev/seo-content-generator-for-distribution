@@ -208,62 +208,66 @@ export class IntegrationAgent extends BaseProofreadingAgent {
   }
   
   private calculateRegulationScore(agentResults: AgentResult[]): IntegrationResult['regulationScore'] {
+    // 新スコア配分（自社サービス 15点を削除し再配分）
+    // - ファクトチェック系: 40→45点（+5点）
+    // - 信頼性・引用系: 20→25点（+5点）
+    // - 構成・執筆ルール: 15→18点（+3点）
+    // - 法的コンプライアンス: 5→7点（+2点）
+    // - 総合品質: 5点（変更なし）
+    // - 合計: 100点
     const scores = {
-      factChecking: 0,      // 40点満点
-      reliability: 0,        // 20点満点
-      axCampCompliance: 0,   // 15点満点
-      structureRules: 0,     // 15点満点
-      legalCompliance: 0,    // 5点満点
-      overallQuality: 0,     // 5点満点
-      total: 0               // 100点満点
+      factChecking: 0,      // 45点満点
+      reliability: 0,       // 25点満点
+      structureRules: 0,    // 18点満点
+      legalCompliance: 0,   // 7点満点
+      overallQuality: 0,    // 5点満点
+      total: 0              // 100点満点
     };
-    
+
     // 各エージェントの結果からスコアを計算
     for (const result of agentResults) {
-      if (result.status !== 'success') continue;
-      
+      if (result.status !== 'success' && result.status !== 'partial-success') continue;
+
       const weight = result.score / 100;
-      
+
       switch (result.agentType) {
         case 'proper-nouns':
         case 'numbers-stats':
         case 'dates-timeline':
         case 'facts-cases':
-          // ファクトチェック系（各10点、合計40点）
-          scores.factChecking += weight * 10;
+          // ファクトチェック系（各11.25点、合計45点）
+          scores.factChecking += weight * 11.25;
           break;
         case 'citations':
         case 'technical':
-          // 信頼性・引用系（各10点、合計20点）
-          scores.reliability += weight * 10;
+          // 信頼性・引用系（各12.5点、合計25点）
+          scores.reliability += weight * 12.5;
           break;
         case 'ax-camp':
-          // AX CAMP準拠（15点）
-          scores.axCampCompliance = weight * 15;
+          // 自社サービスエージェントは無視（削除済み）
           break;
         case 'legal':
-          // 法的コンプライアンス（5点）
-          scores.legalCompliance = weight * 5;
+          // 法的コンプライアンス（7点）
+          scores.legalCompliance = weight * 7;
           break;
       }
     }
-    
+
     // 構成ルールは固定値（後で実装時に計算）
-    scores.structureRules = 12; // 暫定値
-    
+    scores.structureRules = 14.4; // 18点 × 0.8 = 暫定値
+
     // 総合品質
-    scores.overallQuality = agentResults.every(r => r.status === 'success') ? 5 : 3;
-    
+    scores.overallQuality = agentResults.every(r => r.status === 'success' || r.status === 'partial-success') ? 5 : 3;
+
     // 合計
     scores.total = Math.round(
       scores.factChecking +
       scores.reliability +
-      scores.axCampCompliance +
       scores.structureRules +
       scores.legalCompliance +
       scores.overallQuality
     );
-    
+
     return scores;
   }
   
@@ -317,12 +321,11 @@ ${previousScore ? `- **前回スコア**: ${previousScore}点` : ''}
 ${!passed && regulationScore.total >= 70 ? '- **次回合格条件**: 75点以上または10%以上の改善' : ''}
 
 ## スコア内訳
-1. ファクトチェック系: ${regulationScore.factChecking}/40点
-2. 信頼性・引用系: ${regulationScore.reliability}/20点
-3. AX CAMP準拠: ${regulationScore.axCampCompliance}/15点
-4. 構成・執筆ルール: ${regulationScore.structureRules}/15点
-5. 法的コンプライアンス: ${regulationScore.legalCompliance}/5点
-6. 総合品質: ${regulationScore.overallQuality}/5点
+1. ファクトチェック系: ${regulationScore.factChecking.toFixed(1)}/45点
+2. 信頼性・引用系: ${regulationScore.reliability.toFixed(1)}/25点
+3. 構成・執筆ルール: ${regulationScore.structureRules.toFixed(1)}/18点
+4. 法的コンプライアンス: ${regulationScore.legalCompliance.toFixed(1)}/7点
+5. 総合品質: ${regulationScore.overallQuality}/5点
 
 ## 検出された問題
 - 重大な問題: ${criticalIssues.length}件

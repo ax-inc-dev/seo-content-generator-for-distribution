@@ -77,7 +77,7 @@ ${section.subheadings.map((sub, subIndex) => `
 ## 競合比較サマリ（上位10記事）
 - **総H2/H3数**
   - 競合平均: H2=${outline.competitorComparison.averageH2Count} / H3=${outline.competitorComparison.averageH3Count}
-  - AX CAMP追加後: H2=${outline.competitorComparison.averageH2Count + 1} / H3=${outline.competitorComparison.averageH3Count + 2}
+  - サービス訴求追加後: H2=${outline.competitorComparison.averageH2Count + 1} / H3=${outline.competitorComparison.averageH3Count + 2}
   - 自案: H2=${outline.competitorComparison.ourH2Count} / H3=${outline.competitorComparison.ourH3Count}
   - 差分: H2=${outline.competitorComparison.ourH2Count - (outline.competitorComparison.averageH2Count + 1) >= 0 ? '+' : ''}${outline.competitorComparison.ourH2Count - (outline.competitorComparison.averageH2Count + 1)} / H3=${outline.competitorComparison.ourH3Count - (outline.competitorComparison.averageH3Count + 2) >= 0 ? '+' : ''}${outline.competitorComparison.ourH3Count - (outline.competitorComparison.averageH3Count + 2)}
 
@@ -283,7 +283,7 @@ ${outline.competitorComparison.differentiators.map((diff, i) => `  ${i + 1}) ${d
             <h4 className="font-semibold text-blue-700 mb-2">H2/H3数の比較</h4>
             <div className="space-y-1 text-sm">
               <p className="text-gray-700">競合平均: H2={outline.competitorComparison.averageH2Count} / H3={outline.competitorComparison.averageH3Count}</p>
-              <p className="text-gray-500">AX CAMP追加後: H2={outline.competitorComparison.averageH2Count + 1} / H3={outline.competitorComparison.averageH3Count + 2}</p>
+              <p className="text-gray-500">サービス訴求追加後: H2={outline.competitorComparison.averageH2Count + 1} / H3={outline.competitorComparison.averageH3Count + 2}</p>
               <p className="text-gray-700">自案: H2={outline.competitorComparison.ourH2Count} / H3={outline.competitorComparison.ourH3Count}</p>
               <p className="font-semibold text-blue-600">
                 差分: H2={outline.competitorComparison.ourH2Count - (outline.competitorComparison.averageH2Count + 1) >= 0 ? '+' : ''}{outline.competitorComparison.ourH2Count - (outline.competitorComparison.averageH2Count + 1)} /

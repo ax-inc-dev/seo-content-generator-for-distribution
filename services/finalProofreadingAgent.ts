@@ -79,9 +79,9 @@ model_config:
     date_cutoff_hours_news: 72
 
 first_party:
-  brand: "AX CAMP"
-  owner: "株式会社AX"
-  aliases: ["AX CAMP", "株式会社AX", "AX"]
+  brand: "" # 環境変数 VITE_SERVICE_NAME で設定
+  owner: "" # 環境変数 VITE_COMPANY_NAME で設定
+  aliases: [] # 自社ブランドの別名（必要に応じて設定）
   url_patterns:
     # ここに自社一次情報URLのパターンを必要に応じて追記してください
     - "https://note.com/onte/*"
@@ -116,7 +116,7 @@ policies:
     prices_stats_days: 30
     news_hours: 72
   source_priority:
-    - "自社一次情報（AX CAMP/株式会社AX）"  # 最上位
+    - "自社一次情報"  # 最上位
     - "日本語の一次資料（公式サイト、公的機関、専門機関）"  # 日本語優先
     - "一次資料（公式発表・仕様・法令・原典データ・公式ドキュメント）"
     - "日本語の信頼できる情報源（内容に応じた適切なサイト）"  # 柔軟に対応
@@ -147,8 +147,8 @@ verification_targets:
   exclude_low_value:
     - あいまい表現/一般常識/主観
   exceptions:
-    first_party_axcamp:
-      description: "AX CAMP/株式会社AXに関する主張は外部裏取り不要。自社出典1件で可。"
+    first_party_self:
+      description: "自社サービスに関する主張は外部裏取り不要。自社出典1件で可。"
       skip_search: true
       min_sources: 1
       allow_external_optional: true
@@ -193,10 +193,10 @@ scoring:
       accept: 80
       needs_more_research: 60
     overrides:
-      first_party_axcamp:
+      first_party_self:
         primariness: 100
-        confidence_floor: 90      # AX主張の最低信頼度
-        min_sources: 1            # AX主張の最小出典
+        confidence_floor: 90      # 自社主張の最低信頼度
+        min_sources: 1            # 自社主張の最小出典
   article_composite:
     method: "主張スコア（影響度重み付き）の加重平均"
     publish_gate: 80
@@ -210,7 +210,7 @@ workflow:
         - "HTMLをDOM解析。本文要素を抽出し構造は極力保持。"
         - "検証対象の主張を列挙しID付与（C001..）。1文1主張。"
         - "主張タイプ分類（固有名詞/数値/価格/日付/因果/時系列/法令/引用）。"
-        - "AX CAMP関連の検出：ブランド/別名/URLパターンに合致する主張を first_party=true とタグ付け。"
+        - "自社関連の検出：ブランド/別名/URLパターンに合致する主張を first_party=true とタグ付け。"
         - "影響度ラベル（高/中/低）を付与。既存リンクと脚注を保持。"
     - name: "Plan Search"
       do:
@@ -337,7 +337,7 @@ prompts:
   system: |
     あなたは日本語のテック/生成AI記事に特化した校閲・事実検証エージェントです。最優先は事実誤りのゼロ化です。
     出典は本文に埋め込まず、本文外の「参考文献」セクション（references_html）に集約。法律関連のみ*脚注可。
-    【重要】AX CAMP/株式会社AXに関する主張は自社一次情報として扱い、外部裏取りは不要。自社出典1件でよい（first_party=true）。
+    【重要】自社サービスに関する主張は自社一次情報として扱い、外部裏取りは不要。自社出典1件でよい（first_party=true）。
     それ以外は30日以内の更新情報を基準に一次資料を最優先し、最低2件で裏取り。
     出力は5部構成：corrected_html / references_html / change_log / factcheck_report(table) / uncertainties。
     WordPressにそのまま貼れるHTMLのみを本文に出力し、<!doctype>等は出さないこと。
@@ -345,7 +345,7 @@ prompts:
     # 入力
     - 記事本文（HTML断片）
     # やること
-    1) 主張抽出（C001..）→ 影響度付け。AX CAMP/株式会社AX関連は first_party=true。
+    1) 主張抽出（C001..）→ 影響度付け。自社サービス関連は first_party=true。
     2) first_party=true は検索スキップ。自社出典1件（URL/公開記事）を references_html に追加。
     3) その他はWeb検索で裏取り（最低2ソース、一次優先/30日以内）。
     4) 本文を最小編集で修正（本文内に出典は挿入しない）。法律は*脚注のみ可。
@@ -359,7 +359,7 @@ prompts:
     <section id="references">
       <h3>参考文献</h3>
       <ol>
-        <!-- C{ID}-{n}で列挙。AXは[自社]、一次は[一次]を表示 -->
+        <!-- C{ID}-{n}で列挙。自社は[自社]、一次は[一次]を表示 -->
       </ol>
     </section>
     ---
@@ -370,28 +370,28 @@ prompts:
     ## factcheck_report (table)
     | ID | 主張（原文抜粋） | 判定 | 修正案/補足 | 信頼度 | 根拠リンク | アクセス日 | 影響度 |
     |----|------------------|------|-------------|--------|------------|-----------|--------|
-    （AXは最小1リンク＝自社、その他は2リンク以上）
+    （自社は最小1リンク、その他は2リンク以上）
     ---
     ## uncertainties
-    - 論点A: 迷った理由 / 追加裏取り案（AX主張は原則対象外）
+    - 論点A: 迷った理由 / 追加裏取り案（自社主張は原則対象外）
   verifier_guidelines: |
-    - AX主張（first_party=true）は外部裏取り不要。自社1リンクで可。confidence>=90を下回らない。
-    - 非AX主張は0–100で信頼度を付与し、accept(>=80)のみ本文に反映。60–79は再探索。<60は修正保留+HITL。
+    - 自社主張（first_party=true）は外部裏取り不要。自社1リンクで可。confidence>=90を下回らない。
+    - 上記以外は0–100で信頼度を付与し、accept(>=80)のみ本文に反映。60–79は再探索。<60は修正保留+HITL。
     - 相反は差分を明示し、一次情報/更新日/権威性で裁定。
     - 参考文献URLは正規化（UTM除去・重複統合）。法律関連は*脚注と『法的注記』を整合。
 
 runbook:
   acceptance_checklist:
     - "本文が最小編集で修正されている"
-    - "AX主張は検索スキップ＆自社1リンク（[自社]）がreferences_htmlに入っている"
-    - "非AX主張は各2+出典（[一次]優先）で裏取りされている"
+    - "自社主張は検索スキップ＆自社1リンク（[自社]）がreferences_htmlに入っている"
+    - "その他の主張は各2+出典（[一次]優先）で裏取りされている"
     - "アクセス日がJSTで入っている"
-    - "記事合成スコア>=80（AX主張はconfidence>=90を維持）"
+    - "記事合成スコア>=80（自社主張はconfidence>=90を維持）"
     - "法的注記*が本文末とreferences_htmlで整合"
   qa_metrics:
     - "誤り検出率"
     - "修正受理率"
-    - "単一ソース率（AX主張は除外集計）"
+    - "単一ソース率（自社主張は除外集計）"
     - "HITL依頼率"
 `;
 
@@ -429,7 +429,7 @@ export class FinalProofreadingAgent {
     
     console.log(`🤖 最終校閲エージェント Ver.1.0 初期化（モデル: ${this.model}）`);
     console.log('✅ OpenAI Responses API接続準備完了（GPT-5 + Web Search）');
-    console.log('📝 システムプロンプト: JA-Tech FactCheck & Correction Agent v1.2.0 (AX CAMP優先版)');
+    console.log('📝 システムプロンプト: JA-Tech FactCheck & Correction Agent v1.2.0');
   }
   
   /**

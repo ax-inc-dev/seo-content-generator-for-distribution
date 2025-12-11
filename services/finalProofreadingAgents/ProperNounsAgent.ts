@@ -41,8 +41,8 @@ export class ProperNounsAgent extends BaseProofreadingAgent {
     return issues;
   }
 
-  // AX CAMP関連企業の誤情報をチェック
-  private checkAxCampCompanies(content: string): Issue[] {
+  // 登録企業の誤情報をチェック
+  private checkRegisteredCompanies(content: string): Issue[] {
     const issues: Issue[] = [];
 
     // COMPANY_MASTERから動的に全企業をチェック
@@ -73,30 +73,8 @@ export class ProperNounsAgent extends BaseProofreadingAgent {
           }
         }
 
-        // 2. 業界・事業内容の誤りをチェック（既存のロジック）
-        if (companyName === 'グラシズ' && content.match(/グラシズ.{0,20}(コンサル|Web制作|ウェブ制作)/)) {
-          issues.push({
-            type: 'factual-error',
-            severity: 'critical',
-            location: 'グラシズの事業内容',
-            description: 'グラシズはリスティング広告運用企業です。コンサルティングやWeb制作は行っていません',
-            original: 'コンサルティング/Web制作',
-            suggestion: companyInfo.industry,
-            confidence: 100
-          });
-        }
-
-        if (companyName === 'C社' && content.match(/C社.{0,20}(メディア運営)/)) {
-          issues.push({
-            type: 'factual-error',
-            severity: 'major',
-            location: 'C社の事業内容',
-            description: `C社は${companyInfo.industry}を行う企業です`,
-            original: 'メディア運営',
-            suggestion: companyInfo.industry,
-            confidence: 100
-          });
-        }
+        // 2. 業界・事業内容の誤りをチェック（汎用ロジック）
+        // 固有名詞のチェックは汎用版では簡略化
       }
     }
 
@@ -125,12 +103,12 @@ export class ProperNounsAgent extends BaseProofreadingAgent {
     suggestions: Suggestion[];
     confidence: number;
   }> {
-    // まず内部データでAX CAMP関連企業をチェック
-    const axCampIssues = this.checkAxCampCompanies(content);
+    // まず内部データで登録企業をチェック
+    const registeredCompanyIssues = this.checkRegisteredCompanies(content);
     const aiModelIssues = this.checkAIModelNames(content);
 
-    // AX CAMP関連企業の正確な情報を準備
-    const axCampCompanies = Object.entries(COMPANY_MASTER).map(([key, info]) =>
+    // 登録企業の正確な情報を準備
+    const registeredCompanies = Object.entries(COMPANY_MASTER).map(([key, info]) =>
       `- ${info.fullName}（${info.displayName}）: ${info.industry}`
     ).join('\n');
 
@@ -166,13 +144,12 @@ ${latestAIModels.deprecatedTerms.doNotUse.slice(0, 10).map(m => `- ${m}`).join('
 推奨される置き換え：
 ${Object.entries(latestAIModels.replacementRules).slice(0, 5).map(([old, newer]) => `- ${old} → ${newer}`).join('\n')}
 
-【AX CAMP関連企業の正確な情報（これらは内部データを優先）】
-${axCampCompanies}
+【登録企業の情報（これらは内部データを優先）】
+${registeredCompanies}
 
 【特に注意】
-- "AX CAMP"、"株式会社AX"は自社ブランドなので外部検証不要
-- 上記のAX CAMP関連企業については、記載の業界情報が正確です（Web検索結果より優先）
-- 特にグラシズは「リスティング広告運用企業」であり、コンサルティングや Web制作は行っていません
+- 自社ブランドは外部検証不要
+- 上記の登録企業については、記載の業界情報が正確です（Web検索結果より優先）
 
 【出力形式】
 {
@@ -200,15 +177,15 @@ ${axCampCompanies}
 }`;
 
     try {
-      // Web検索を有効にして最新情報を確認（AX CAMP関連企業以外）
+      // Web検索を有効にして最新情報を確認（登録企業以外）
       const response = await this.callGPT5(prompt, true);
       const gptResult = this.parseResponse(response);
 
       // 内部チェックの結果を統合
-      const allIssues = [...axCampIssues, ...aiModelIssues, ...gptResult.issues];
+      const allIssues = [...registeredCompanyIssues, ...aiModelIssues, ...gptResult.issues];
 
-      // AX CAMP関連企業やAIモデルの誤情報があった場合、スコアを減点
-      const internalIssuesCount = axCampIssues.length + aiModelIssues.length;
+      // 登録企業やAIモデルの誤情報があった場合、スコアを減点
+      const internalIssuesCount = registeredCompanyIssues.length + aiModelIssues.length;
       const score = internalIssuesCount > 0
         ? Math.max(0, gptResult.score - (internalIssuesCount * 10))
         : gptResult.score;
@@ -222,7 +199,7 @@ ${axCampCompanies}
     } catch (error) {
       console.error('固有名詞チェックエラー:', error);
       // エラー時でも内部チェックの結果は返す
-      const allInternalIssues = [...axCampIssues, ...aiModelIssues];
+      const allInternalIssues = [...registeredCompanyIssues, ...aiModelIssues];
       return {
         score: allInternalIssues.length > 0 ? 60 : 75,
         issues: allInternalIssues,

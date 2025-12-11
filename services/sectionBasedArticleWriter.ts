@@ -214,16 +214,17 @@ async function generateSection(
         .join('\n')}\n`
     : '';
   
-  // AX CAMPセクションか判定
-  const isAxCampSection = section.heading.includes('AX CAMP');
-  
+  // サービス訴求セクションか判定（自社サービス名を環境変数から取得）
+  const serviceName = import.meta.env.VITE_SERVICE_NAME || '当社サービス';
+  const isServiceSection = section.heading.includes(serviceName) || section.heading.includes('サービス訴求');
+
   let prompt = '';
-  
-  if (isAxCampSection) {
-    // AX CAMPセクション用の特別なプロンプト
+
+  if (isServiceSection) {
+    // サービス訴求セクション用の特別なプロンプト
     const axCampInfo = getAxCampInfo();
     prompt = `
-あなたはSEOライターです。AX CAMPサービス訴求セクションを執筆してください。
+あなたはSEOライターです。サービス訴求セクションを執筆してください。
 
 【記事のキーワード】
 ${keyword}
@@ -248,10 +249,10 @@ ${section.subheadings.map((sub: any) => {
 }).join('\n')}
 ` : ''}
 
-【AX CAMP情報】
-- サービス名: ${axCampInfo.company.service_name}
-- 会社名: ${axCampInfo.company.name}
-- 対象: 法人向けAI研修サービス
+【サービス情報】
+- サービス名: ${axCampInfo.company.service_name || serviceName}
+- 会社名: ${axCampInfo.company.name || ''}
+- 対象: 法人向けサービス
 
 【導入事例】（業種名で記載、社名は出さない）
 ${axCampInfo.case_studies.map(cs => {

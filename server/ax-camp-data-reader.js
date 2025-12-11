@@ -4,11 +4,11 @@ const { exec } = require('child_process');
 const path = require('path');
 
 /**
- * Google Drive outputsフォルダからAX CAMPデータを読み取るエンドポイント
+ * Google Drive outputsフォルダから実績データを読み取るエンドポイント
  */
-router.post('/read-ax-camp-data', async (req, res) => {
+router.post('/read-company-data', async (req, res) => {
   try {
-    console.log('📚 AX CAMPデータ読み取りリクエスト受信');
+    console.log('📚 実績データ読み取りリクエスト受信');
     
     // Pythonスクリプトを実行してGoogle Driveから読み取り
     const scriptPath = path.join(__dirname, '..', 'scripts', 'read_drive_outputs.py');
@@ -55,7 +55,7 @@ router.post('/read-ax-camp-data', async (req, res) => {
 });
 
 /**
- * キャッシュされたAX CAMPデータ
+ * キャッシュされた実績データ
  */
 function getCachedData() {
   return {
@@ -73,13 +73,13 @@ function getCachedData() {
       ]
     },
     documents: {
-      total: 7,
+      total: 5,
       pdfs: [
-        'AX CAMPご提案資料_ver.3_2pv.pdf',
-        '1本10万円のLPライティング外注費がゼロに！グラシズ社が「AIへの教育」に力を入れる理由とは？｜ぶんた@株式会社AX CEO.pdf',
-        '原稿執筆が24時間→10秒に！Route66社が実現したマーケ現場の生成AI内製化｜ぶんた@株式会社AX CEO.pdf',
-        '採用予定2名分の業務をAIが代替！WISDOM社、毎日2時間の調整業務を自動化｜ぶんた@株式会社AX CEO.pdf',
-        '月間1,000万impを自動化！C社でAI活用が当たり前の文化になった背景とは？｜ぶんた@株式会社AX CEO.pdf'
+        '提案資料.pdf',
+        'A社導入事例：LP制作費削減.pdf',
+        'B社導入事例：原稿執筆時間短縮.pdf',
+        'C社導入事例：業務時間削減.pdf',
+        'D社導入事例：採用業務効率化.pdf'
       ]
     },
     keywords: {
@@ -95,59 +95,48 @@ function getCachedData() {
       'カリキュラム': 35
     },
     service_info: {
-      company: '株式会社AX',
-      service_name: 'AX CAMP',
+      company: '',
+      service_name: '',
       description: '法人向けAI研修サービス',
       main_contents: [
         'AI活用基礎研修',
-        'ClaudeCode実践研修',
+        'Claude実践研修',
         'ChatGPT API活用研修',
         'プロンプトエンジニアリング研修',
         '業務自動化研修'
       ],
       case_studies: [
         {
-          company: 'グラシズ社',
-          result: 'LPライティング外注費10万円→0円',
-          detail: 'AIへの教育に注力し、内製化を実現',
-          business: 'マーケティング支援企業（LPライティング等）',
-          achievements: '制作時間3営業日→2時間',
-          ceo: '土谷武史',
-          challenge: 'スキルの属人化と慢性的なリソース不足'
+          company: 'A社',
+          result: 'LP制作費10万円→0円',
+          detail: 'AI活用により内製化を実現',
+          business: 'マーケティング支援企業',
+          achievements: '制作時間3営業日→2時間'
         },
         {
-          company: 'Route66社',
-          result: '原稿執筆時間24時間→10秒',
-          detail: 'マーケ現場の生成AI内製化',
-          business: 'コンテンツ制作・マーケティング企業',
-          ceo: '細川大',
-          focus: '業務の仕組み化と再現性のある成果創出'
-        },
-        {
-          company: 'WISDOM社',
-          result: '採用予定2名分の業務をAI代替',
-          detail: '毎日2時間の調整業務を自動化',
-          business: 'SNS広告とショート動画を強みに、制作・出稿・運用を担う広告代理店',
-          platforms: ['TikTok', 'Google', 'Meta'],
-          focus: '広告効果を最大化するためのクリエイティブ制作',
-          ceo: '安藤宏将'
+          company: 'B社',
+          result: '原稿執筆時間大幅短縮',
+          detail: '生成AI内製化',
+          business: 'コンテンツ制作・マーケティング企業'
         },
         {
           company: 'C社',
           result: '月間1,000万impを自動化',
           detail: 'AI活用が当たり前の文化を構築',
-          business: 'テキスト系SNS運用・メディア運営',
-          achievements: '1日3時間→1時間に業務短縮（66%削減）',
-          leader: 'N氏（事業責任者）',
-          highlight: '非エンジニアチームでSNS完全自動化システムを内製化'
+          business: 'SNS運用・メディア運営',
+          achievements: '業務時間66%削減'
         },
         {
-          company: 'Foxx社',
-          result: '月75時間の運用業務をAIとの対話で変革',
-          detail: '新規事業創出も実現',
-          business: '運用業務',
-          achievements: 'AIとの対話による業務効率化',
-          highlight: '運用効率化の副次的効果として新規事業創出を実現'
+          company: 'D社',
+          result: '採用業務の効率化',
+          detail: '調整業務を自動化',
+          business: '広告代理店'
+        },
+        {
+          company: 'E社',
+          result: '運用業務をAI活用で変革',
+          detail: '業務効率化と新規事業創出',
+          business: '運用業務'
         }
       ]
     }

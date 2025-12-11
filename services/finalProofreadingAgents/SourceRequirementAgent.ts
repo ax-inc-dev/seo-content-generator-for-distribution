@@ -136,8 +136,8 @@ ${possibleSourceElements.length > 0 ? possibleSourceElements.join(', ') : 'な�
   "requirements": [
     {
       "elementIndex": 4,  // 要素番号（1から始まる）
-      "claim": "出典が必要な具体的な文章（例：Route66様は24時間→10秒）",
-      "searchKeywords": ["Route66 AX CAMP 24時間 10秒", "Route66 実績 時間短縮"],
+      "claim": "出典が必要な具体的な文章（例：B社は原稿執筆時間を大幅短縮）",
+      "searchKeywords": ["企業名 実績 時間短縮", "事例 導入効果"],
       "sourceType": "official" | "media" | "government" | "research",
       "reason": "出典が必要な理由（例：企業名＋具体的数値）"
     }

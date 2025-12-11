@@ -10,7 +10,8 @@ import type {
 } from '../types';
 import { countCharacters } from '../utils/characterCounter';
 import { generateOutlineV2 } from './outlineGeneratorV2';
-import { getAxCampInfo } from './axCampService';
+// AX CAMP関連のimportは汎用化のため削除
+// import { getAxCampInfo } from './axCampService';
 
 // ノイズ記事を除外して平均値を計算
 function calculateAveragesExcludingNoise(
@@ -140,17 +141,13 @@ export function checkOutline(
     }
   });
   
-  // 4. ±10%ルールチェック（-10%から+10%の範囲内、AX CAMP調整考慮）
+  // 4. ±10%ルールチェック（-10%から+10%の範囲内）
   if (competitorData && competitorData.averageH2Count > 0) {
-    // AX CAMP分を追加した調整後の値を計算
-    const adjustedH2Count = competitorData.averageH2Count + 1; // AX CAMP H2を追加
-    const adjustedH3Count = competitorData.averageH3Count + 2; // AX CAMP H3を追加（2個）
-    
-    // 調整後の値に対して±10%ルールを適用
-    const minH2Count = Math.max(5, Math.ceil(adjustedH2Count * 0.9)); // 最低5個は必要
-    const maxH2Count = Math.max(10, Math.floor(adjustedH2Count * 1.1)); // 最大10個は必要
-    const minH3Count = Math.max(0, Math.ceil(adjustedH3Count * 0.9));
-    const maxH3Count = Math.max(5, Math.floor(adjustedH3Count * 1.1)); // 最大5個は必要
+    // ±10%ルールを適用
+    const minH2Count = Math.max(5, Math.ceil(competitorData.averageH2Count * 0.9)); // 最低5個は必要
+    const maxH2Count = Math.max(10, Math.floor(competitorData.averageH2Count * 1.1)); // 最大10個は必要
+    const minH3Count = Math.max(0, Math.ceil(competitorData.averageH3Count * 0.9));
+    const maxH3Count = Math.max(5, Math.floor(competitorData.averageH3Count * 1.1)); // 最大5個は必要
     
     const currentH2Count = outline.outline.length;
     const currentH3Count = outline.outline.reduce((sum, section) => sum + section.subheadings.length, 0);
@@ -330,18 +327,17 @@ export function checkOutline(
     }
   });
   
-  // 9. 記事構成の順序チェック（FAQ → AX CAMP → まとめ）
+  // 9. 記事構成の順序チェック（FAQ → まとめ）
   const outlineLength = outline.outline.length;
-  if (outlineLength >= 3) {
+  if (outlineLength >= 2) {
     const lastSection = outline.outline[outlineLength - 1];
-    const secondLastSection = outline.outline[outlineLength - 2];
-    const thirdLastSection = outlineLength >= 3 ? outline.outline[outlineLength - 3] : null;
-    
+    const secondLastSection = outlineLength >= 2 ? outline.outline[outlineLength - 2] : null;
+
     // まとめが最後にあるかチェック
-    const isLastSummary = lastSection.heading.includes('まとめ') || 
-                         lastSection.heading.includes('最後に') || 
+    const isLastSummary = lastSection.heading.includes('まとめ') ||
+                         lastSection.heading.includes('最後に') ||
                          lastSection.heading.includes('おわりに');
-    
+
     if (!isLastSummary) {
       errors.push({
         field: 'outline',
@@ -349,13 +345,13 @@ export function checkOutline(
         severity: 'error'
       });
     }
-    
+
     // まとめ見出しのフォーマットチェック
     if (isLastSummary) {
       const summaryHeading = lastSection.heading;
       const hasColon = summaryHeading.includes('：');
       const hasKeyword = keyword ? summaryHeading.includes(keyword) : true;
-      
+
       if (!hasColon || summaryHeading === 'まとめ' || summaryHeading === '最後に' || summaryHeading === 'おわりに') {
         errors.push({
           field: 'outline',
@@ -365,7 +361,7 @@ export function checkOutline(
         suggestions.push(`例: 「まとめ：${keyword || 'キーワード'}の基本を理解して着実に成果を出そう」`);
         suggestions.push(`例: 「まとめ：${keyword || 'キーワード'}を継続的に改善して長期的な成功へ」`);
       }
-      
+
       if (!hasKeyword && keyword) {
         errors.push({
           field: 'outline',
@@ -374,57 +370,46 @@ export function checkOutline(
         });
       }
     }
-    
-    // AX CAMPが最後から2番目にあるかチェック
-    const isSecondLastAxCamp = secondLastSection.heading.includes('AX CAMP');
-    
-    if (!isSecondLastAxCamp) {
-      errors.push({
-        field: 'outline',
-        message: 'AX CAMPサービス訴求セクションが「まとめ」の直前に配置されていません。',
-        severity: 'error'
-      });
-    }
-    
-    // FAQがある場合、AX CAMPの前にあるかチェック
+
+    // FAQがある場合、まとめの前にあるかチェック
     const faqSectionIndex = outline.outline.findIndex(section => {
       const heading = section.heading;
-      
+
       // 直接的なFAQ表現
-      if (heading.includes('FAQ') || 
-          heading.includes('よくある質問') || 
+      if (heading.includes('FAQ') ||
+          heading.includes('よくある質問') ||
           heading.includes('Q&A') ||
           heading.includes('質問')) {
         return true;
       }
-      
+
       // FAQの内容から判断（H3にQ1, Q2などがある場合）
-      const hasQAContent = section.subheadings?.some(sub => 
+      const hasQAContent = section.subheadings?.some(sub =>
         sub.text.match(/^Q\d|^質問\d|^疑問/) ||
         sub.text.includes('ですか？') ||
         sub.text.includes('ますか？')
       );
-      
+
       if (hasQAContent) {
         console.log(`📝 FAQ検出: "${heading}" (H3の内容からFAQと判断)`);
         return true;
       }
-      
+
       // キーワードベースの判断（FAQ関連の見出しパターン）
       const faqKeywords = ['疑問', '回答', 'お悩み', '不安', 'ご質問'];
       const hasFAQKeyword = faqKeywords.some(keyword => heading.includes(keyword));
-      
+
       if (hasFAQKeyword) {
         console.log(`📝 FAQ検出: "${heading}" (FAQキーワードから判断)`);
         return true;
       }
-      
+
       return false;
     });
-    
+
     if (faqSectionIndex !== -1) {
       const faqHeading = outline.outline[faqSectionIndex].heading;
-      
+
       // FAQ見出しの品質チェック
       // 1. 短すぎる見出しをチェック
       if (faqHeading === 'FAQ' || faqHeading === 'よくある質問' || faqHeading === 'Q&A') {
@@ -434,7 +419,7 @@ export function checkOutline(
           severity: 'high'
         });
       }
-      
+
       // 2. 不自然な「導入」の使用をチェック（問題系キーワードの場合）
       const hasProblematicKeyword = /問題|課題|リスク|デメリット|欠点|危険|懸念|注意/.test(keyword || '');
       if (hasProblematicKeyword && faqHeading.includes('導入')) {
@@ -446,7 +431,7 @@ export function checkOutline(
         const cleanKeyword = (keyword || '').replace(/\s+/g, '');
         suggestions.push(`FAQ見出しを「${cleanKeyword}に関するよくある質問」に変更することを推奨`);
       }
-      
+
       // 3. 意味不明な結合をチェック（例：「生成AI問題点導入における」）
       if (/問題点導入|リスク導入|課題導入|欠点導入/.test(faqHeading)) {
         errors.push({
@@ -455,58 +440,26 @@ export function checkOutline(
           severity: 'critical'
         });
       }
-      
-      // 位置のチェック
-      const axCampIndex = outline.outline.findIndex(section => 
-        section.heading.includes('AX CAMP')
+
+      // 位置のチェック：FAQはまとめの前にあるべき
+      const summaryIndex = outline.outline.findIndex(section =>
+        section.heading.includes('まとめ') ||
+        section.heading.includes('最後に') ||
+        section.heading.includes('おわりに')
       );
-      
-      if (faqSectionIndex >= axCampIndex && axCampIndex !== -1) {
+
+      if (summaryIndex !== -1 && faqSectionIndex > summaryIndex) {
         errors.push({
           field: 'outline',
-          message: 'FAQセクションはAX CAMPサービス訴求セクションの前に配置する必要があります。',
+          message: 'FAQセクションは「まとめ」セクションの前に配置する必要があります。',
           severity: 'error'
         });
-        suggestions.push('正しい順序: FAQ → AX CAMP → まとめ');
+        suggestions.push('正しい順序: FAQ → まとめ');
       }
     }
   }
   
-  // 10. AX CAMP関連情報のチェック
-  const axCampInfo = getAxCampInfo();
-  const isAiRelatedKeyword = keyword ? 
-    (keyword.includes('AI') || keyword.includes('研修') || 
-     keyword.includes('Claude') || keyword.includes('ChatGPT') ||
-     keyword.includes('企業') || keyword.includes('法人')) : false;
-  
-  if (isAiRelatedKeyword) {
-    // AX CAMP情報が適切に含まれているかチェック
-    let hasAxCampReference = false;
-    
-    // 構成内でAX CAMPや事例が言及されているか確認
-    outline.outline.forEach((section) => {
-      if (section.writingNote?.includes('AX CAMP') || 
-          section.writingNote?.includes('グラシズ') || 
-          section.writingNote?.includes('Route66') ||
-          section.writingNote?.includes('WISDOM')) {
-        hasAxCampReference = true;
-      }
-    });
-    
-    if (!hasAxCampReference) {
-      suggestions.push('AI関連キーワードのため、AX CAMPの事例や研修サービス情報を適切に含めることを推奨します。');
-    }
-    
-    // CTAが含まれているかチェック
-    const lastSection = outline.outline[outline.outline.length - 1];
-    if (!lastSection.heading.includes('AX CAMP') && 
-        !lastSection.writingNote?.includes('AX CAMP') &&
-        !outline.conclusion?.includes('AX CAMP')) {
-      suggestions.push('記事の最後にAX CAMPの紹介を自然な形で含めることを推奨します。');
-    }
-  }
-  
-  // 9. 執筆メモの文字数チェック
+  // 10. 執筆メモの文字数チェック
   outline.outline.forEach((section, index) => {
     const h2NoteLength = countCharacters(section.writingNote);
     if (h2NoteLength > 200) {

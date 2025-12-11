@@ -52,13 +52,12 @@ const mockProofreadResult: IntegrationResult = {
     timeoutAgents: 0
   },
   regulationScore: {
-    factChecking: 27.9,
-    reliability: 11.4,
-    axCampCompliance: 10.8,
-    structureRules: 12,
-    legalCompliance: 3.6,
+    factChecking: 31.5,
+    reliability: 17.5,
+    structureRules: 12.6,
+    legalCompliance: 4.9,
     overallQuality: 5,
-    total: 71
+    total: 71.5
   },
   recommendation: 'revise',
   detailedReport: 'テスト用レポート',

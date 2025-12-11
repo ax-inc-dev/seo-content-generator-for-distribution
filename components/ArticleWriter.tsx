@@ -862,11 +862,10 @@ ${article.plainText}`;
 判定: ${result.passed ? "✅ 合格" : "❌ 要修正"}
 
 【スコア内訳】
-• ファクトチェック: ${result.regulationScore.factChecking}/40点
-• 信頼性・引用: ${result.regulationScore.reliability}/20点
-• AX CAMP準拠: ${result.regulationScore.axCampCompliance}/15点
-• 構成ルール: ${result.regulationScore.structureRules}/15点
-• 法的コンプライアンス: ${result.regulationScore.legalCompliance}/5点
+• ファクトチェック: ${result.regulationScore.factChecking}/45点
+• 信頼性・引用: ${result.regulationScore.reliability}/25点
+• 構成ルール: ${result.regulationScore.structureRules}/18点
+• 法的コンプライアンス: ${result.regulationScore.legalCompliance}/7点
 • 総合品質: ${result.regulationScore.overallQuality}/5点
 
 【検出された問題】
@@ -1808,7 +1807,7 @@ ${
           h3: ["AI研修の定義と目的", "なぜ今AI研修が必要なのか"],
         },
         {
-          h2: "AX CAMPのAI研修サービス",
+          h2: "おすすめのAI研修サービス",
           h3: ["実践的なカリキュラム", "導入企業の成功事例"],
         },
         {
@@ -1831,17 +1830,17 @@ ${
 <h3>なぜ今AI研修が必要なのか</h3>
 <p>2024年現在、<b>企業の約70%がAI導入を検討</b>しています。競争優位性を保つためには、全社員のAIリテラシー向上が不可欠となっています。</p>
 
-<h2>AX CAMPのAI研修サービス</h2>
-<p>AX CAMPは、<b>実践的なAI研修で企業のDXを支援</b>します。豊富な導入実績と高い満足度を誇る研修プログラムを提供しています。</p>
+<h2>おすすめのAI研修サービス</h2>
+<p>実践的なAI研修サービスでは、<b>企業のDXを効果的に支援</b>します。豊富な導入実績と高い満足度を誇る研修プログラムを選ぶことが重要です。</p>
 
 <h3>実践的なカリキュラム</h3>
 <p>座学だけでなく、<b>実際の業務シーンを想定した演習</b>を多数用意。受講者は研修終了後すぐに現場でAIを活用できるようになります。</p>
 
 <h3>導入企業の成功事例</h3>
-<p>グラシズ社では<b>LP制作費を10万円から0円に削減</b>。Route66社では原稿執筆時間を24時間から10秒に短縮するなど、劇的な成果を実現しています。</p>
+<p>導入企業では<b>LP制作費を10万円から0円に削減</b>した事例や、原稿執筆時間を大幅に短縮するなど、劇的な成果を実現しています。</p>
 
 <h2>まとめ：AI研修で組織を変革する</h2>
-<p>AI研修は単なるツールの使い方講座ではありません。<b>組織全体の生産性を飛躍的に向上させる投資</b>です。AX CAMPの実践的な研修プログラムで、貴社のDXを加速させましょう。まずは無料相談から始めてみませんか。</p>
+<p>AI研修は単なるツールの使い方講座ではありません。<b>組織全体の生産性を飛躍的に向上させる投資</b>です。実践的な研修プログラムを導入して、貴社のDXを加速させましょう。まずは無料相談から始めてみませんか。</p>
 `,
       plainText: "テスト記事のプレーンテキスト版です。",
     };
@@ -2567,25 +2566,19 @@ ${
                       <div className="flex justify-between">
                         <span className="text-gray-500">ファクトチェック:</span>
                         <span className="text-gray-800">
-                          {multiAgentResult.regulationScore.factChecking}/40
+                          {multiAgentResult.regulationScore.factChecking}/45
                         </span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-gray-500">信頼性・引用:</span>
                         <span className="text-gray-800">
-                          {multiAgentResult.regulationScore.reliability}/20
-                        </span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-500">AX CAMP準拠:</span>
-                        <span className="text-gray-800">
-                          {multiAgentResult.regulationScore.axCampCompliance}/15
+                          {multiAgentResult.regulationScore.reliability}/25
                         </span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-gray-500">構成ルール:</span>
                         <span className="text-gray-800">
-                          {multiAgentResult.regulationScore.structureRules}/15
+                          {multiAgentResult.regulationScore.structureRules}/18
                         </span>
                       </div>
                       <div className="flex justify-between">
@@ -2593,7 +2586,7 @@ ${
                           法的コンプライアンス:
                         </span>
                         <span className="text-gray-800">
-                          {multiAgentResult.regulationScore.legalCompliance}/5
+                          {multiAgentResult.regulationScore.legalCompliance}/7
                         </span>
                       </div>
                       <div className="flex justify-between">

@@ -77,12 +77,12 @@ export const testOutlinesV2 = {
           imageSuggestion: "5つの施策のチェックリスト"
         },
         {
-          heading: "SEO対策のプロフェッショナルサポートならAX CAMP",
+          heading: "SEO対策のプロフェッショナルサポートなら当社サービス",
           subheadings: [
             { text: "豊富な実績とAI活用の最新ノウハウ", writingNote: "企業向けAI研修やコンサルティング実績を紹介" },
             { text: "無料相談で最適な戦略をご提案", writingNote: "まずは気軽に相談できることを強調" }
           ],
-          writingNote: "AX CAMPのSEO支援サービスを自然に紹介",
+          writingNote: "自社サービスを自然に紹介",
           imageSuggestion: "サービス紹介のイメージ図"
         },
         {
@@ -197,13 +197,13 @@ export const testOutlinesV2 = {
           imageSuggestion: "効果測定ダッシュボードの例"
         },
         {
-          heading: "SEO対策の課題解決ならAX CAMP",
+          heading: "SEO対策の課題解決なら当社サービス",
           subheadings: [
             { text: "最新のAI技術を活用した効果的なSEO戦略", writingNote: "AIツール活用の優位性を説明" },
             { text: "実績豊富な専門家による個別サポート", writingNote: "具体的な成功事例を交えて信頼性を訴求" },
             { text: "無料相談で貴社に最適なプランをご提案", writingNote: "行動を促すCTAとして機能させる" }
           ],
-          writingNote: "自然な流れでAX CAMPのサービス価値を訴求",
+          writingNote: "自然な流れで当社サービスのサービス価値を訴求",
           imageSuggestion: "サービスの特徴を示すインフォグラフィック"
         },
         {
@@ -384,7 +384,7 @@ export const testOutlinesV2 = {
           imageSuggestion: "FAQ形式のアイコン付きレイアウト"
         },
         {
-          heading: "SEO対策の専門的サポートならAX CAMP",
+          heading: "SEO対策の専門的サポートなら当社サービス",
           subheadings: [
             { text: "AIツール活用で効率的なSEO戦略を実現", writingNote: "ChatGPT/Claude活用による効率化を訴求" },
             { text: "大手企業の実績多数！信頼できるパートナー", writingNote: "実績企業名を挙げて信頼性を高める" },
@@ -491,8 +491,8 @@ function getAiTrainingTestOutline() {
         {
           heading: "助成金を活用してAI研修を導入した企業3社",
           subheadings: [
-            { text: "リスティング広告運用企業グラシズ：外注費10万円→0円、制作時間3営業日→2時間", writingNote: "AI研修によりLP制作内製化を実現" },
-            { text: "マーケティング支援企業Route66：原稿執筆時間24時間→10秒に短縮", writingNote: "AI活用により原稿執筆を大幅効率化" },
+            { text: "A社（リスティング広告運用）：外注費10万円→0円、制作時間3営業日→2時間", writingNote: "AI研修によりLP制作内製化を実現" },
+            { text: "B社（マーケティング支援）：原稿執筆時間24時間→数分に短縮", writingNote: "AI活用により原稿執筆を大幅効率化" },
             { text: "SNS広告代理店C社：月1,000万impを自動化、業務時間66%削減", writingNote: "非エンジニアチームでSNS完全自動化システムを内製化" }
           ],
           writingNote: "実際の企業事例を通じて、助成金活用の具体的なイメージを持ってもらう",
@@ -518,19 +518,19 @@ function getAiTrainingTestOutline() {
           imageSuggestion: "Q&Aのアイコン付きリスト"
         },
         {
-          heading: "AI研修の助成金活用ならAX CAMPへご相談を",
+          heading: "AI研修の助成金活用なら当社サービスへご相談を",
           subheadings: [
             { text: "助成金申請を完全サポートする充実の体制", writingNote: "書類作成から申請まで専任担当者がフルサポート、過去の申請実績と高い通過率" },
-            { text: "実践型カリキュラムで即戦力を育成", writingNote: "グラシズ、Route66、C社などの具体的成果を引用" },
+            { text: "実践型カリキュラムで即戦力を育成", writingNote: "A社、B社、C社などの具体的成果を引用" },
             { text: "無料相談で最適な助成金プランをご提案", writingNote: "30分の無料相談で、貴社に最適な助成金と研修プランを診断" }
           ],
-          writingNote: "助成金を活用したAI研修の実績とAX CAMPの強みを訴求",
-          imageSuggestion: "AX CAMPのサービス概要図"
+          writingNote: "助成金を活用したAI研修の実績と当社サービスの強みを訴求",
+          imageSuggestion: "当社サービスのサービス概要図"
         },
         {
           heading: "まとめ：AI研修 助成金を活用して人材育成を加速させよう",
           subheadings: [],
-          writingNote: "本記事の重要ポイントを振り返り、助成金を活用したAI研修の価値を再確認。最大75%の補助率を活用して、コストを抑えながら即戦力のAI人材を育成できることを強調。AX CAMPへの無料相談を最後にもう一度促す",
+          writingNote: "本記事の重要ポイントを振り返り、助成金を活用したAI研修の価値を再確認。最大75%の補助率を活用して、コストを抑えながら即戦力のAI人材を育成できることを強調。当社サービスへの無料相談を最後にもう一度促す",
           imageSuggestion: "記事のポイントまとめ図"
         }
       ],
@@ -554,7 +554,7 @@ function getAiTrainingTestOutline() {
         ],
         differentiators: [
           "2025年最新の助成金情報と補助率を反映",
-          "実際のAX CAMP受講企業の成功事例を具体的数値で提示",
+          "実際の当社サービス受講企業の成功事例を具体的数値で提示",
           "助成金申請サポート付き研修会社の選び方まで網羅"
         ]
       },

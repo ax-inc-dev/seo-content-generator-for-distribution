@@ -13,8 +13,9 @@ import type {
 } from '../types';
 import { countCharacters, truncateToLength } from '../utils/characterCounter';
 import { generateTitleHook, generateFullTitle } from '../utils/titleHookGenerator';
-import { getAxCampInfo, generateAxCampContext } from './axCampService';
-import { curriculumDataService } from './curriculumDataService';
+// AX CAMP関連のimportは汎用化のため削除
+// import { getAxCampInfo, generateAxCampContext } from './axCampService';
+// import { curriculumDataService } from './curriculumDataService';
 import { getContextForKeywords, isSupabaseAvailable } from './primaryDataService';
 
 const apiKey = import.meta.env.VITE_GEMINI_API_KEY || process.env.GEMINI_API_KEY;
@@ -101,7 +102,7 @@ function detectCompetitorFAQ(articles: ArticleAnalysis[]): {
   };
 }
 
-// ノイズ記事を除外して平均値を計算（AX CAMP/FAQ調整付き）
+// ノイズ記事を除外して平均値を計算（FAQ調整付き）
 function calculateAveragesExcludingNoise(
   articles: ArticleAnalysis[],
   keyword: string
@@ -114,8 +115,8 @@ function calculateAveragesExcludingNoise(
   originalAverageH3: number;
   filteredArticles: ArticleAnalysis[];
   faqDetection: { hasFAQ: boolean; faqCount: number; faqPercentage: number };
-  adjustedH2Count: number;  // AX CAMP分を加算した調整後のH2数
-  adjustedH3Count: number;  // AX CAMP分を加算した調整後のH3数
+  adjustedH2Count: number;  // 調整後のH2数
+  adjustedH3Count: number;  // 調整後のH3数
 } {
   // Step 1: 全記事での平均値を計算（除外前）
   const originalH2Avg = articles.reduce((sum, a) => sum + a.headingStructure.h2Items.length, 0) / articles.length;
@@ -179,26 +180,20 @@ function calculateAveragesExcludingNoise(
   
   // Step 6: FAQ検出
   const faqDetection = detectCompetitorFAQ(finalArticles);
-  
-  // Step 7: AX CAMP分を追加した調整後の数を計算
-  // AX CAMPは必ず追加（H2:1個、H3:0個 → まとめと同じ構造）
-  const axCampH2Addition = 1;
-  const axCampH3Addition = 0; // AX CAMPセクションはH3なし（まとめと同じ）
-  
+
+  // Step 7: 調整後の数を計算（AX CAMP削除済み）
   // FAQは競合の状況に応じて追加
   const faqH2Addition = faqDetection.hasFAQ ? 0 : 0; // FAQは競合にある場合は平均に含まれているので追加しない
   const faqH3Addition = faqDetection.hasFAQ ? 0 : 0; // FAQのH3も同様
-  
-  const adjustedH2Count = averageH2Count + axCampH2Addition + faqH2Addition;
-  const adjustedH3Count = averageH3Count + axCampH3Addition + faqH3Addition;
+
+  const adjustedH2Count = averageH2Count + faqH2Addition;
+  const adjustedH3Count = averageH3Count + faqH3Addition;
 
   console.log(`\n📊 最終調整後の目標値:`);
   console.log(`   基本H2数: ${averageH2Count}個`);
-  console.log(`   + AX CAMP: ${axCampH2Addition}個`);
   console.log(`   + FAQ調整: ${faqH2Addition}個`);
   console.log(`   = 調整後H2数: ${adjustedH2Count}個`);
   console.log(`   基本H3数: ${averageH3Count}個`);
-  console.log(`   + AX CAMP H3: ${axCampH3Addition}個（まとめと同じくH3なし）`);
   console.log(`   = 調整後H3数: ${adjustedH3Count}個`)
   console.log('');
   
@@ -445,8 +440,8 @@ export async function generateOutlineV2(
   const currentYear = new Date().getFullYear();
   const currentMonth = new Date().getMonth() + 1;
   
-  // AX CAMP情報を取得（カリキュラムデータを使用）
-  const axCampContext = curriculumDataService.buildArticleContext(keyword) || '';
+  // AX CAMP情報は汎用化のため削除
+  // const axCampContext = curriculumDataService.buildArticleContext(keyword) || '';
   
   // FAQ見出しを生成
   const faqHeading = generateFAQHeading(keyword);
@@ -536,13 +531,12 @@ export async function generateOutlineV2(
 【重要な注意事項】
 - 現在は${currentYear}年です。情報の鮮度が重要な場合のみ「${currentYear}年」を含めてください
 - 古い情報や${currentYear - 1}年以前の情報は使用しないでください
-- タイトルには「AX CAMP」を含めないでください（H2のサービス訴求セクションのみに含める）
 
 【競合分析データ】
 - 上位10記事の平均H2数（ノイズ除外後）: ${averageH2Count}
 - 上位10記事の平均H3数（ノイズ除外後）: ${averageH3Count}
-- AX CAMP追加後のH2数: ${adjustedH2Count}（基本${averageH2Count} + AX CAMP 1）
-- AX CAMP追加後のH3数: ${adjustedH3Count}（基本${averageH3Count} + AX CAMP 0）
+- 調整後のH2数: ${adjustedH2Count}
+- 調整後のH3数: ${adjustedH3Count}
 - 最小H2数（-10%ルール）: ${minH2Count}
 - 最小H3数（-10%ルール）: ${minH3Count}
 - FAQ判定: ${faqDetection.hasFAQ ? `必要（${faqDetection.faqPercentage.toFixed(0)}%の記事が含む）` : '不要'}
@@ -613,19 +607,6 @@ ${(() => {
 - 情報の鮮度が重要な場合のみ「${currentYear}年」を含めてください`;
 })()}
 
-【重要：利用可能な自社情報】
-${keyword.includes('AI') || keyword.includes('研修') ? `
-以下の実績データを記事内で必ず活用してください（ただしタイトルには使用しない）：
-
-${axCampContext}
-
-【重要な指示】記事構成で「事例」「導入事例」「成功事例」に関するH2を作成する場合：
-1. 必ず上記の【導入実績】セクションに記載されている企業事例を使用すること
-2. 一般的な業界事例（小売業、製造業、金融業など）ではなく、【導入実績】の具体的な企業と成果を使用
-3. H3の見出しには【導入実績】の企業名を含める（例：「売上140%向上を実現した事例」）
-4. 執筆メモには【導入実績】の具体的な数値（売上140%向上、24時間→10秒など）を必ず含める
-5. 【導入実績】にない架空の事例は作成しない
-` : ''}
 
 ${primaryDataContext ? `
 【補足：一次情報データベースからの関連情報】
@@ -670,9 +651,8 @@ ${primaryDataContext}
     min: ${minH2Count}
     max: ${Math.floor(adjustedH2Count * 1.1)}
     ideal: ${adjustedH2Count}
-    特殊ルール: "まとめH2は必須、H3は0個、AX CAMP H2は別枠で必須"
-    注意: "上記の数値にはAX CAMP分が含まれています"
-    
+    特殊ルール: "まとめH2は必須、H3は0個"
+
   H3総数:
     min: ${minH3Count}（競合平均の90%以上を確保）
     上限: なし（最小数を満たせば自由に設定可能）
@@ -680,42 +660,36 @@ ${primaryDataContext}
       - "各H2: 0個 or 2個以上（1個禁止）"
       - "重要H2: 多めに配分"
       - "標準H2: 適度に配分"
-      - "AX CAMP H2: 必ず0個（絶対厳守）"
       - "まとめH2: 必ず0個（絶対厳守）"
-    重要: "AX CAMPとまとめは例外なくH3を0個にすること。他のH2でH3数を調整する。"
+    重要: "まとめは例外なくH3を0個にすること。他のH2でH3数を調整する。"
 その他のルール:
   見出しの重複禁止:
     - "同じ意図の見出しを別のH2/H3で繰り返さない"
     - "H2とその配下のH3で意味が重複しないよう注意"
     
-  H2順序: "上位3記事の多数派順序を優先（最後3つは固定）"
-  
+  H2順序: "上位3記事の多数派順序を優先（最後2つは固定）"
+
   キーワード含有:
     方針: "自然に置き換え可能な場合のみH2に含める"
     優先度: "SEO効果と自然さのバランス重視"
-    
+
   執筆メモ:
     H2: "最大200字"
     H3: "200-300字目安"
   固定順序:
-    最後3つ: ["FAQ（ある場合）", "AX CAMPサービス訴求", "まとめ"]
+    最後2つ: ["FAQ（ある場合）", "まとめ"]
     FAQ:
-      位置: "AX CAMPの前（ある場合のみ）"
+      位置: "まとめの前（ある場合のみ）"
       見出し形式: "キーワードを含めた具体的な見出し（15-25文字程度）"
       推奨見出し: "${faqHeading}"
       重要: "上記の推奨見出しを使用してください。これはキーワードの種類に応じて最適化されています"
-      
+
       注意事項:
         - 「問題点」や「リスク」を含むキーワードに「導入」を付けない
         - キーワードの意味を理解して自然な日本語にする
         - 機械的な結合を避ける
-      
+
       H3数: "3-5個（具体的な質問形式）"
-    AX_CAMP:
-      位置: "まとめの直前（最後から2番目）"
-      H2必須: "AX CAMP"を含む
-      H3数: 0
-      内容: "サービス価値訴求、無料相談誘導（まとめと同じくH3なしで本文のみ）"
     まとめ:
       フォーマット: "まとめ：${keyword}を含むサブタイトル"
       H3数: 0
@@ -859,8 +833,8 @@ ${primaryDataContext}
     
     if (metaDescLength < 100) {
       console.warn(`⚠️ メタディスクリプションが短すぎます: ${metaDescLength}文字`);
-      // キーワードとAX CAMP情報を追加して100文字以上にする
-      const additionalText = `${keyword}の導入ならAX CAMPの法人研修で。`;
+      // キーワードを追加して100文字以上にする
+      const additionalText = `${keyword}について詳しく解説します。`;
       adjustedMetaDescription = adjustedMetaDescription + additionalText;
     }
     

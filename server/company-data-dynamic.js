@@ -79,58 +79,54 @@ function getCachedCompanyData() {
   return {
     companies: [
       {
-        name: 'グラシズ社',
+        name: 'A社',
         industry: 'マーケティング支援企業',
         results: {
-          before: 'LPライティング外注費10万円',
+          before: 'LP制作外注費10万円',
           after: '外注費0円',
           timeReduction: '制作時間3営業日→2時間'
         },
-        ceo: '土谷武史',
-        details: 'AIへの教育に注力し、内製化を実現'
+        details: 'AI活用により内製化を実現'
       },
       {
-        name: 'Route66社',
+        name: 'B社',
         industry: 'コンテンツ制作・マーケティング企業',
         results: {
-          before: '原稿執筆24時間',
-          after: '10秒で完了',
-          improvement: '14,400倍の高速化'
+          before: '原稿執筆に長時間',
+          after: '大幅短縮',
+          improvement: '高速化'
         },
-        ceo: '細川大',
-        details: 'マーケ現場の生成AI内製化'
-      },
-      {
-        name: 'WISDOM社',
-        industry: 'SNS広告・ショート動画広告代理店',
-        results: {
-          before: '採用予定2名分の業務負荷',
-          after: 'AIが完全代替',
-          timeReduction: '毎日2時間の調整業務を自動化'
-        },
-        ceo: '安藤宏将',
-        platforms: ['TikTok', 'Google', 'Meta']
+        details: '生成AI内製化'
       },
       {
         name: 'C社',
-        industry: 'テキスト系SNS運用・メディア運営',
+        industry: 'SNS運用・メディア運営',
         results: {
           before: '1日3時間の運用作業',
           after: '1時間に短縮（66%削減）',
           achievement: '月間1,000万impを自動化'
         },
-        leader: 'N氏（事業責任者）',
-        details: '非エンジニアチームでSNS完全自動化システムを内製化'
+        details: 'SNS自動化システムを内製化'
       },
       {
-        name: 'Foxx社',
+        name: 'D社',
+        industry: '広告代理店',
+        results: {
+          before: '採用業務の負荷',
+          after: 'AI活用で効率化',
+          timeReduction: '調整業務を自動化'
+        },
+        details: 'AI導入による採用業務効率化'
+      },
+      {
+        name: 'E社',
         industry: '運用業務',
         results: {
-          before: '月75時間の運用業務',
+          before: '運用業務',
           after: 'AIとの対話で効率化',
           achievement: '新規事業創出も実現'
         },
-        details: 'AI活用による業務効率化、副次的効果として新規事業創出'
+        details: 'AI活用による業務効率化と新規事業創出'
       }
     ],
     summary: {
@@ -138,13 +134,13 @@ function getCachedCompanyData() {
       averageTimeReduction: '70%以上',
       keyAchievements: [
         '外注費削減（10万円→0円）',
-        '作業時間短縮（24時間→10秒）',
-        '人材採用不要（2名分の業務をAI代替）',
+        '作業時間大幅短縮',
+        '採用業務の効率化',
         'インプレッション自動化（月1,000万imp）',
-        '新規事業創出（Foxx社）'
+        '新規事業創出'
       ]
     },
-    lastUpdated: '2025-09-09T14:09:30.497Z'
+    lastUpdated: new Date().toISOString()
   };
 }
 

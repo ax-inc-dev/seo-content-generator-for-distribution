@@ -7,7 +7,7 @@ const FactCheckPage: React.FC = () => {
   const [result, setResult] = useState<FactCheckResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [copySuccess, setCopySuccess] = useState(false);
-  const [includeAxCamp, setIncludeAxCamp] = useState(false);
+  const [includeCompanyCheck, setIncludeCompanyCheck] = useState(false);
 
   const handleFactCheck = async () => {
     if (!inputText.trim()) {
@@ -20,8 +20,8 @@ const FactCheckPage: React.FC = () => {
     setResult(null);
 
     try {
-      // サービスを使用してファクトチェックを実行（AX CAMPチェックのオプション付き）
-      const checkResult = await performFactCheck(inputText, { includeAxCamp });
+      // サービスを使用してファクトチェックを実行
+      const checkResult = await performFactCheck(inputText, { includeCompanyCheck: false });
       setResult(checkResult);
 
     } catch (err) {
@@ -89,19 +89,7 @@ const FactCheckPage: React.FC = () => {
               {inputText.length} 文字
             </div>
 
-            {/* AX CAMPチェックのオプション */}
-            <label className="flex items-center cursor-pointer">
-              <input
-                type="checkbox"
-                checked={includeAxCamp}
-                onChange={(e) => setIncludeAxCamp(e.target.checked)}
-                disabled={isProcessing}
-                className="mr-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
-              />
-              <span className="text-sm text-gray-500 hover:text-gray-700">
-                AX CAMP関連のチェックを含める
-              </span>
-            </label>
+            {/* 追加チェックオプション（将来の拡張用） */}
           </div>
         </div>
 

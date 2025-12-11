@@ -91,12 +91,12 @@ export const parseHtmlWithIntelligentMatching = async (
           continue;
       }
 
-      // 次の見出しが「まとめ」の場合、現在の見出し（通常AX CAMPセクション）もスキップ
+      // 次の見出しが「まとめ」の場合、現在の見出し（通常サービス訴求セクション）もスキップ
       if (index + 1 < h2s.length) {
           const nextH2 = h2s[index + 1];
           const nextH2Text = nextH2.textContent?.trim() || '';
           if (isSummaryHeading(nextH2Text)) {
-              console.log(`⏭️ "${h2Text}" は「まとめ」の直前（AX CAMPセクション）のため、画像配置をスキップします`);
+              console.log(`⏭️ "${h2Text}" は「まとめ」の直前（サービス訴求セクション）のため、画像配置をスキップします`);
               continue;
           }
       }
@@ -186,12 +186,12 @@ export const parseHtmlWithFilenameMatching = async (
             continue;
         }
 
-        // 次の見出しが「まとめ」の場合、現在の見出し（通常AX CAMPセクション）もスキップ
+        // 次の見出しが「まとめ」の場合、現在の見出し（通常サービス訴求セクション）もスキップ
         if (index + 1 < h2s.length) {
             const nextH2 = h2s[index + 1];
             const nextH2Text = nextH2.textContent?.trim() || '';
             if (isSummaryHeading(nextH2Text)) {
-                console.log(`⏭️ "${h2Text}" は「まとめ」の直前（AX CAMPセクション）のため、画像配置をスキップします`);
+                console.log(`⏭️ "${h2Text}" は「まとめ」の直前（サービス訴求セクション）のため、画像配置をスキップします`);
                 continue;
             }
         }
@@ -289,12 +289,12 @@ export const parseHtmlSimple = (htmlContent: string, baseImageMap: Map<string, s
             return;
         }
 
-        // 次の見出しが「まとめ」の場合、現在の見出し（通常AX CAMPセクション）もスキップ
+        // 次の見出しが「まとめ」の場合、現在の見出し（通常サービス訴求セクション）もスキップ
         if (index + 1 < h2s.length) {
             const nextH2 = h2s[index + 1];
             const nextH2Text = nextH2.textContent?.trim() || '';
             if (isSummaryHeading(nextH2Text)) {
-                console.log(`⏭️ "${h2Text}" は「まとめ」の直前（AX CAMPセクション）のため、画像配置をスキップします`);
+                console.log(`⏭️ "${h2Text}" は「まとめ」の直前（サービス訴求セクション）のため、画像配置をスキップします`);
                 return;
             }
         }

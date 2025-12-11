@@ -28,13 +28,13 @@ export interface FactCheckResult {
  * @returns ファクトチェック結果
  */
 export interface FactCheckOptions {
-  includeAxCamp?: boolean;
+  includeCompanyCheck?: boolean;  // 自社サービスチェックを含めるか
 }
 
 export async function performFactCheck(text: string, options: FactCheckOptions = {}): Promise<FactCheckResult> {
   console.log('🔍 === ファクトチェック開始 ===');
   console.log(`📝 入力文字数: ${text.length}文字`);
-  console.log(`🏢 AX CAMPチェック: ${options.includeAxCamp ? '有効' : '無効'}`);
+  console.log(`🏢 自社サービスチェック: ${options.includeCompanyCheck ? '有効' : '無効'}`);
 
   // Step 1: マルチエージェントでチェック
   console.log('📊 Step 1: マルチエージェントによるチェック...');
@@ -42,7 +42,7 @@ export async function performFactCheck(text: string, options: FactCheckOptions =
   const orchestrator = new MultiAgentOrchestrator({
     enableLegalCheck: false, // 法令チェックは省略
     parallel: true,
-    disableAxCampAgent: !options.includeAxCamp, // オプションに基づいてAX CAMPエージェントを制御
+    disableAxCampAgent: !options.includeCompanyCheck, // オプションに基づいて自社サービスエージェントを制御
     onProgress: (message, progress) => {
       console.log(`  進捗 ${progress}%: ${message}`);
     }

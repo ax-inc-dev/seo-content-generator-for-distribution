@@ -8,7 +8,8 @@
 
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { companyDataService } from "./companyDataService";
-import { curriculumDataService } from "./curriculumDataService";
+// AX CAMP関連のimportは汎用化のため削除
+// import { curriculumDataService } from "./curriculumDataService";
 import { getContextForKeywords, isSupabaseAvailable } from "./primaryDataService";
 import latestAIModels from "../data/latestAIModels.json";
 
@@ -34,10 +35,10 @@ if (!API_KEY) {
 console.log("✅ Gemini API初期化成功");
 const genAI = new GoogleGenerativeAI(API_KEY);
 
-// AX CAMP編集部のカスタムインストラクション（三段セルフリファイン + ファクトチェック強化版）
+// SEOコンテンツ執筆のカスタムインストラクション（三段セルフリファイン + ファクトチェック強化版）
 const WRITING_INSTRUCTIONS = `
 meta:
-  name: "AX CAMP 編集部：三段セルフリファイン + ファクトチェック強化（完全版）"
+  name: "SEOライター：三段セルフリファイン + ファクトチェック強化（完全版）"
   version: "2025-09-06"
   language: "ja"
   audience: "法人の決裁者・推進担当・現場マネジャー"
@@ -46,14 +47,14 @@ meta:
     auto_refine_retries: 2                   # 自動リトライ最大回数
 
 role: |
-  あなたはAX CAMP編集部の天才SEOライター兼編集者です。
+  あなたは専門的なSEOライター兼編集者です。
   以後の出力は本文のみを返し、工程やメタ説明は一切出力しません。
 
 identity:
-  role: "AX CAMP編集部のSEOライター"
-  company: "株式会社AXは、法人向けAI研修・伴走支援サービスを提供する会社"
-  service: "AX CAMPは実践型の法人向けAI研修ブランド。実務直結のカリキュラム、伴走サポートが特長"
-  stance: "AX CAMPを推進する立場で、専門的かつ中立な比較・出典提示を行う"
+  role: "SEOコンテンツの専門ライター"
+  company: ""
+  service: ""
+  stance: "専門的かつ中立な比較・出典提示を行う"
   output_style:
     - "本文ではH3の事例として1〜3文で要約"
     - "主要数値は<b>太字</b>で強調（例：<b>24時間→10秒</b>）"
@@ -157,7 +158,7 @@ writing_prohibitions:
 lead_section:
   goal: "検索意図への即応＋読む理由の提示"
   length: "200〜350字"
-  structure: ["悩みの代弁","解決策（結論）","読むベネフィット","読み進め促し","読者ニーズとAX CAMP資料を自然に結びつける"]
+  structure: ["悩みの代弁","解決策（結論）","読むベネフィット","読み進め促し"]
   html_format: |
     【重要】リード文は一文ごとに<p>タグで囲む
 
@@ -175,9 +176,9 @@ lead_section:
     悪い例:
     <p>AI導入を検討しているものの、何から始めればよいかわからないと悩んでいませんか。本記事では、中小企業でも実践できるAI導入のステップを詳しく解説します。読み終える頃には、自社に最適なAI活用の第一歩が明確になるはずです。</p>
   service_mention:
-    approach: "読者の課題とAX CAMPの強みの接点を見つける"
+    approach: "読者の課題と解決策の接点を見つける"
     tone: "押し付けではなく、参考になる情報があるという選択肢の提示"
-    strength_focus: "AI導入支援、業務自動化、実績など記事テーマと関連する強みに言及"
+    strength_focus: "記事テーマと関連する具体的な解決策に言及"
     goal: "「ちょっと見てみようかな」と思える軽い興味喚起"
   cta:
     shortcode: "[リード文下]"
@@ -232,7 +233,7 @@ emphasis_rules:
 link_citation:
   policy: "原則dofollow。一次情報を優先（公式/省庁/学協会/大手メディア/自社資料）"
   placement: "本文近傍に出典を明示（タイトル/組織名＋年を含む自然文アンカー）"
-  internal_refs: "用語集やAX CAMPページへ自然な導線を挿入"
+  internal_refs: "用語集や関連ページへ自然な導線を挿入"
   anchor_text: "クリック後の内容を正確に表す自然文"
   self_data: "添付ファイル・自社実績も一次情報として使用可（数値・条件を明記）"
 
@@ -293,15 +294,9 @@ numbers_terms:
   terminology: "専門用語は初出で簡潔に定義。略語は展開後に使用"
   numbers: "数値は前提・条件・出所とセットで提示（単位・分母・時点を明記）"
   formulas: "必要時は条件を明示し簡潔に"
-  ax_camp_results:
+  company_results:
     instruction: "【自社実績データ】が提供された場合は必ず記事内で活用"
-    examples:
-     - "グラシズ様: LPライティング外注費10万円→0円、制作時間3営業日→2時間"
-      - "Route66様: 原稿執筆時間24時間→10秒"
-      - "C社様: SNS運用3時間→1時間、月間1,000万imp達成"
-      - "WISDOM様: 採用予定2名分の業務負荷→AIが完全代替、毎日2時間の調整業務を自動化"
-      - "Foxx様: 運用業務月75時間の中で、AI活用により新規事業創出"
-      - "Inmark様: 毎日1時間以上の広告チェック業務→2週間でゼロに"
+    examples: []
     usage: "数値を示す際は実績データを引用し説得力を高める（前提・時点・分母を併記）"
 
 ai_model_updates:
@@ -349,7 +344,7 @@ ${latestAIModels.categories.videoGeneration.latest
 
 cta_rules:
   shortcode: "日本語形式のショートコードを使用"
-  placement_default: ["リード内","AX CAMPセクション末尾","まとめ後"]
+  placement_default: ["リード内","まとめ後"]
   mid_heading_cta_rule: |
     【重要】中間見出しCTA自動挿入ルール
 
@@ -359,7 +354,6 @@ cta_rules:
 
     ■ 例外処理（挿入しない見出し）
     - 「ここまでのまとめ」見出し → 挿入しない
-    - 「AXCAMP」「AX CAMP」を含む見出し → 挿入しない
     - 「まとめ」見出し → 挿入しない
 
     ■ 挿入例
@@ -386,63 +380,22 @@ cta_rules:
       4つ目の直前には挿入しない（4は偶数のため）
     - 次の奇数（5つ目）の直前に挿入
 
-  ax_camp_section_rule: |
-    ax_camp_section_rule: |
-    【AX CAMP訴求セクション執筆ルール（重要）】
-
-    ■ 基本構造
-    - H3は0個（まとめセクションと同じ）
-    - 400-600文字程度でコンパクトに（事例なしで簡潔に）
-
-    ■ 執筆の方向性：「読者のニーズに応じて自然に」
-    - キーワードと読者の検索意図を最優先
-    - 事例は原則使用しない（文字数削減のため）
-    - サービスの強みと読者メリットを端的に説明
-    - 無料相談への興味は自然に湧くように
-
-    【NG例】
-    - 企業事例の詳細説明（文字数オーバーの原因）
-    - 「ぜひお申し込みください！」など押し売り
-    - サービスの機能説明に終始
-
-    【OK例】
-    - サービスの強み3点を簡潔に提示
-    - 「詳しく知りたい方は」と控えめな誘導
-    - 読者メリットを中心に展開
-
-    【画像配置】
-    セクション冒頭（本文の最初）に必ず配置:
-    [AX画像]
-
-    【CTA配置】
-    セクション末尾に必ず配置:
-    [研修訴求見出し]
-  
   conclusion_section_rule: |
     【まとめセクション執筆ルール（重要）】
 
     ■ 基本構造
     - H3は0個
-    - 記事要点の総括 ＋ AX CAMP訴求
+    - 記事要点の総括
 
     ■ 執筆の流れ
     1. 記事の要点を3-5点で簡潔にまとめ
-    2. その内容を踏まえてAX CAMPでの解決を自然に訴求
-    3. CTAで締める
-
-    ■ AX CAMP訴求の方針
-    - 訴求トーン: AX CAMPセクションと同等（強め）
-    - 事例: 基本的に使わない（AX CAMPセクションと重複を避ける）
-    - 表現: 一般化した成果表現（「○%削減可能」など）
-    - 記事テーマとの関連性を明確に
+    2. CTAで締める
 
     【OK例】
-    - 「専門的な支援により、記事で紹介した施策を確実に実現」
-    - 「AI導入で業務時間を大幅に削減できます」
-    - 「詳しい実装方法は無料相談でご案内」
+    - 「記事で紹介した施策を確実に実現」
+    - 「詳しい実装方法は専門家にご相談」
 
     【NG例】
-    - AX CAMPセクションと同じ事例の繰り返し
     - 記事内容と無関係な訴求
     - 過度な売り込み
 
@@ -476,7 +429,6 @@ self_data_auto_extraction:
   sources: "プロジェクト内の実績・取材PDF/ノートの索引（例：/mnt/data/pdf_segments_index.csv 等）"
   trigger: "投入フォーマットで『自社実績』が auto または未指定のとき発火"
   keyword_hints:
-    - "AX CAMP"
     - "導入事例"
     - "外注費|コスト|費用"
     - "→|円|%|時間|日|件|削減|自動化|短縮"
@@ -566,7 +518,6 @@ output_contract:
     - "数値/条件/手順のいずれかを含む"
     - "1ブロック以上の事例/比較/具体例を入れる"
     - "太字1〜3箇所"
-    - "AX CAMP訴求セクション: H3なし、事例なし、400-600文字で簡潔に興味を引く"
 
   images_block: "各『画像提案』が来た見出しでは、本文末に『図のキャプション案』『alt案』を提示"
   forbid: ["自己言及","作業手順の列挙","『この記事では〜を解説します』等のメタ文言","マークダウン記法"]
@@ -902,7 +853,7 @@ ${linkList}
     if (request.useCurriculum !== false) {
       // デフォルトでは使用する
       try {
-        console.log("\n🔄 [1.5/4] AX CAMPカリキュラムデータを検索中...");
+        console.log("\n🔄 [1.5/4] カリキュラムデータを検索中...");
         const currStartTime = Date.now();
         const curriculumContext = curriculumDataService.buildArticleContext(
           request.keyword
@@ -980,13 +931,12 @@ ${primaryDataText}
 - ただし、執筆メモの内容を機械的にコピーするのではなく、自然な文章として展開してください
 
 【CTA配置の厳守事項】
-- CTAショートコードは以下の3箇所に必ず配置（全て必須）
-- 必須配置場所（3箇所全て配置必須）：
+- CTAショートコードは以下の2箇所に必ず配置（全て必須）
+- 必須配置場所（2箇所全て配置必須）：
   1. リード文末: [リード文下] - リード文の最後、最初のH2見出しの直前
-  2. AX CAMPセクション末尾: [研修訴求見出し] - サービス訴求セクション（まとめの直前）の本文最後、まとめセクションの直前
-  3. 記事文末: [まとめ見出し] - まとめの本文が終わった後、記事の一番最後
+  2. 記事文末: [まとめ見出し] - まとめの本文が終わった後、記事の一番最後
 - 配置位置は厳密に守ること（自由な配置は禁止）
-- 3つ全てのCTAを必ず配置すること（省略禁止）
+- 2つ全てのCTAを必ず配置すること（省略禁止）
 ${
   companyDataText
     ? `

@@ -235,17 +235,18 @@ export async function generateArticleV2(
     const section = outline.outline[i];
     const sectionCharCount = charDistribution.get(`section_${i}`) || 2000;
     
-    // AX CAMPセクションかチェック
-    const isAxCampSection = section.heading.includes('AX CAMP');
-    
+    // サービス訴求セクションかチェック（自社サービス名を環境変数から取得）
+    const serviceName = import.meta.env.VITE_SERVICE_NAME || '当社サービス';
+    const isServiceSection = section.heading.includes(serviceName) || section.heading.includes('サービス訴求');
+
     // セクション生成プロンプト
     let sectionPrompt = '';
-    
-    if (isAxCampSection) {
-      // AX CAMPセクション用の特別なプロンプト
+
+    if (isServiceSection) {
+      // サービス訴求セクション用の特別なプロンプト
       const axCampInfo = getAxCampInfo();
       sectionPrompt = `
-「${keyword}」に関する記事のAX CAMPサービス訴求セクションを執筆してください。
+「${keyword}」に関する記事のサービス訴求セクションを執筆してください。
 
 【セクション】
 ${section.heading}
@@ -256,10 +257,10 @@ ${section.subheadings?.join('\n') || 'なし'}
 【目標文字数】
 ${sectionCharCount}文字
 
-【AX CAMP情報】
-- サービス名: ${axCampInfo.company.service_name}
-- 会社名: ${axCampInfo.company.name}
-- 対象: 法人向けAI研修サービス
+【サービス情報】
+- サービス名: ${axCampInfo.company.service_name || serviceName}
+- 会社名: ${axCampInfo.company.name || ''}
+- 対象: 法人向けサービス
 
 【導入事例】（業種名で記載、社名は出さない）
 ${axCampInfo.case_studies.map(cs => {
@@ -274,7 +275,7 @@ ${axCampInfo.case_studies.map(cs => {
 - 具体的な料金は記載しない
 - 無料相談への誘導にフォーカス
 - 企業名は出さず、業種名で記載（例：広告代理店様、メディア運営企業様）
-- 成果の数値は含めてOK（例：10万円→0円、24時間→10秒）
+- 成果の数値は含めてOK
 
 HTML形式で出力してください（h2, h3, p, ul, li タグを使用）。
 `;

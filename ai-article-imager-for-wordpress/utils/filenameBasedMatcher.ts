@@ -183,11 +183,10 @@ const SYNONYM_GROUPS = {
     "活用",
   ],
 
-  // AX CAMP系（新規追加）
-  axcamp: [
-    "AX CAMP",
-    "AXCAMP",
-    "axcamp",
+  // サービス訴求系
+  service: [
+    "サービス",
+    "service",
     "無料相談",
     "お問い合わせ",
     "ご相談",

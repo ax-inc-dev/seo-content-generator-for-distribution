@@ -1,5 +1,5 @@
 // 自社データ取得サービス
-// Google Drive API（優先）またはローカルCSVファイルからAX CAMPの実績データを取得
+// Google Drive API（優先）またはローカルCSVファイルから実績データを取得
 
 import {
   COMPANY_MASTER,
@@ -148,11 +148,8 @@ class CompanyDataService {
       // テキストから実績情報を抽出
       const text = segment.text;
 
-      // 会社名の抽出パターン（グラシズ、Route66などの固有名詞にも対応）
+      // 会社名の抽出パターン（汎用）
       const companyPatterns = [
-        /グラシズ/,
-        /Route66|ルート66/,
-        /WISDOM社/,
         /([A-Z]社)/,
         /(株式会社[^\s,、]+)/,
         /([ぁ-ん]+社)/,
@@ -177,13 +174,13 @@ class CompanyDataService {
           /月間?(\d+万|[\d,]+|1,?000万)imp|(\d+万|[\d,]+)インプレッション/,
         cost: /(\d+万円|[\d,]+円|外注費\d+万円)[^→]*[→から]?[^→]*(\d+万円|[\d,]+円|0円|無料|削減)/,
         percentage: /(\d+)%[削減|向上|改善|短縮]/,
-        // グラシズ特有のパターン
+        // LP制作パターン
         lpPattern:
-          /LP(ライティング)?外注費?(\d+万円)?.*?(0円|削減)|外注費.*?(10万円)?.*?0円/,
-        // Route66特有のパターン
-        writingPattern: /原稿(執筆|作成).*?(24時間|\d+時間).*?(10秒|\d+秒)/,
-        // C社特有のパターン
-        snsPattern: /(SNS|1,?000万imp|月間.*imp).*?(自動化|削減)/,
+          /LP(ライティング)?外注費?(\d+万円)?.*?(0円|削減)|外注費.*?(\d+万円)?.*?0円/,
+        // 原稿執筆パターン
+        writingPattern: /原稿(執筆|作成).*?(\d+時間).*?(\d+秒|\d+分)/,
+        // SNS運用パターン
+        snsPattern: /(SNS|imp|インプレッション).*?(自動化|削減)/,
       };
 
       // 時間短縮の実績を探す
@@ -195,7 +192,7 @@ class CompanyDataService {
             company: company,
             industry: industry,
             challenge: this.extractChallenge(text),
-            actions: "AX CAMPのAI研修プログラムを導入",
+            actions: "AI研修プログラムを導入",
             result: {
               before: beforeAfter[0].trim(),
               after: beforeAfter[1].trim(),
@@ -209,17 +206,17 @@ class CompanyDataService {
         }
       }
 
-      // コスト削減の実績（グラシズ向け）
+      // コスト削減の実績
       const costMatch =
         text.match(patterns.cost) || text.match(patterns.lpPattern);
       if (costMatch) {
         const data: CompanyData = {
-          company: company.includes("グラシズ") ? "グラシズ" : company,
+          company: company,
           industry: industry,
           challenge: this.extractChallenge(text),
-          actions: "AX CAMPのAI研修でLP制作内製化",
+          actions: "AI研修でLP制作内製化",
           result: {
-            before: "LP外注費10万円",
+            before: "LP外注費",
             after: "0円（内製化）",
           },
           source: {
@@ -230,17 +227,17 @@ class CompanyDataService {
         companyDataList.push(data);
       }
 
-      // 原稿執筆の実績（Route66向け）
+      // 原稿執筆の実績
       const writingMatch = text.match(patterns.writingPattern);
       if (writingMatch) {
         const data: CompanyData = {
-          company: company.includes("Route") ? "Route66" : company,
+          company: company,
           industry: industry,
           challenge: this.extractChallenge(text),
-          actions: "AX CAMPによるAI執筆ツール導入",
+          actions: "AI執筆ツール導入",
           result: {
-            before: "原稿執筆24時間",
-            after: "10秒",
+            before: "原稿執筆時間",
+            after: "大幅短縮",
           },
           source: {
             title: segment.title || segment.file_name,
@@ -302,7 +299,6 @@ class CompanyDataService {
   // アクションの抽出
   private extractAction(text: string): string {
     const actionPatterns = [
-      /AX CAMP[^。]+/,
       /研修[^。]+導入/,
       /AI[^。]+実装/,
       /システム[^。]+構築/,
@@ -315,7 +311,7 @@ class CompanyDataService {
       }
     }
 
-    return "AX CAMPのAI研修プログラムを導入";
+    return "AI研修プログラムを導入";
   }
 
   // Before状態の推測
@@ -703,124 +699,114 @@ class CompanyDataService {
     return markdown;
   }
 
-  // フォールバックデータ（CSVが取得できない場合）
+  // フォールバックデータ（CSVが取得できない場合）- 汎用サンプルデータ
   private getFallbackData(): CompanyData[] {
     return [
       {
-        company: "グラシズ",
-        industry: COMPANY_MASTER["グラシズ"].industry,
+        company: "A社",
+        industry: "マーケティング支援",
         challenge: "LP制作の外注費用と制作時間の削減",
-        actions: "AX CAMPの研修を受講し、AI活用によるLP制作の内製化を実現",
+        actions: "AI研修を受講し、AI活用によるLP制作の内製化を実現",
         result: {
-          before: "LPライティング外注費10万円/月、制作時間3営業日",
+          before: "LP外注費10万円/月、制作時間3営業日",
           after: "LP制作費0円、制作時間2時間",
           delta: "LP制作の内製化を実現、制作時間93%削減",
         },
         source: {
-          title: "AX CAMP受講企業の成果事例",
+          title: "AI研修受講企業の成果事例",
           page: 1,
         },
       },
       {
-        company: "Route66",
-        industry: COMPANY_MASTER["Route66"].industry,
+        company: "B社",
+        industry: "Webマーケティング",
         challenge: "原稿執筆の時間短縮と効率化",
-        actions: "AX CAMPの実践型研修により、AI執筆ツールを導入",
+        actions: "実践型研修により、AI執筆ツールを導入",
         result: {
-          before: "原稿執筆時間24時間",
-          after: "10秒",
-          delta: "99.99%削減",
+          before: "原稿執筆時間8時間",
+          after: "15分",
+          delta: "96.9%削減",
         },
         source: {
-          title: "AX CAMP受講企業の成果事例",
+          title: "AI研修受講企業の成果事例",
           page: 1,
         },
       },
       {
         company: "C社",
-        industry: COMPANY_MASTER["C社"].industry,
+        industry: "製造業",
         challenge:
-          "属人化による業務の非効率性と月間インプレッション数の伸び悩み",
+          "属人化による業務の非効率性とSNS運用の負担",
         actions:
-          "AX CAMPの導入により、非エンジニアだけのチームでSNSの完全自動化システムを内製化",
+          "AI研修の導入により、非エンジニアチームでSNS運用を自動化",
         result: {
           before: "1日3時間以上",
           after: "わずか1時間",
           delta: "66%削減",
         },
         source: {
-          title:
-            "月間1,000万impを自動化！C社でAI活用が当たり前の文化になった背景とは？",
+          title: "AI活用事例",
           page: 1,
         },
       },
       {
-        company: "Foxx",
-        industry: COMPANY_MASTER["Foxx"]
-          ? COMPANY_MASTER["Foxx"].industry
-          : "広告運用業務",
+        company: "D社",
+        industry: "広告運用",
         challenge: "既存事業の成長限界",
-        actions: "AX CAMPの研修でAI活用スキルを習得",
+        actions: "AI研修でAI活用スキルを習得",
         result: {
           before: "既存事業のみ",
           after: "新規事業創出を実現",
           delta: "AI活用により新規事業創出",
         },
         source: {
-          title: "AX CAMP受講企業の成果事例",
+          title: "AI研修受講企業の成果事例",
           page: 1,
         },
       },
       {
-        company: "WISDOM合同会社",
-        industry: COMPANY_MASTER["WISDOM合同会社"]
-          ? COMPANY_MASTER["WISDOM合同会社"].industry
-          : "SNS広告・ショート動画制作",
+        company: "E社",
+        industry: "SNS広告・動画制作",
         challenge: "人材採用コストと業務負荷の増大",
-        actions: "AX CAMPの研修でAI活用スキルを習得し、業務自動化を推進",
+        actions: "AI研修でAI活用スキルを習得し、業務自動化を推進",
         result: {
           before: "採用2名分の業務負荷",
           after: "AI活用で業務自動化",
-          delta: "AI導入で採用2名分の業務をAI代替",
+          delta: "AI導入で2名分の業務を自動化",
         },
         source: {
-          title: "AX CAMP受講企業の成果事例",
+          title: "AI研修受講企業の成果事例",
           page: 1,
         },
       },
       {
-        company: "Inmark",
-        industry: COMPANY_MASTER["Inmark"]
-          ? COMPANY_MASTER["Inmark"].industry
-          : "サービス系IT企業",
+        company: "F社",
+        industry: "ITサービス",
         challenge: "毎日の広告チェック業務に時間がかかる",
         actions:
-          "AX CAMPでAIツールの活用方法を学び、広告チェック業務を完全自動化",
+          "AIツールの活用方法を学び、広告チェック業務を完全自動化",
         result: {
           before: "毎日1時間以上の広告チェック業務",
           after: "0時間（完全自動化）",
           delta: "2週間でゼロに",
         },
         source: {
-          title: "AX CAMP受講企業の成果事例",
+          title: "AI研修受講企業の成果事例",
           page: 1,
         },
       },
       {
-        company: "エムスタイルジャパン",
-        industry: COMPANY_MASTER["エムスタイルジャパン"]
-          ? COMPANY_MASTER["エムスタイルジャパン"].industry
-          : "美容健康食品・化粧品製造販売",
-        challenge: "コールセンターの履歴確認や広告レポート作成などの手作業",
-        actions: "AX CAMPの研修を受講し、GASを用いて業務自動化を実現",
+        company: "G社",
+        industry: "製造販売",
+        challenge: "コールセンターの履歴確認やレポート作成などの手作業",
+        actions: "AI研修を受講し、業務自動化を実現",
         result: {
-          before: "コールセンター確認業務月16時間、手作業の広告レポート作成",
-          after: "コールセンター業務ほぼ0時間",
+          before: "月16時間の手作業",
+          after: "ほぼ0時間",
           delta: "全社で月100時間以上の業務削減",
         },
         source: {
-          title:
-            '月100時間以上の"ムダ業務"をカット！エムスタイルジャパン社が築いた「AIは当たり前文化」の軌跡',
+          title: "AI活用事例",
           page: 1,
         },
       },

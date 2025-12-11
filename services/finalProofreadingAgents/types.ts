@@ -39,7 +39,7 @@ export type AgentType =
   | 'numbers-stats'       // 数値・統計確認
   | 'dates-timeline'      // 日付・時系列検証
   | 'facts-cases'         // 事例・ファクト検証
-  | 'ax-camp'            // AX CAMP専門
+  | 'ax-camp'            // 自社サービス専門
   | 'citations'          // 引用・出典検証
   | 'technical'          // 技術仕様確認
   | 'legal'              // 法令・規制チェック
@@ -90,12 +90,12 @@ export interface IntegrationResult {
     timeoutAgents: number;
   };
   regulationScore: {
-    factChecking: number;      // 40点満点
-    reliability: number;        // 20点満点
-    axCampCompliance: number;   // 15点満点
-    structureRules: number;     // 15点満点
-    legalCompliance: number;    // 5点満点
-    overallQuality: number;     // 5点満点
+    factChecking: number;       // 45点満点（旧40点から+5点）
+    reliability: number;        // 25点満点（旧20点から+5点）
+    axCampCompliance?: number;  // 削除済み（汎用版では使用しない）
+    structureRules: number;     // 18点満点（旧15点から+3点）
+    legalCompliance: number;    // 7点満点（旧5点から+2点）
+    overallQuality: number;     // 5点満点（変更なし）
     total: number;              // 100点満点
   };
   recommendation: 'publish' | 'revise' | 'reject';

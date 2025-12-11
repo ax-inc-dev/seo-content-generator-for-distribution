@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🎨 画像生成エージェント</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+      }
+
+      .container {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 20px;
+        padding: 40px;
+        max-width: 800px;
+        width: 100%;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      }
+
+      h1 {
+        color: #333;
+        margin-bottom: 20px;
+        text-align: center;
+        font-size: 2em;
+      }
+
+      .article-info {
+        background: #f7f7f7;
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 30px;
+      }
+
+      .article-info h2 {
+        color: #667eea;
+        margin-bottom: 15px;
+      }
+
+      .info-row {
+        margin: 10px 0;
+        padding: 10px;
+        background: white;
+        border-radius: 5px;
+      }
+
+      .info-label {
+        font-weight: bold;
+        color: #666;
+      }
+
+      .status {
+        text-align: center;
+        padding: 20px;
+        background: #e3f2fd;
+        border-radius: 10px;
+        margin-bottom: 20px;
+      }
+
+      .status.loading {
+        background: #fff3e0;
+      }
+
+      .status.success {
+        background: #e8f5e9;
+      }
+
+      .status.error {
+        background: #ffebee;
+      }
+
+      button {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 15px 30px;
+        border-radius: 10px;
+        font-size: 1.1em;
+        cursor: pointer;
+        width: 100%;
+        transition: transform 0.2s;
+      }
+
+      button:hover {
+        transform: translateY(-2px);
+      }
+
+      button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .content-preview {
+        background: #f5f5f5;
+        padding: 20px;
+        border-radius: 10px;
+        max-height: 300px;
+        overflow-y: auto;
+        margin-top: 20px;
+      }
+
+      .loading-spinner {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid #f3f3f3;
+        border-top: 3px solid #667eea;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-left: 10px;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🎨 画像生成エージェント</h1>
+
+      <div class="status" id="status">記事データを読み込み中...</div>
+
+      <div class="article-info" id="articleInfo" style="display: none">
+        <h2>📄 記事情報</h2>
+        <div class="info-row">
+          <span class="info-label">タイトル:</span>
+          <span id="articleTitle">-</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">キーワード:</span>
+          <span id="articleKeyword">-</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">メタディスクリプション:</span>
+          <span id="articleMeta">-</span>
+        </div>
+      </div>
+
+      <button id="generateBtn" onclick="generateImages()" disabled>
+        🚀 画像を生成する
+      </button>
+
+      <div class="content-preview" id="contentPreview" style="display: none">
+        <h3>記事内容（プレビュー）</h3>
+        <div id="contentText"></div>
+      </div>
+    </div>
+
+    <script>
+      let articleData = null;
+
+      // postMessageでデータを受信
+      window.addEventListener("message", (event) => {
+        console.log("📨 postMessage受信:", event);
+
+        if (
+          event.data &&
+          (event.data.type === "ARTICLE_DATA" ||
+            event.data.type === "ARTICLE_DATA_TRANSFER")
+        ) {
+          console.log("✅ 記事データを受信しました");
+          console.log("  受信データ:", event.data.data);
+          console.log(
+            "  htmlContent:",
+            event.data.data.htmlContent ? "あり" : "なし"
+          );
+          articleData = event.data.data;
+          displayArticleInfo();
+          document.getElementById("status").textContent =
+            "✅ 記事データを読み込みました";
+          document.getElementById("status").className = "status success";
+          document.getElementById("generateBtn").disabled = false;
+        }
+      });
+
+      // ページ読み込み時に記事データを取得
+      window.addEventListener("load", () => {
+        try {
+          // localStorageから記事データを取得
+          const storedData = localStorage.getItem(
+            "articleDataForImageGen_5176"
+          );
+
+          if (storedData) {
+            articleData = JSON.parse(storedData);
+            displayArticleInfo();
+            document.getElementById("status").textContent =
+              "✅ 記事データを読み込みました";
+            document.getElementById("status").className = "status success";
+            document.getElementById("generateBtn").disabled = false;
+          } else {
+            document.getElementById("status").textContent =
+              "⚠️ 記事データが見つかりません。メインアプリから「画像生成へ」ボタンを押してください。";
+            document.getElementById("status").className = "status error";
+          }
+        } catch (error) {
+          console.error("Error loading article data:", error);
+          document.getElementById("status").textContent =
+            "❌ エラーが発生しました";
+          document.getElementById("status").className = "status error";
+        }
+      });
+
+      function displayArticleInfo() {
+        if (!articleData) return;
+
+        document.getElementById("articleInfo").style.display = "block";
+        document.getElementById("articleTitle").textContent =
+          articleData.title || "-";
+        document.getElementById("articleKeyword").textContent =
+          articleData.keyword || "-";
+        document.getElementById("articleMeta").textContent =
+          articleData.metaDescription || "-";
+
+        // HTMLコンテンツをプレビュー表示
+        if (articleData.htmlContent) {
+          document.getElementById("contentPreview").style.display = "block";
+          // HTMLタグを除去してテキストのみ表示（最初の500文字のみ）
+          const tempDiv = document.createElement("div");
+          tempDiv.innerHTML = articleData.htmlContent;
+          const textContent = tempDiv.textContent || tempDiv.innerText || "";
+          document.getElementById("contentText").textContent =
+            textContent.length > 500
+              ? textContent.substring(0, 500) + "..."
+              : textContent;
+        } else {
+          console.warn("⚠️ htmlContentが空です");
+        }
+      }
+
+      async function generateImages() {
+        if (!articleData) {
+          alert("記事データがありません");
+          return;
+        }
+
+        const btn = document.getElementById("generateBtn");
+        const status = document.getElementById("status");
+
+        btn.disabled = true;
+        btn.innerHTML = '転送中... <span class="loading-spinner"></span>';
+        status.textContent = "🔄 AI Article Imager for WordPressに転送中...";
+        status.className = "status loading";
+
+        try {
+          // 環境に応じたURL設定
+          const isLocalhost =
+            window.location.hostname === "localhost" ||
+            window.location.hostname === "127.0.0.1";
+          const imageGenUrl = isLocalhost
+            ? "http://localhost:5178"
+            : "https://ai-article-imager-for-wordpress.vercel.app";
+
+          console.log("🚀 転送するデータ:", {
+            title: articleData.title,
+            htmlContent: articleData.htmlContent ? "あり" : "なし",
+            keyword: articleData.keyword,
+            metaDescription: articleData.metaDescription,
+            slug: articleData.slug || "auto-generated",
+          });
+
+          // 新しいタブでai-article-imager-for-wordpressを開く
+          const newWindow = window.open(imageGenUrl, "_blank");
+
+          if (newWindow) {
+            // データを転送
+            setTimeout(() => {
+              const transferData = {
+                type: "ARTICLE_DATA",
+                data: {
+                  title: articleData.title,
+                  htmlContent: articleData.htmlContent,
+                  keyword: articleData.keyword,
+                  metaDescription: articleData.metaDescription,
+                  slug: articleData.slug || "auto-generated",
+                },
+              };
+
+              console.log("📤 実際に転送するデータ:", transferData);
+
+              const targetOrigin = isLocalhost
+                ? "http://localhost:5178"
+                : "https://ai-article-imager-for-wordpress.vercel.app";
+
+              console.log("📤 送信先オリジン:", targetOrigin);
+
+              newWindow.postMessage(transferData, targetOrigin);
+
+              status.textContent =
+                "✅ AI Article Imager for WordPressに転送完了！新しいタブで画像生成を続行してください。";
+              status.className = "status success";
+              btn.innerHTML = "🚀 再度転送する";
+              btn.disabled = false;
+
+              console.log(
+                "📤 記事データをAI Article Imager for WordPressに転送しました"
+              );
+            }, 2000);
+          } else {
+            throw new Error(
+              "AI Article Imager for WordPressを開けませんでした。ポップアップブロッカーを確認してください。"
+            );
+          }
+        } catch (error) {
+          console.error("転送エラー:", error);
+          status.textContent = "❌ 転送に失敗しました: " + error.message;
+          status.className = "status error";
+          btn.innerHTML = "🚀 画像を生成する";
+          btn.disabled = false;
+        }
+      }
+    </script>
+  </body>
+</html>

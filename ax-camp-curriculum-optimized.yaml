@@ -1,0 +1,898 @@
+ax_camp_curriculum:
+  version: v3
+  last_updated: '2025-09-24'
+  total_chapters: 12
+  chapters:
+    - chapter_id: 1
+      title: AI活用マインドセット
+      page_count: 41
+      duration: "約15-20分"
+
+      # 講義の構成
+      agenda:
+        - カリキュラムのゴール
+        - なぜ今AIを学ぶ必要があるのか
+        - 組織のAI改革を成功させるには
+        - 要点の振り返り
+
+      # 学習目標
+      learning_objectives:
+        - AIの重要性を理解し、組織での活用マインドを築く
+        - AIスキルを身につけたらどんなメリットがあるのかを理解する
+        - 組織でAI活用を成功させる方法を知る
+        - 学習マインドの基礎を築く
+
+      # 主要セクション
+      main_sections:
+        - section_title: カリキュラムのゴール
+          key_points:
+              - AIの重要性を理解し、組織での活用マインドを築く
+              - AIができることを学びつつ、今後の人生への恩恵を理解
+              - 組織でのAI活用に必要なことと推進すべきことを理解
+
+        - section_title: なぜ今AIを学ぶ必要があるのか
+          key_points:
+              - AIは既に生活と仕事に浸透している現実
+              - AIに使われる側になるリスクの理解
+              - AIの進化とスキル格差の関係
+          subsections:
+              - title: AIの身近な浸透事例
+              points:
+                - カスタマーサポートのAIチャットボット化
+                - AI OCR技術による請求書等のデータ入力自動化
+                - 会議の文字起こしからタスク生成まで自動化
+              - title: OpenAIの5段階進化モデル
+              points:
+                - レベル1：チャットボット
+                - レベル2：有能なアシスタント
+                - レベル3：指示を実行するエージェント（現在）
+                - レベル4：戦略を共に図る参謀
+                - レベル5：事業を自動遂行するシステム
+
+        - section_title: 組織のAI改革を成功させるには
+          key_points:
+              - AI改革が進まない2つの原因（スキル定着と文化形成）
+              - AI万能病への注意と正しい認識
+              - AI文化形成の3つのポイント
+          subsections:
+              - title: AIスキルの定着
+              points:
+                - AI万能病への注意（AIは何でもできるわけではない）
+                - AIは自分の拡張でしかないという認識
+                - 根気よく検証することの重要性
+              - title: AI文化の形成
+              points:
+                - 最速で社内実績を作る
+                - トップダウンとボトムアップの協力体制
+                - 共有文化の構築
+
+        - section_title: 要点の振り返り
+          key_points:
+              - AIスキルを学ばないとAIに使われる側になるリスク
+              - AIは知識を拡張する自分の分身として捉える
+              - AI文化形成で競争優位性を築く
+
+      # 重要な概念と定義
+      key_concepts:
+        - concept: AI万能病
+          definition: AIの理解が浅く、AIは何でもできると思い込んでしまう状態。業務AI化の失敗の主な原因。
+        - concept: AIは自分の拡張
+          definition: AIは自分が理解していることしかできない。明確な指示と出力判断には自分の知識が必要。
+        - concept: OpenAI 5段階進化モデル
+          definition: OpenAIが描くAI進化の5段階。チャットボットから事業自動遂行システムまで。
+        - concept: AI文化の形成
+          definition: AIが特別なものではなく、日常の会話に自然と登場し、全員が使える組織文化。
+
+      # 具体例
+      examples:
+        - category: AX社の実例
+          items:
+              - カスタマーサポートを完全AI化
+              - 会議文字起こし→タスク生成→プロジェクト管理ツール登録まで自動化
+              - 2-3ヶ月に1回のAIエージェント開発合宿
+              - 各領域（テキスト/画像/動画/開発/音声）専門の検証スタッフ配置
+
+        - category: 失敗パターン
+          items:
+              - 5-6回の検証で挫折してAI使用を諦める
+              - AI万能病により実現不可能なタスクをAIに任せる
+              - 分からない言葉を分からないまま使い続ける
+
+        - category: 成功パターン
+          items:
+              - 10回20回30回と根気強く検証して成功
+              - 作業用チャットと質問用チャットを分けて使用
+              - 社内勉強会、ノウハウ共有チャンネル、成果発表会の実施
+
+        - category: 比喩・例え話
+          items:
+              - name: Excel比喩
+              description: 基本機能のみ vs VLOOKUP/マクロ/ピボットテーブル使いこなしの差
+              - name: セールスライティング例
+              description: 知識ゼロの人はAIで広告文を作っても良し悪しを判断できない
+              - name: 契約書作成例
+              description: 法律知識なしでAIに契約書を作らせても正誤判断不可能
+
+      # 重要な引用・フレーズ
+      quotes:
+        - "AIでできるかな、じゃあ今日試してみますね、が自然に溢れる会社へ"
+        - "AIは自分の拡張でしかない"
+        - "AIが賢くなっても的確な指示やその能力を引き出せるのは人間だけ"
+        - "すごい発明してみたいな抽象度の高い問いかけをしても、AIは何のことやら"
+        - "AIの進化はスキル格差をどんどん広げていく"
+
+      # 実践的なアドバイス
+      practical_tips:
+        - tip: 2画面チャット法
+          description: 作業用チャットと質問用チャットを分けて、不明点を即座に解決
+
+        - tip: 検証回数の目安
+          description: 5-6回で諦めず、10回20回30回と根気強く検証する
+
+        - tip: 社内展開の3ステップ
+          steps:
+              - 小さくても良いので最速で実績を作る
+              - 経営陣と実働部隊の協力体制を構築
+              - 勉強会・共有チャンネル・成果発表会で共有文化を作る
+
+        - tip: Google Generative AI Leader資格
+          description: Googleが提唱するAI導入の戦略的知識を証明する認定資格
+
+      # メトリクス・数値
+      metrics:
+        - AIスキルなしの検証回数：5-6回で挫折
+        - 成功までの検証回数：10-30回以上
+        - AX社の合宿頻度：2-3ヶ月に1回
+        - 成果発表会：研修1ヶ月後に実施する企業あり
+
+      # 検索タグ
+      search_tags:
+        - ai-mindset
+        - organizational-transformation
+        - ai-culture
+        - skill-development
+        - practical-implementation
+        - ai-omnipotence-disease
+        - self-extension
+        - openai-5-levels
+        - google-generative-ai-leader
+
+      # 章の要約
+      content_summary: |
+        AI活用の基本マインドセットを確立する章。「AIに使われる側」になるリスクを理解し、
+        「AIは自分の拡張」という正しい認識を持つことの重要性を説明。
+        特にAI万能病への警告と、組織全体でAI文化を形成するための具体的な方法論を提示。
+        AX社の実例を交えながら、根気強い検証と共有文化の重要性を強調。
+
+    # 以下、他の章は元の簡略版構造を維持
+    - chapter_id: 2
+      title: AIの基礎原理
+      page_count: 43
+      duration: "約20-25分"
+
+      # 講義の構成
+      agenda:
+        - カリキュラムのゴール
+        - 生成AIとは
+        - LLM（大規模言語モデル）とは
+        - LLMの5つの特徴
+        - LLMの2つの注意点
+        - 要点の振り返り
+
+      # 学習目標
+      learning_objectives:
+        - AIを使える側になるためにAIの原理を理解する
+        - 生成AIを使いこなすために必要な原理を理解
+        - AIがどのように動いているのかを知る
+        - 生成AIを使う上での注意点を理解
+
+      # 主要セクション
+      main_sections:
+        - section_title: 生成AIとは
+          key_points:
+              - AIの全体像（AI→機械学習→生成AI）
+              - 生成AIができること：生成・要約・発見
+              - 生成AIにやらせない方がいいこと：計算・規則処理
+          subsections:
+              - title: AIの全体像
+              points:
+                - AI（人工知能）：学習や判断が得意な機械
+                - ML（機械学習）：解析・抽出が得意
+                - 生成AI（Generative AI）：生成・要約・発見が得意
+                - LLMとディフュージョンモデルの分類
+              - title: 生成AIにできること
+              points:
+                - 生成：文章生成、画像生成、音声生成
+                - 要約：議事録、ニュース、論文の要約
+                - 発見：トレンド発見、顧客インサイト、リサーチ支援
+              - title: 生成AIにやらせない方がいいこと
+              points:
+                - 計算：四則演算、財務指標算出（ROI、IRR等）
+                - 規則処理：if文の条件分岐、データバリデーション、ループ処理
+
+        - section_title: LLM（大規模言語モデル）とは
+          key_points:
+              - 人間のような文章生成が得意なモデル
+              - トークンという単位で文章を処理
+              - 確率計算で最適な回答を出力
+          subsections:
+              - title: LLMの仕組み
+              points:
+                - トークン化：文章を単語や文字レベルに分解
+                - ベクトル化：トークンをデータに変換
+                - 重み付け：重要単語を推測（日本・首都など）
+                - 確率計算：次に来る言葉を確率で予測
+              - title: モデルとサービスの違い
+              points:
+                - ChatGPTはサービス名、GPT-5がモデル名
+                - ClaudeはサービスClaude 4.1 Opusがモデル名
+                - モデルによって出力結果が全く異なる
+
+        - section_title: LLMの5つの特徴
+          key_points:
+              - モダリティ：扱えるメディアの種類
+              - コンテキストウィンドウ：処理できる最大トークン数
+              - コスト：トークンあたりの料金
+              - ナレッジカットオフ：学習データの最終日時
+              - パフォーマンス：得意分野と性能
+          subsections:
+              - title: 各モデルの特性
+              points:
+                - ChatGPT：万能型、GPT-5 Thinkingは解析能力が高い
+                - Claude：コーディング特化、自律的な連続実行が得意
+                - Gemini：大容量データ処理、100万トークン対応
+                - Grok：グレー情報出力可、Xのリアルタイム情報アクセス
+
+        - section_title: LLMの2つの注意点
+          key_points:
+              - ハルシネーション：事実と異なる情報の生成
+              - バイアス：学習データの偏りによる不公平な出力
+          subsections:
+              - title: ハルシネーション・バイアスの4つの原因
+              points:
+                - ナレッジカットオフ：最新情報を知らない
+                - 確からしいデータの優先：似たデータを誤って出力
+                - エッジケース：特殊な条件での誤答
+                - プロンプトへの依存：指示に過度に従う
+
+      # 重要な概念と定義
+      key_concepts:
+        - concept: 生成AI（Generative AI）
+          definition: 生成・要約・発見が得意なAI。計算や規則処理は苦手。
+        - concept: LLM（大規模言語モデル）
+          definition: 人間のような文章生成が得意なモデル。膨大なテキストデータを学習し、パターンから次の言葉を予測。
+        - concept: トークン
+          definition: 文章を単語や文字レベルに分解したパーツ。LLMが処理する最小単位。
+        - concept: コンテキストウィンドウ
+          definition: LLMが一度に処理できる入力と出力の最大トークン数。超えると忘れる。
+        - concept: ナレッジカットオフ
+          definition: LLMが学習に使った情報の最終日時。これ以降の情報は知らない。
+        - concept: ハルシネーション
+          definition: AIが最もらしいが事実と異なる情報を生成してしまう現象。
+        - concept: バイアス
+          definition: 学習データの偏りをそのまま反映して公平性を欠いた出力をすること。
+        - concept: モデル
+          definition: 膨大なデータを解析して答え方のパターンを学んだもの。パターンの集合。
+
+      # 具体例
+      examples:
+        - category: 生成AIの活用例
+          items:
+              - name: 生成
+              description: 広告コピー自動生成、新商品イメージ写真作成、音声生成
+              - name: 要約
+              description: 議事録要約、ニュース要約、論文要約
+              - name: 発見
+              description: トレンド発見、顧客インサイト抽出、リサーチ支援
+
+        - category: 生成AIに不向きな例
+          items:
+              - name: 計算
+              description: ROIやIRR算出など正確性必須の業務、複雑な数列処理
+              - name: 規則処理
+              description: 明確な条件分岐（1以上なら処理A）、完全一致のデータ抽出
+
+        - category: ハルシネーションの例
+          items:
+              - name: 存在しない製品
+              description: iPhone20がありますと答える
+              - name: 古い情報を新情報として提示
+              description: 閉店したカフェを新しい店として紹介
+              - name: 似た情報の誤出力
+              description: O4 MiniのコストをGPT-4o-miniのデータで答える
+              - name: エッジケース
+              description: 「日本で最も背が高い2歳児」に架空の人物で答える
+
+        - category: 各モデルのトークン数比較
+          items:
+              - GPT-5：40万トークン
+              - Claude 4.1 Opus：20万トークン
+              - Gemini 2.5 Pro：100万トークン
+
+        - category: コスト例
+          items:
+              - GPT-5：出力100万トークンで10ドル
+              - Gemini 2.5 Flash Lite：出力100万トークンで0.4ドル
+              - Runway Gen 4（動画）：10秒で1.5ドル
+
+      # 重要な引用・フレーズ
+      quotes:
+        - "ChatGPTはモデルではない。ただのAIチャットのサービスの名称"
+        - "生成AIは確率で生成されている"
+        - "LLMを自在に扱えるかどうかが全ての根幹"
+        - "生成AIにできることは生成・要約・発見。これ以外はやらせない方がいい"
+        - "モデル選びはAIにおける人材採用と同じ"
+        - "ハルシネーションは起こらないということはない。ほぼなくすことはできるが100%ではない"
+        - "生成AIが出してきた結果を鵜呑みにせず、判断は私たちである"
+
+      # 実践的なアドバイス
+      practical_tips:
+        - tip: モデル選定の重要性
+          description: 有名なモデルをとりあえず使うのではなく、効率化したい業務に応じて戦略的に選ぶ
+
+        - tip: 同じプロンプトで複数モデル検証
+          description: ChatGPT、Claude、Geminiに同じプロンプトを送って特性を理解
+
+        - tip: ブラウザ利用時のコスト
+          description: ブラウザ上での使用は月額固定。APIエージェント開発時にトークンコストが発生
+
+        - tip: ハルシネーション対策の意識
+          description: 常にハルシネーションの可能性を意識し、出力を鵜呑みにしない
+
+        - tip: 計算や規則処理の代替
+          description: 計算はExcelやPython、規則処理はプログラムで処理する
+
+      # メトリクス・数値
+      metrics:
+        - GPT-5 Thinking：週3000回使用可能
+        - ハルシネーション発生：数十万回の検証でほとんどの失敗原因
+        - 東京の確率：95%、京都：3%（確率計算の例）
+        - O4 Mini実際のコスト：入力1.1ドル、出力4.4ドル/100万トークン
+
+      # 検索タグ
+      search_tags:
+        - fundamentals
+        - generative-ai
+        - llm
+        - large-language-model
+        - token
+        - context-window
+        - knowledge-cutoff
+        - hallucination
+        - bias
+        - model-selection
+        - chatgpt
+        - claude
+        - gemini
+        - grok
+
+      # 章の要約
+      content_summary: |
+        生成AIとLLMの基礎原理を体系的に学習する章。生成AIができること（生成・要約・発見）と
+        できないこと（計算・規則処理）を明確に区別。LLMの5つの特徴（モダリティ、コンテキストウィンドウ、
+        コスト、ナレッジカットオフ、パフォーマンス）と2つの注意点（ハルシネーション、バイアス）を詳説。
+        各モデルの特性を理解し、業務に応じた適切なモデル選定の重要性を強調。
+
+    - chapter_id: 3
+      title: プロンプトエンジニアリング
+      page_count: 75
+      duration: "約30-40分"
+
+      # 講義の構成
+      agenda:
+        - カリキュラムのゴール
+        - プロンプトエンジニアリング概要
+        - プロンプトの7つの要素
+        - 5つの言語化テクニック
+        - メタプロンプト
+        - AIを扱う際の注意点
+        - 要点の振り返り
+
+      # 学習目標
+      learning_objectives:
+        - AIスキルの真髄「プロンプトエンジニアリング」を理解する
+        - プロンプト作成における基礎・テクニックを習得できる
+        - プロンプトの7つの要素を理解し活用できる
+        - 言語化テクニックを身につけて意図を的確に伝える
+        - メタプロンプトを使って効率的にプロンプトを作成する
+
+      # 主要セクション
+      main_sections:
+        - section_title: AIを扱う際の注意点
+          key_points:
+              - ブラウザ上では出力上限がある
+              - 何度もチャットでやり取りをすると精度が下がる
+              - 無理に出力させようとすると精度低下につながる
+          subsections:
+              - title: 出力上限への対処法
+              points:
+                - ChatGPT通常：約4000文字、キャンバス機能：約1万文字
+                - 長文出力したい場合は段落ごとに順番に出力させる
+                - Geminiは出力上限が大きいので長文出力に適している
+                - GPT-5以降、トークン節約のため出力を絞る傾向
+              - title: チャットの切り替えタイミング
+              points:
+                - やり取り回数が増えるほど無駄な情報がたまる
+                - コンテキストウィンドウを超えてAIが忘れてしまう
+                - 5回試してダメな場合は新しいチャットに切り替える
+                - 推論（思考中）で大量のトークンを使うことがある
+                - 要約を作って新しいチャットに渡す手法も有効
+
+        - section_title: プロンプトエンジニアリングとは
+          key_points:
+              - 生成AIから理想の出力を得られる指示を作る技術
+              - AIエージェント開発の文脈ではプロンプトの設計、戦略の活用、タスクの定義の3要素
+              - まずはブラウザ上で自在にAIを使いこなすことがゴール
+              - JSON形式の複雑なプロンプトも最終的には書けるようになる
+          subsections:
+              - title: システムプロンプトとユーザープロンプト
+              points:
+                - システムプロンプトは「店員へのマニュアル」のようなもの
+                - ユーザープロンプトは「お客の注文」にあたる
+                - Chat GPT側でセットされているシステムプロンプトが自動で合成される
+                - 後に書かれた内容が優先される性質を活用して疑似的に上書き
+              - title: 明確な指示の重要性
+              points:
+                - あなたが説明できることしかLLMにタスクを任せることはできない
+                - 自分の業務を言語化する能力がとても大切
+                - 曖昧な指示では望む結果が得られにくい
+                - ユーザープロンプトは詳細であればあるほど良い
+
+        - section_title: プロンプトの7つの要素
+          key_points:
+              - 役割：タスクに最適な役割を設定する
+              - 目的：やって欲しいことをシンプルに伝える
+              - 背景：どのような状況で依頼しているのか説明
+              - 制約：回答における条件や守って欲しいこと
+              - 出力形式：どのような形式や構造で出力してほしいか
+              - 参考情報：モデルの推論に使わせる文脈や資料
+              - 例示(Shot)：出力時のお手本
+          subsections:
+              - title: Shot（例示）の使い方
+              points:
+                - Zero-shot：shotが0で自由度が高い
+                - One-shot：shotが1つで方向性が定まる
+                - Few-shot：shotが複数で出力が収束する
+
+        - section_title: 5つの言語化テクニック
+          key_points:
+              - 5分間しゃべる：音声入力や録音データをAIに渡す
+              - 要素を網羅的に書く：箇条書きで並べて整理
+              - 絵にする：図や絵で視覚的に伝える
+              - マインドマップにする：関連アイデアを枝分かれで展開
+              - 喋りながら画面録画を撮る：実際の作業を見せながら説明
+          subsections:
+              - title: 各テクニックの適用場面
+              points:
+                - 喋るのが得意な人は音声入力を活用。講師も普段から音声入力を使用。
+                - 書きながら整理するのが得意な人は箇条書き
+                - ビジュアルで考えるのが得意な人は図解。女性スタッフに多い手法。
+                - 思考を発散させたい人はマインドマップ（MindMeister等を活用）
+                - 画面遷移が多いタスクは画面録画。3-5分程度が適切
+
+        - section_title: メタプロンプト
+          key_points:
+              - プロンプトを生成するためのプロンプト
+              - YAMLで構造化すると出力が安定する
+              - 「この内容をYAMLでプロンプト化して」と伝えるだけ
+              - 「メタプロンプトを使わないと数万文字のプロンプトは作れない」
+          subsections:
+              - title: 構造化と重み付け
+              points:
+                - YAMLという表記法で簡単に構造化
+                - 構造化すると勝手に重み付けが行われる
+                - 言語化した情報を効率的にプロンプト化
+                - 出力が安定しない時はまずYAML化を試す
+              - title: 実務での使用方法
+              points:
+                - 1個1個プロンプトの要素を書くケースは少ない
+                - ほぼほぼメタプロンプトを使って生成
+                - AIエージェント開発時は基本的にYAML化が必須
+
+      # 重要な概念と定義
+      key_concepts:
+        - concept: プロンプトエンジニアリング
+          definition: 生成AIから理想の出力を得られる指示を作る技術。AIの性能を最大限に引き出すための「指示の技術」。
+        - concept: システムプロンプト
+          definition: ユーザーが入力した内容に自動で追加される指示文。生成AIサービス側でセットされている基本的なルール。
+        - concept: プロンプトの7つの要素
+          definition: 役割・目的・背景・制約・出力形式・参考情報・例示(Shot)の7要素で構成される効果的なプロンプトの構成要素。
+        - concept: メタプロンプト
+          definition: プロンプトを生成するためのプロンプト。プロンプト作成自体をAIに行わせるテクニック。
+        - concept: Shot（例示）
+          definition: 出力例を提示することでAIの出力方向性を制御する手法。Zero-shot、One-shot、Few-shotがある。
+
+      # 具体例
+      examples:
+        - category: 悪いプロンプト例
+          items:
+              - "文章をまとめて"
+              - "資料を作って"
+              - "説明して"
+              - 曖昧で具体性に欠ける指示
+              - "勝手に考えて」という指示（良いものができる確率が低い）
+
+        - category: 良いプロンプト例
+          items:
+              - "この文章を500文字以内で要約してください"
+              - "社内プレゼン用に、箇条書きで3つのポイントに整理してください"
+              - "中学生にもわかるように例え話を交えて説明してください"
+              - 具体的な条件と出力形式を指定
+
+        - category: 実践問題の実例
+          items:
+              - "営業部の求人票作成：段階的にタスク処理フロー、コンテキスト、Shotを追加"
+              - "AI活用の成功事例記事：経営者層向けの見出し構成案作成"
+              - "1万文字の議事録要約：決定事項とアクションアイテム（誰が・何を・いつまでに）を抽出"
+
+        - category: AX社の実例
+          items:
+              - "LPの構成出力プロンプト：15,324文字でブレにくい出力を実現"
+              - "10万回以上の検証で培われたプロンプトテクニック"
+              - "基本的にOne-shotで設計、安定しない場合はFew-shotへ"
+              - "AIエージェント開発時はYAMLで構造化が基本"
+
+      # 引用・名言
+      quotes:
+        - "AIに'何を''どうしてほしいか'を的確に伝えることで、その性能を最大限に引き出します"
+        - "あなたが説明できることしかLLMにタスクを任せることはできません"
+        - "優秀な新人でも、上司の指示が曖昧だと良い成果が出ないのと一緒"
+        - "プロンプトの指示通りに動くのがLLM。'勝手に考えて'という指示では、良いものができる確率は低い"
+        - "AIは自分の分身を作るというイメージ。自分が理解していないことは基本的に任せられない。"
+        - "自分の業務を言語化する能力がとても大切"
+        - "プロンプトエンジニアリングはAIスキルの核"
+
+      # 実践的なヒント
+      practical_tips:
+        - tip: タスク処理の流れを明確に
+          details: "必要な情報を整理する→各項目を埋める→出力内容を整形する」のようなステップを含める"
+        - tip: コンテキストを充実させる
+          details: "役割、会社情報、ビジョン、環境などの背景情報を追加すると出力が向上。AIが知らない自社情報は特に重要。"
+        - tip: 良質なコンテキストが鍵
+          details: "良質なコンテキストがあるほど出力精度は安定。関係ない情報を添付すると精度がかなりダウンするので注意。"
+        - tip: YAMLで構造化
+          details: "『この内容をYAMLでプロンプト化して』と伝えるだけでOK。出力が安定しない時はまずYAML化を試す。"
+        - tip: メタプロンプトを積極活用
+          details: "AIにプロンプトを書かせた方が楽で効率的。数万文字のプロンプトもメタプロンプトなしでは作れない。"
+        - tip: 制約情報の注意点
+          details: "制約情報が増えすぎるとAIが忘れやすくなる。ネガティブプロンプトよりポジティブな指示が優先される。"
+        - tip: Shotの使い分け
+          details: "基本はOne-shotから始める。出力が安定しない場合はFew-shotへ。幅広い調査にはZero-shot。"
+        - tip: 音声入力の活用
+          details: "キーボードより早い。講師も普段から音声入力でプロンプトを書いている。最初は恥ずかしいが慣れると便利。"
+        - tip: チャットの切り替え
+          details: "5回試してダメな場合は新しいチャットに切り替える。悪い情報に引っ張られているかコンテキストウィンドウを突破している可能性。"
+        - tip: 出力上限への対処
+          details: "ChatGPTは約4000文字、キャンバス機能で約1万文字。長文出力にはGeminiを使うか、段落ごとに順番に出力させる。"
+
+      # パフォーマンス指標
+      metrics:
+        - metric: プロンプト要素の完全性
+          target: "7つの要素のうち、タスクに応じて必要な要素を適切に含める"
+        - metric: 出力の一致率
+          target: "期待する出力形式と実際の出力の一致度80%以上"
+        - metric: Shot数の最適化
+          target: "タスクの複雑さに応じてZero/One/Few-shotを使い分け"
+        - metric: プロンプト文字数
+          target: "AX社のLP構成出力プロンプト：15,324文字（ブレづらい出力を実現）"
+        - metric: 検証回数
+          target: "10万回以上の検証経験に基づくテクニック"
+        - metric: チャット切り替えタイミング
+          target: "5回試してダメな場合は新しいチャットへ"
+
+      search_tags:
+        - prompt-engineering
+        - seven-elements
+        - meta-prompt
+        - language-techniques
+        - system-prompt
+        - user-prompt
+        - shot-learning
+        - yaml-structuring
+
+      content_summary: |
+        効果的なプロンプトの作成方法、7つの要素、言語化テクニックを習得。
+        実践的なプロンプトエンジニアリングスキルを身につける。
+
+    - chapter_id: 4
+      title: AI活用戦略
+      page_count: 38
+      agenda:
+        - プロンプトチェーン
+      learning_objectives:
+        - 組織におけるAI活用戦略を立案
+        - ROI評価方法を理解
+        - 導入プロセスを設計
+      search_tags:
+        - ai-strategy
+        - prompt-chain
+        - roi-evaluation
+      content_summary: |
+        組織におけるAI活用の戦略立案、ROI評価、導入プロセスを学習。
+        ビジネス価値を最大化するためのAI戦略を構築。
+
+    - chapter_id: 5
+      title: AIエージェントとは？
+      page_count: 34
+      duration: "約20-25分"
+
+      # 講義の構成
+      agenda:
+        - カリキュラムのゴール
+        - AIエージェントとは
+        - 要点の振り返り
+
+      # 学習目標
+      learning_objectives:
+        - AIエージェントについて理解を深める
+        - そもそもAIエージェントとは何なのかの全体像を学ぶ
+        - AIエージェント開発における知識の土台を作る
+        - 最も簡単なAIエージェントを作れるようになる
+
+      # 主要セクション
+      main_sections:
+        - section_title: AIエージェントの定義
+          key_points:
+              - ゴールまで自律的に動くAI
+              - 指示を与えると必要な情報収集やツール利用を行いタスクを遂行
+              - PC上で行うほとんどの作業はAIエージェントで代替可能
+              - AIであなたの分身を作る
+          subsections:
+              - title: 人間とAIの役割分担
+              points:
+                - 人間は創造的な仕事に集中（0→1の仕事）
+                - AIは作業や実行レイヤーの仕事（1→100の仕事）
+                - 価値創造を伴う仕事を人が行う
+
+        - section_title: AIエージェントの仕組み
+          key_points:
+              - エージェントはツールを持っている
+              - LLMは文章を生成するだけ、ツールを使えるようになるとAIエージェント
+              - 現在のチャットサービスはほぼAIエージェント化している
+              - どんなツールを持っているかがAIエージェントが生み出す結果に直結
+          subsections:
+              - title: 推論ループの流れ
+              points:
+                - 観察：ユーザーの指示を確認
+                - 思考：LLMがツール使用を判断
+                - 行動：ツールを呼び出し実行
+                - このループを繰り返して目的を達成
+              - title: ツールの種類
+              points:
+                - Web検索ツール
+                - 外部API連携（Gmail、Googleカレンダー、Google Drive等）
+                - 画像・動画・音声生成ツール（Diffusionモデル）
+                - OCR、RAG、コード実行
+                - 別のAIエージェント（Agent to Agent）
+
+        - section_title: 具体的なAIエージェントの例
+          key_points:
+              - ディープリサーチ：検索ツールを連続実行するAIエージェント
+              - Custom GPTs：自分専用のAIエージェントを作成
+              - NotebookLM：情報をもとに音声・動画生成も可能
+              - Gemini GEM：Googleサービスを横断的に扱う
+          subsections:
+              - title: Custom GPTsの作り方
+              points:
+                - 左サイドバーからGPTボタンを押して「作成する」を選択
+                - プロンプトを入力すると自動でエージェントが構築される
+                - 「構成」ボタンで細かく設定・確認可能
+                - Web検索、キャンバス、画像生成、コード実行の4つの標準ツール
+
+        - section_title: AIエージェントとRPAの違い
+          key_points:
+              - RPAはプログラムのみで設計
+              - AIエージェントはプロンプトとプログラムで設計
+              - RPAは決められた手順を忠実に繰り返す
+              - AIエージェントはLLMが文脈に合うツールを呼び出す
+
+      # 重要な概念と定義
+      key_concepts:
+        - concept: AIエージェント
+          definition: ゴールまで自律的に動くAI。指示を与えると必要な情報収集やツールの利用を行いながらタスクを遂行する。
+        - concept: ツール
+          definition: AIエージェントが使用できる機能やサービス。検索、API連携、コード実行など。
+        - concept: 推論ループ
+          definition: 観察→思考→行動のサイクル。AIエージェントがタスクを実行する際の基本的な動作フロー。
+        - concept: Agent to Agent（A2A）
+          definition: AIエージェントがAIエージェントに指示を出す仕組み。複数エージェントの連携。
+        - concept: ディープリサーチ
+          definition: ChatGPTの機能の1つ。検索ツールを連続実行して目的を達成するAIエージェント。
+
+      # 具体例
+      examples:
+        - category: ツール使用の例
+          items:
+              - "Web検索：ReActで習った検索を挟む行動はWebサーチツールの使用"
+              - "カレンダー連携：空き時間を確認して予定を自動作成"
+              - "Uber Eats注文：ブラウジングツールで実際に24個入りたこ焼きを注文"
+
+        - category: AX社の実装事例
+          items:
+              - "広告入稿エージェント：必要なエージェントを集めてタスク実行"
+              - "キーワードリサーチ、広告文作成、競合分析のエージェント連携"
+              - "PC上の様々な業務をAIエージェント化して代替"
+
+        - category: 実践問題の例
+          items:
+              - "3C分析：ディープリサーチを使って市場・競合・自社を分析"
+              - "YAMLプロンプトGPTs：コンテキスト情報からYAML化するエージェント"
+              - "足りない情報を質問しつつ、検索して自動補完する機能追加"
+
+      # 引用・名言
+      quotes:
+        - "部下にこの仕事やっといてと伝えると指示に合わせて仕事をしてくれる。これをAIが自動で行うのがAIエージェント。"
+        - "PC上で行うほとんどの作業はAIエージェントを開発することで代替できてしまいます"
+        - "AIであなたの分身を作ろう"
+        - "どんなツールを持っているかがAIエージェントが生み出す結果に直結する"
+        - "LLMはシンプルに文章を生成するだけ、ツールを使えるようになるとAIエージェント"
+
+      # 実践的なヒント
+      practical_tips:
+        - tip: ツールの選定
+          details: "何をやらせたいかで必要なツールが決まる。ツールを持ってなければその機能は実行できない。"
+        - tip: GPTsのツール設定
+          details: "チェックボックスでツールを有効化し、プロンプト内で明示することで確実に使用される。"
+        - tip: 簡単なエージェントから始める
+          details: "GPTsで十分なケースも多い。複雑化する場合や他のトリガーが必要な場合は専用エージェントを組む。"
+        - tip: RPAとの使い分け
+          details: "決められた手順の繰り返しはRPA、判断が必要なタスクはAIエージェント。"
+        - tip: 推論ループの理解
+          details: "観察→思考→行動のループが何度も繰り返されていることを理解しておく。"
+
+      # パフォーマンス指標
+      metrics:
+        - metric: AIエージェント化の効果
+          target: "PC上で行う作業の大部分が代替可能"
+        - metric: エージェント連携
+          target: "複数エージェントを組み合わせて複雑なタスクを実行"
+        - metric: Custom GPTsの活用
+          target: "標準ツール4つ（Web検索、キャンバス、画像生成、コード実行）を活用"
+
+      search_tags:
+        - ai-agent
+        - autonomous-ai
+        - custom-gpts
+        - deep-research
+        - agent-to-agent
+        - tools
+        - reasoning-loop
+        - rpa-vs-agent
+
+      content_summary: |
+        AIエージェントの概念、設計方法、実装パターンを理解。
+        ゴールまで自律的に動くAIシステムの構築方法を習得。
+
+    - chapter_id: 6
+      title: ワークフロー分解
+      page_count: 70
+      agenda:
+        - 設計に必要な3つの要素
+      learning_objectives:
+        - 業務プロセスの分解方法を学習
+        - 自動化ポイントの特定
+        - ワークフロー設計
+      search_tags:
+        - workflow-decomposition
+        - process-automation
+        - design-elements
+      content_summary: |
+        業務プロセスの分解方法、自動化ポイントの特定、ワークフロー設計を学習。
+        効率的な業務自動化を実現。
+
+    - chapter_id: 7
+      title: バイブコーディング
+      page_count: 34
+      learning_objectives:
+        - 音声入力を活用した高速コーディング
+        - バイブコーディングの手法習得
+      search_tags:
+        - vibe-coding
+        - voice-input
+        - rapid-development
+      content_summary: |
+        音声入力を活用した高速コーディング手法。
+        バイブコーディングによる開発効率の劇的な向上を実現。
+
+    - chapter_id: 8
+      title: APIを使ったAIエージェント開発
+      page_count: 25
+      agenda:
+        - APIとは？
+        - GASとは？
+      learning_objectives:
+        - APIを使用したAIエージェントの実装
+        - OpenAI API、Claude APIの活用
+        - GASとの統合方法
+      search_tags:
+        - api-development
+        - openai-api
+        - claude-api
+        - google-apps-script
+      content_summary: |
+        APIを使用したAIエージェントの実装方法。
+        OpenAI API、Claude APIの活用と統合方法を実践的に学習。
+
+    - chapter_id: 9
+      title: よく使うプロンプトテクニック
+      page_count: 60
+      learning_objectives:
+        - 実践的なプロンプトテクニック習得
+        - Few-shot learning
+        - Chain of Thought
+      search_tags:
+        - prompt-techniques
+        - few-shot-learning
+        - chain-of-thought
+      content_summary: |
+        実践的なプロンプトテクニック集。
+        Few-shot learning、Chain of Thought、その他の高度なテクニックを習得。
+
+    - chapter_id: 10
+      title: 入力と出力の応用
+      page_count: 37
+      learning_objectives:
+        - 入力の最適化方法
+        - 出力の制御方法
+        - 構造化入出力の実装
+      search_tags:
+        - input-optimization
+        - output-control
+        - structured-io
+      content_summary: |
+        入力の最適化と出力の制御方法。
+        構造化入出力、フォーマット制御、品質向上のテクニックを学習。
+
+    - chapter_id: 11
+      title: 実践的ChatGPT活用術
+      page_count: 39
+      learning_objectives:
+        - ChatGPTの実践的な活用
+        - カスタムインストラクション
+        - プラグイン活用
+      search_tags:
+        - chatgpt
+        - custom-instructions
+        - plugins
+        - practical-use
+      content_summary: |
+        ChatGPTの実践的な活用方法。
+        カスタムインストラクション、プラグイン活用、業務への応用を習得。
+
+    - chapter_id: 12
+      title: 開発エラーへの対応方法
+      page_count: 46
+      agenda:
+        - エラー対応フローチャート
+      learning_objectives:
+        - エラー対処法の習得
+        - デバッグテクニック
+        - トラブルシューティング
+      search_tags:
+        - error-handling
+        - debugging
+        - troubleshooting
+      content_summary: |
+        開発時のエラー対処法とデバッグテクニック。
+        トラブルシューティングのベストプラクティスを学習。
+
+  # グローバル検索インデックス
+  global_index:
+    concepts:
+      AI万能病: [1]
+      プロンプトエンジニアリング: [3, 9]
+      AIエージェント: [5, 8]
+      バイブコーディング: [7]
+      ワークフロー分解: [6]
+
+    companies:
+      AX社: [1]
+      グラシズ: [1]
+      Route66: [1]
+      WISDOM: [1]
+
+    techniques:
+      2画面チャット法: [1]
+      Few-shot learning: [9]
+      Chain of Thought: [9]
+      メタプロンプト: [3]

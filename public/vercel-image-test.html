@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🚀 Vercel画像生成エージェント 実連携テスト</title>
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        background: #f5f5f5;
+      }
+
+      .container {
+        background: white;
+        border-radius: 12px;
+        padding: 30px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      h1 {
+        color: #333;
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .test-section {
+        margin-bottom: 30px;
+        padding: 20px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+      }
+
+      .test-section h2 {
+        color: #667eea;
+        margin-bottom: 15px;
+      }
+
+      .warning {
+        background: #fff3cd;
+        border: 1px solid #ffeaa7;
+        border-radius: 6px;
+        padding: 15px;
+        margin: 15px 0;
+        font-size: 14px;
+      }
+
+      .success {
+        background: #d4edda;
+        border: 1px solid #c3e6cb;
+        border-radius: 6px;
+        padding: 15px;
+        margin: 15px 0;
+      }
+
+      .error {
+        background: #f8d7da;
+        border: 1px solid #f5c6cb;
+        border-radius: 6px;
+        padding: 15px;
+        margin: 15px 0;
+      }
+
+      input,
+      select,
+      textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        font-size: 16px;
+        margin-top: 5px;
+      }
+
+      button {
+        background: #667eea;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 16px;
+        margin: 5px;
+      }
+
+      button:hover {
+        background: #5a67d8;
+      }
+
+      button:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+      }
+
+      .progress {
+        background: #f0f0f0;
+        border-radius: 6px;
+        padding: 15px;
+        margin: 15px 0;
+        font-family: monospace;
+        white-space: pre-line;
+        max-height: 400px;
+        overflow-y: auto;
+      }
+
+      .results {
+        background: #f8f9fa;
+        border-radius: 6px;
+        padding: 15px;
+        margin: 15px 0;
+      }
+
+      .article-preview {
+        background: #f8f9fa;
+        border-radius: 6px;
+        padding: 15px;
+        margin: 10px 0;
+        font-size: 14px;
+      }
+
+      .article-preview h3 {
+        margin: 0 0 10px 0;
+        color: #333;
+      }
+
+      .article-preview ul {
+        margin: 5px 0;
+        padding-left: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🚀 Vercel画像生成エージェント 実連携テスト</h1>
+
+      <div class="warning">
+        <strong>⚠️ 重要:</strong>
+        このテストは実際にデプロイされている画像生成エージェントに接続します。
+        API使用料金が発生する可能性があります。テスト前に料金体系をご確認ください。
+      </div>
+
+      <!-- 設定セクション -->
+      <div class="test-section">
+        <h2>⚙️ 設定</h2>
+
+        <div style="margin-bottom: 15px">
+          <label for="imageAgentUrl">画像生成エージェントURL:</label>
+          <input
+            type="text"
+            id="imageAgentUrl"
+            placeholder="https://ai-article-imager-for-wordpress.vercel.app"
+            value="https://ai-article-imager-for-wordpress.vercel.app"
+          />
+          <small style="color: #666"
+            >実際にデプロイされているVercel画像生成エージェントのURLを入力してください</small
+          >
+        </div>
+
+        <button onclick="testConnection()">🔗 接続テスト</button>
+        <div id="connectionStatus"></div>
+      </div>
+
+      <!-- 単体テスト -->
+      <div class="test-section">
+        <h2>📄 単体テスト</h2>
+
+        <div style="margin-bottom: 15px">
+          <label for="testArticleSelect">テスト記事を選択:</label>
+          <select id="testArticleSelect" onchange="previewArticle()">
+            <option value="0">SEO対策完全ガイド (H2: 4個, H3: 12個)</option>
+            <option value="1">
+              リモートワーク成功の秘訣 (H2: 3個, H3: 9個)
+            </option>
+            <option value="2">AI活用で業務効率化 (H2: 3個, H3: 9個)</option>
+          </select>
+        </div>
+
+        <div id="articlePreview" class="article-preview"></div>
+
+        <button onclick="testSingleArticle()">
+          🎨 選択した記事で画像生成テスト
+        </button>
+
+        <div id="singleProgress" class="progress" style="display: none"></div>
+        <div id="singleResults" class="results" style="display: none"></div>
+      </div>
+
+      <!-- 全記事テスト -->
+      <div class="test-section">
+        <h2>🚀 全記事テスト</h2>
+        <p>すべてのテスト記事で順次画像生成を実行します</p>
+
+        <button onclick="testAllArticles()">
+          🎯 全記事で画像生成テスト実行
+        </button>
+
+        <div id="allProgress" class="progress" style="display: none"></div>
+        <div id="allResults" class="results" style="display: none"></div>
+      </div>
+
+      <!-- カスタムテスト -->
+      <div class="test-section">
+        <h2>✏️ カスタムテスト</h2>
+        <p>独自のデータで画像生成をテスト</p>
+
+        <div style="margin-bottom: 15px">
+          <label for="customTitle">記事タイトル:</label>
+          <input
+            type="text"
+            id="customTitle"
+            placeholder="テスト記事のタイトル"
+          />
+        </div>
+
+        <div style="margin-bottom: 15px">
+          <label for="customKeyword">キーワード:</label>
+          <input
+            type="text"
+            id="customKeyword"
+            placeholder="メインキーワード"
+          />
+        </div>
+
+        <div style="margin-bottom: 15px">
+          <label for="customHeadings">見出し (1行1見出し):</label>
+          <textarea
+            id="customHeadings"
+            rows="5"
+            placeholder="見出し1&#10;見出し2&#10;見出し3"
+          ></textarea>
+        </div>
+
+        <button onclick="testCustomArticle()">
+          🎨 カスタムデータで画像生成テスト
+        </button>
+
+        <div id="customProgress" class="progress" style="display: none"></div>
+        <div id="customResults" class="results" style="display: none"></div>
+      </div>
+    </div>
+
+    <script>
+      // テスト用記事データ
+      const testArticles = [
+        {
+          title: "SEO対策完全ガイド：検索順位を上げる15の手法",
+          keyword: "SEO対策",
+          characterCount: 8500,
+          h2Items: [
+            {
+              text: "SEO対策の基本概念",
+              h3Items: [
+                "検索エンジンの仕組み",
+                "SEOの重要性",
+                "検索アルゴリズムの理解",
+              ],
+            },
+            {
+              text: "キーワード戦略の立て方",
+              h3Items: [
+                "キーワード調査の方法",
+                "競合分析",
+                "ロングテールキーワード活用",
+              ],
+            },
+            {
+              text: "コンテンツ最適化テクニック",
+              h3Items: [
+                "タイトルタグ最適化",
+                "メタディスクリプション",
+                "見出し構造の改善",
+              ],
+            },
+            {
+              text: "技術的SEO対策",
+              h3Items: ["サイト速度改善", "モバイル最適化", "構造化データ実装"],
+            },
+          ],
+        },
+        {
+          title: "リモートワーク成功の秘訣：生産性を3倍にする方法",
+          keyword: "リモートワーク",
+          characterCount: 6200,
+          h2Items: [
+            {
+              text: "リモートワークの現状と課題",
+              h3Items: [
+                "導入企業の増加傾向",
+                "よくある問題点",
+                "解決すべき課題",
+              ],
+            },
+            {
+              text: "効率的な作業環境の構築",
+              h3Items: [
+                "ホームオフィス設計",
+                "必要なツールと機器",
+                "集中力を高める工夫",
+              ],
+            },
+            {
+              text: "時間管理とタスク管理",
+              h3Items: [
+                "ポモドーロテクニック",
+                "タスク優先順位付け",
+                "デッドライン管理",
+              ],
+            },
+          ],
+        },
+        {
+          title: "AI活用で業務効率化：中小企業でも始められる実践ガイド",
+          keyword: "AI活用",
+          characterCount: 7800,
+          h2Items: [
+            {
+              text: "AI導入の基礎知識",
+              h3Items: [
+                "AIの種類と特徴",
+                "中小企業での活用メリット",
+                "導入コストの考え方",
+              ],
+            },
+            {
+              text: "具体的なAI活用事例",
+              h3Items: [
+                "顧客対応の自動化",
+                "データ分析の効率化",
+                "文書作成支援",
+              ],
+            },
+            {
+              text: "AI導入の進め方",
+              h3Items: ["段階的導入計画", "従業員教育", "効果測定方法"],
+            },
+          ],
+        },
+      ];
+
+      // 記事プレビュー表示
+      function previewArticle() {
+        const selectedIndex =
+          document.getElementById("testArticleSelect").value;
+        const article = testArticles[selectedIndex];
+        const preview = document.getElementById("articlePreview");
+
+        let html = `<h3>${article.title}</h3>`;
+        html += `<p><strong>キーワード:</strong> ${
+          article.keyword
+        } | <strong>文字数:</strong> ${article.characterCount.toLocaleString()}</p>`;
+        html += `<p><strong>見出し構造:</strong></p>`;
+
+        article.h2Items.forEach((h2, index) => {
+          html += `<p><strong>H2-${index + 1}:</strong> ${h2.text}</p>`;
+          if (h2.h3Items.length > 0) {
+            html += `<ul>`;
+            h2.h3Items.forEach((h3) => {
+              html += `<li>H3: ${h3}</li>`;
+            });
+            html += `</ul>`;
+          }
+        });
+
+        preview.innerHTML = html;
+      }
+
+      // 接続テスト
+      async function testConnection() {
+        const url = document.getElementById("imageAgentUrl").value;
+        const statusDiv = document.getElementById("connectionStatus");
+
+        if (!url) {
+          statusDiv.innerHTML =
+            '<div class="error">URLを入力してください</div>';
+          return;
+        }
+
+        statusDiv.innerHTML = "<div>🔗 接続テスト中...</div>";
+
+        try {
+          const response = await fetch(`${url}/api/health`, {
+            method: "GET",
+            headers: { Accept: "application/json" },
+          });
+
+          if (response.ok) {
+            statusDiv.innerHTML =
+              '<div class="success">✅ 接続成功！画像生成エージェントに正常に接続できました。</div>';
+          } else {
+            statusDiv.innerHTML = `<div class="error">❌ 接続失敗: HTTP ${response.status}</div>`;
+          }
+        } catch (error) {
+          statusDiv.innerHTML = `<div class="error">❌ 接続エラー: ${error.message}</div>`;
+        }
+      }
+
+      // 単体記事テスト
+      async function testSingleArticle() {
+        const url = document.getElementById("imageAgentUrl").value;
+        const selectedIndex =
+          document.getElementById("testArticleSelect").value;
+        const article = testArticles[selectedIndex];
+
+        if (!url) {
+          alert("画像生成エージェントのURLを入力してください");
+          return;
+        }
+
+        const progressDiv = document.getElementById("singleProgress");
+        const resultsDiv = document.getElementById("singleResults");
+
+        progressDiv.style.display = "block";
+        resultsDiv.style.display = "none";
+        progressDiv.textContent = "";
+
+        try {
+          await runImageGenerationTest(article, url, (message) => {
+            progressDiv.textContent += message + "\n";
+            progressDiv.scrollTop = progressDiv.scrollHeight;
+          });
+        } catch (error) {
+          progressDiv.textContent += `❌ テストエラー: ${error.message}\n`;
+        }
+      }
+
+      // 全記事テスト
+      async function testAllArticles() {
+        const url = document.getElementById("imageAgentUrl").value;
+
+        if (!url) {
+          alert("画像生成エージェントのURLを入力してください");
+          return;
+        }
+
+        const progressDiv = document.getElementById("allProgress");
+        const resultsDiv = document.getElementById("allResults");
+
+        progressDiv.style.display = "block";
+        resultsDiv.style.display = "none";
+        progressDiv.textContent = "";
+
+        const results = [];
+
+        progressDiv.textContent += "🚀 全記事テスト開始\n";
+        progressDiv.textContent += `📊 テスト対象: ${testArticles.length}記事\n\n`;
+
+        for (let i = 0; i < testArticles.length; i++) {
+          const article = testArticles[i];
+
+          progressDiv.textContent += `📄 テスト ${i + 1}/${
+            testArticles.length
+          }: ${article.title}\n`;
+
+          try {
+            const result = await runImageGenerationTest(
+              article,
+              url,
+              (message) => {
+                progressDiv.textContent += `   ${message}\n`;
+                progressDiv.scrollTop = progressDiv.scrollHeight;
+              }
+            );
+
+            results.push({ article: article.title, success: true, ...result });
+          } catch (error) {
+            progressDiv.textContent += `   ❌ 失敗: ${error.message}\n`;
+            results.push({
+              article: article.title,
+              success: false,
+              error: error.message,
+            });
+          }
+
+          // 次のテストまで待機
+          if (i < testArticles.length - 1) {
+            progressDiv.textContent += "   ⏳ 3秒待機...\n\n";
+            await new Promise((resolve) => setTimeout(resolve, 3000));
+          }
+        }
+
+        // 結果サマリー
+        const successCount = results.filter((r) => r.success).length;
+        progressDiv.textContent += `\n🎉 全テスト完了\n`;
+        progressDiv.textContent += `📊 成功率: ${successCount}/${results.length}\n`;
+
+        resultsDiv.style.display = "block";
+        resultsDiv.innerHTML =
+          "<h3>📊 テスト結果</h3><pre>" +
+          JSON.stringify(results, null, 2) +
+          "</pre>";
+      }
+
+      // カスタム記事テスト
+      async function testCustomArticle() {
+        const url = document.getElementById("imageAgentUrl").value;
+        const title = document.getElementById("customTitle").value;
+        const keyword = document.getElementById("customKeyword").value;
+        const headings = document
+          .getElementById("customHeadings")
+          .value.split("\n")
+          .filter((h) => h.trim());
+
+        if (!url || !title || !keyword || headings.length === 0) {
+          alert("すべての項目を入力してください");
+          return;
+        }
+
+        const customArticle = {
+          title,
+          keyword,
+          characterCount: 5000,
+          h2Items: headings.map((heading) => ({
+            text: heading.trim(),
+            h3Items: [],
+          })),
+        };
+
+        const progressDiv = document.getElementById("customProgress");
+        const resultsDiv = document.getElementById("customResults");
+
+        progressDiv.style.display = "block";
+        resultsDiv.style.display = "none";
+        progressDiv.textContent = "";
+
+        try {
+          await runImageGenerationTest(customArticle, url, (message) => {
+            progressDiv.textContent += message + "\n";
+            progressDiv.scrollTop = progressDiv.scrollHeight;
+          });
+        } catch (error) {
+          progressDiv.textContent += `❌ テストエラー: ${error.message}\n`;
+        }
+      }
+
+      // 実際の画像生成テスト実行
+      async function runImageGenerationTest(article, url, onProgress) {
+        const startTime = Date.now();
+
+        onProgress(`🎨 画像生成開始: ${article.title}`);
+        onProgress(`📊 H2見出し数: ${article.h2Items.length}`);
+
+        // 画像生成エージェントが期待する形式でデータを準備
+        const payload = {
+          article: {
+            title: article.title,
+            keyword: article.keyword,
+            h2Items: article.h2Items,
+            characterCount: article.characterCount,
+            content: generateMockContent(article),
+          },
+          options: {
+            imageCount: article.h2Items.length,
+            style: "professional",
+            size: "1024x1024",
+          },
+        };
+
+        onProgress(`📡 データ送信中...`);
+
+        const response = await fetch(`${url}/api/generate-images`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify(payload),
+        });
+
+        const processingTime = Date.now() - startTime;
+
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+
+        const result = await response.json();
+
+        onProgress(`✅ 画像生成完了 (${processingTime}ms)`);
+        onProgress(`🖼️ 生成された画像数: ${result.images?.length || 0}`);
+
+        return {
+          processingTime,
+          imageCount: result.images?.length || 0,
+          response: result,
+        };
+      }
+
+      // モックコンテンツ生成
+      function generateMockContent(article) {
+        let content = `# ${article.title}\n\n`;
+        content += `この記事では「${article.keyword}」について詳しく解説します。\n\n`;
+
+        article.h2Items.forEach((h2, index) => {
+          content += `## ${h2.text}\n\n`;
+          content += `${h2.text}について説明します。\n\n`;
+
+          h2.h3Items.forEach((h3) => {
+            content += `### ${h3}\n\n`;
+            content += `${h3}に関する詳細な説明をここに記載します。\n\n`;
+          });
+        });
+
+        return content;
+      }
+
+      // 初期化
+      document.addEventListener("DOMContentLoaded", function () {
+        previewArticle();
+      });
+    </script>
+  </body>
+</html>
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🚀 Vercel画像生成エージェント 実連携テスト</title>
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        background: #f5f5f5;
+      }
+
+      .container {
+        background: white;
+        border-radius: 12px;
+        padding: 30px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      h1 {
+        color: #333;
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .test-section {
+        margin-bottom: 30px;
+        padding: 20px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+      }
+
+      .test-section h2 {
+        color: #667eea;
+        margin-bottom: 15px;
+      }
+
+      .warning {
+        background: #fff3cd;
+        border: 1px solid #ffeaa7;
+        border-radius: 6px;
+        padding: 15px;
+        margin: 15px 0;
+        font-size: 14px;
+      }
+
+      .success {
+        background: #d4edda;
+        border: 1px solid #c3e6cb;
+        border-radius: 6px;
+        padding: 15px;
+        margin: 15px 0;
+      }
+
+      .error {
+        background: #f8d7da;
+        border: 1px solid #f5c6cb;
+        border-radius: 6px;
+        padding: 15px;
+        margin: 15px 0;
+      }
+
+      input,
+      select,
+      textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        font-size: 16px;
+        margin-top: 5px;
+      }
+
+      button {
+        background: #667eea;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 16px;
+        margin: 5px;
+      }
+
+      button:hover {
+        background: #5a67d8;
+      }
+
+      button:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+      }
+
+      .progress {
+        background: #f0f0f0;
+        border-radius: 6px;
+        padding: 15px;
+        margin: 15px 0;
+        font-family: monospace;
+        white-space: pre-line;
+        max-height: 400px;
+        overflow-y: auto;
+      }
+
+      .results {
+        background: #f8f9fa;
+        border-radius: 6px;
+        padding: 15px;
+        margin: 15px 0;
+      }
+
+      .article-preview {
+        background: #f8f9fa;
+        border-radius: 6px;
+        padding: 15px;
+        margin: 10px 0;
+        font-size: 14px;
+      }
+
+      .article-preview h3 {
+        margin: 0 0 10px 0;
+        color: #333;
+      }
+
+      .article-preview ul {
+        margin: 5px 0;
+        padding-left: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🚀 Vercel画像生成エージェント 実連携テスト</h1>
+
+      <div class="warning">
+        <strong>⚠️ 重要:</strong>
+        このテストは実際にデプロイされている画像生成エージェントに接続します。
+        API使用料金が発生する可能性があります。テスト前に料金体系をご確認ください。
+      </div>
+
+      <!-- 設定セクション -->
+      <div class="test-section">
+        <h2>⚙️ 設定</h2>
+
+        <div style="margin-bottom: 15px">
+          <label for="imageAgentUrl">画像生成エージェントURL:</label>
+          <input
+            type="text"
+            id="imageAgentUrl"
+            placeholder="https://ai-article-imager-for-wordpress.vercel.app"
+            value="https://ai-article-imager-for-wordpress.vercel.app"
+          />
+          <small style="color: #666"
+            >実際にデプロイされているVercel画像生成エージェントのURLを入力してください</small
+          >
+        </div>
+
+        <button onclick="testConnection()">🔗 接続テスト</button>
+        <div id="connectionStatus"></div>
+      </div>
+
+      <!-- 単体テスト -->
+      <div class="test-section">
+        <h2>📄 単体テスト</h2>
+
+        <div style="margin-bottom: 15px">
+          <label for="testArticleSelect">テスト記事を選択:</label>
+          <select id="testArticleSelect" onchange="previewArticle()">
+            <option value="0">SEO対策完全ガイド (H2: 4個, H3: 12個)</option>
+            <option value="1">
+              リモートワーク成功の秘訣 (H2: 3個, H3: 9個)
+            </option>
+            <option value="2">AI活用で業務効率化 (H2: 3個, H3: 9個)</option>
+          </select>
+        </div>
+
+        <div id="articlePreview" class="article-preview"></div>
+
+        <button onclick="testSingleArticle()">
+          🎨 選択した記事で画像生成テスト
+        </button>
+
+        <div id="singleProgress" class="progress" style="display: none"></div>
+        <div id="singleResults" class="results" style="display: none"></div>
+      </div>
+
+      <!-- 全記事テスト -->
+      <div class="test-section">
+        <h2>🚀 全記事テスト</h2>
+        <p>すべてのテスト記事で順次画像生成を実行します</p>
+
+        <button onclick="testAllArticles()">
+          🎯 全記事で画像生成テスト実行
+        </button>
+
+        <div id="allProgress" class="progress" style="display: none"></div>
+        <div id="allResults" class="results" style="display: none"></div>
+      </div>
+
+      <!-- カスタムテスト -->
+      <div class="test-section">
+        <h2>✏️ カスタムテスト</h2>
+        <p>独自のデータで画像生成をテスト</p>
+
+        <div style="margin-bottom: 15px">
+          <label for="customTitle">記事タイトル:</label>
+          <input
+            type="text"
+            id="customTitle"
+            placeholder="テスト記事のタイトル"
+          />
+        </div>
+
+        <div style="margin-bottom: 15px">
+          <label for="customKeyword">キーワード:</label>
+          <input
+            type="text"
+            id="customKeyword"
+            placeholder="メインキーワード"
+          />
+        </div>
+
+        <div style="margin-bottom: 15px">
+          <label for="customHeadings">見出し (1行1見出し):</label>
+          <textarea
+            id="customHeadings"
+            rows="5"
+            placeholder="見出し1&#10;見出し2&#10;見出し3"
+          ></textarea>
+        </div>
+
+        <button onclick="testCustomArticle()">
+          🎨 カスタムデータで画像生成テスト
+        </button>
+
+        <div id="customProgress" class="progress" style="display: none"></div>
+        <div id="customResults" class="results" style="display: none"></div>
+      </div>
+    </div>
+
+    <script>
+      // テスト用記事データ
+      const testArticles = [
+        {
+          title: "SEO対策完全ガイド：検索順位を上げる15の手法",
+          keyword: "SEO対策",
+          characterCount: 8500,
+          h2Items: [
+            {
+              text: "SEO対策の基本概念",
+              h3Items: [
+                "検索エンジンの仕組み",
+                "SEOの重要性",
+                "検索アルゴリズムの理解",
+              ],
+            },
+            {
+              text: "キーワード戦略の立て方",
+              h3Items: [
+                "キーワード調査の方法",
+                "競合分析",
+                "ロングテールキーワード活用",
+              ],
+            },
+            {
+              text: "コンテンツ最適化テクニック",
+              h3Items: [
+                "タイトルタグ最適化",
+                "メタディスクリプション",
+                "見出し構造の改善",
+              ],
+            },
+            {
+              text: "技術的SEO対策",
+              h3Items: ["サイト速度改善", "モバイル最適化", "構造化データ実装"],
+            },
+          ],
+        },
+        {
+          title: "リモートワーク成功の秘訣：生産性を3倍にする方法",
+          keyword: "リモートワーク",
+          characterCount: 6200,
+          h2Items: [
+            {
+              text: "リモートワークの現状と課題",
+              h3Items: [
+                "導入企業の増加傾向",
+                "よくある問題点",
+                "解決すべき課題",
+              ],
+            },
+            {
+              text: "効率的な作業環境の構築",
+              h3Items: [
+                "ホームオフィス設計",
+                "必要なツールと機器",
+                "集中力を高める工夫",
+              ],
+            },
+            {
+              text: "時間管理とタスク管理",
+              h3Items: [
+                "ポモドーロテクニック",
+                "タスク優先順位付け",
+                "デッドライン管理",
+              ],
+            },
+          ],
+        },
+        {
+          title: "AI活用で業務効率化：中小企業でも始められる実践ガイド",
+          keyword: "AI活用",
+          characterCount: 7800,
+          h2Items: [
+            {
+              text: "AI導入の基礎知識",
+              h3Items: [
+                "AIの種類と特徴",
+                "中小企業での活用メリット",
+                "導入コストの考え方",
+              ],
+            },
+            {
+              text: "具体的なAI活用事例",
+              h3Items: [
+                "顧客対応の自動化",
+                "データ分析の効率化",
+                "文書作成支援",
+              ],
+            },
+            {
+              text: "AI導入の進め方",
+              h3Items: ["段階的導入計画", "従業員教育", "効果測定方法"],
+            },
+          ],
+        },
+      ];
+
+      // 記事プレビュー表示
+      function previewArticle() {
+        const selectedIndex =
+          document.getElementById("testArticleSelect").value;
+        const article = testArticles[selectedIndex];
+        const preview = document.getElementById("articlePreview");
+
+        let html = `<h3>${article.title}</h3>`;
+        html += `<p><strong>キーワード:</strong> ${
+          article.keyword
+        } | <strong>文字数:</strong> ${article.characterCount.toLocaleString()}</p>`;
+        html += `<p><strong>見出し構造:</strong></p>`;
+
+        article.h2Items.forEach((h2, index) => {
+          html += `<p><strong>H2-${index + 1}:</strong> ${h2.text}</p>`;
+          if (h2.h3Items.length > 0) {
+            html += `<ul>`;
+            h2.h3Items.forEach((h3) => {
+              html += `<li>H3: ${h3}</li>`;
+            });
+            html += `</ul>`;
+          }
+        });
+
+        preview.innerHTML = html;
+      }
+
+      // 接続テスト
+      async function testConnection() {
+        const url = document.getElementById("imageAgentUrl").value;
+        const statusDiv = document.getElementById("connectionStatus");
+
+        if (!url) {
+          statusDiv.innerHTML =
+            '<div class="error">URLを入力してください</div>';
+          return;
+        }
+
+        statusDiv.innerHTML = "<div>🔗 接続テスト中...</div>";
+
+        try {
+          const response = await fetch(`${url}/api/health`, {
+            method: "GET",
+            headers: { Accept: "application/json" },
+          });
+
+          if (response.ok) {
+            statusDiv.innerHTML =
+              '<div class="success">✅ 接続成功！画像生成エージェントに正常に接続できました。</div>';
+          } else {
+            statusDiv.innerHTML = `<div class="error">❌ 接続失敗: HTTP ${response.status}</div>`;
+          }
+        } catch (error) {
+          statusDiv.innerHTML = `<div class="error">❌ 接続エラー: ${error.message}</div>`;
+        }
+      }
+
+      // 単体記事テスト
+      async function testSingleArticle() {
+        const url = document.getElementById("imageAgentUrl").value;
+        const selectedIndex =
+          document.getElementById("testArticleSelect").value;
+        const article = testArticles[selectedIndex];
+
+        if (!url) {
+          alert("画像生成エージェントのURLを入力してください");
+          return;
+        }
+
+        const progressDiv = document.getElementById("singleProgress");
+        const resultsDiv = document.getElementById("singleResults");
+
+        progressDiv.style.display = "block";
+        resultsDiv.style.display = "none";
+        progressDiv.textContent = "";
+
+        try {
+          await runImageGenerationTest(article, url, (message) => {
+            progressDiv.textContent += message + "\n";
+            progressDiv.scrollTop = progressDiv.scrollHeight;
+          });
+        } catch (error) {
+          progressDiv.textContent += `❌ テストエラー: ${error.message}\n`;
+        }
+      }
+
+      // 全記事テスト
+      async function testAllArticles() {
+        const url = document.getElementById("imageAgentUrl").value;
+
+        if (!url) {
+          alert("画像生成エージェントのURLを入力してください");
+          return;
+        }
+
+        const progressDiv = document.getElementById("allProgress");
+        const resultsDiv = document.getElementById("allResults");
+
+        progressDiv.style.display = "block";
+        resultsDiv.style.display = "none";
+        progressDiv.textContent = "";
+
+        const results = [];
+
+        progressDiv.textContent += "🚀 全記事テスト開始\n";
+        progressDiv.textContent += `📊 テスト対象: ${testArticles.length}記事\n\n`;
+
+        for (let i = 0; i < testArticles.length; i++) {
+          const article = testArticles[i];
+
+          progressDiv.textContent += `📄 テスト ${i + 1}/${
+            testArticles.length
+          }: ${article.title}\n`;
+
+          try {
+            const result = await runImageGenerationTest(
+              article,
+              url,
+              (message) => {
+                progressDiv.textContent += `   ${message}\n`;
+                progressDiv.scrollTop = progressDiv.scrollHeight;
+              }
+            );
+
+            results.push({ article: article.title, success: true, ...result });
+          } catch (error) {
+            progressDiv.textContent += `   ❌ 失敗: ${error.message}\n`;
+            results.push({
+              article: article.title,
+              success: false,
+              error: error.message,
+            });
+          }
+
+          // 次のテストまで待機
+          if (i < testArticles.length - 1) {
+            progressDiv.textContent += "   ⏳ 3秒待機...\n\n";
+            await new Promise((resolve) => setTimeout(resolve, 3000));
+          }
+        }
+
+        // 結果サマリー
+        const successCount = results.filter((r) => r.success).length;
+        progressDiv.textContent += `\n🎉 全テスト完了\n`;
+        progressDiv.textContent += `📊 成功率: ${successCount}/${results.length}\n`;
+
+        resultsDiv.style.display = "block";
+        resultsDiv.innerHTML =
+          "<h3>📊 テスト結果</h3><pre>" +
+          JSON.stringify(results, null, 2) +
+          "</pre>";
+      }
+
+      // カスタム記事テスト
+      async function testCustomArticle() {
+        const url = document.getElementById("imageAgentUrl").value;
+        const title = document.getElementById("customTitle").value;
+        const keyword = document.getElementById("customKeyword").value;
+        const headings = document
+          .getElementById("customHeadings")
+          .value.split("\n")
+          .filter((h) => h.trim());
+
+        if (!url || !title || !keyword || headings.length === 0) {
+          alert("すべての項目を入力してください");
+          return;
+        }
+
+        const customArticle = {
+          title,
+          keyword,
+          characterCount: 5000,
+          h2Items: headings.map((heading) => ({
+            text: heading.trim(),
+            h3Items: [],
+          })),
+        };
+
+        const progressDiv = document.getElementById("customProgress");
+        const resultsDiv = document.getElementById("customResults");
+
+        progressDiv.style.display = "block";
+        resultsDiv.style.display = "none";
+        progressDiv.textContent = "";
+
+        try {
+          await runImageGenerationTest(customArticle, url, (message) => {
+            progressDiv.textContent += message + "\n";
+            progressDiv.scrollTop = progressDiv.scrollHeight;
+          });
+        } catch (error) {
+          progressDiv.textContent += `❌ テストエラー: ${error.message}\n`;
+        }
+      }
+
+      // 実際の画像生成テスト実行
+      async function runImageGenerationTest(article, url, onProgress) {
+        const startTime = Date.now();
+
+        onProgress(`🎨 画像生成開始: ${article.title}`);
+        onProgress(`📊 H2見出し数: ${article.h2Items.length}`);
+
+        // 画像生成エージェントが期待する形式でデータを準備
+        const payload = {
+          article: {
+            title: article.title,
+            keyword: article.keyword,
+            h2Items: article.h2Items,
+            characterCount: article.characterCount,
+            content: generateMockContent(article),
+          },
+          options: {
+            imageCount: article.h2Items.length,
+            style: "professional",
+            size: "1024x1024",
+          },
+        };
+
+        onProgress(`📡 データ送信中...`);
+
+        const response = await fetch(`${url}/api/generate-images`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify(payload),
+        });
+
+        const processingTime = Date.now() - startTime;
+
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+
+        const result = await response.json();
+
+        onProgress(`✅ 画像生成完了 (${processingTime}ms)`);
+        onProgress(`🖼️ 生成された画像数: ${result.images?.length || 0}`);
+
+        return {
+          processingTime,
+          imageCount: result.images?.length || 0,
+          response: result,
+        };
+      }
+
+      // モックコンテンツ生成
+      function generateMockContent(article) {
+        let content = `# ${article.title}\n\n`;
+        content += `この記事では「${article.keyword}」について詳しく解説します。\n\n`;
+
+        article.h2Items.forEach((h2, index) => {
+          content += `## ${h2.text}\n\n`;
+          content += `${h2.text}について説明します。\n\n`;
+
+          h2.h3Items.forEach((h3) => {
+            content += `### ${h3}\n\n`;
+            content += `${h3}に関する詳細な説明をここに記載します。\n\n`;
+          });
+        });
+
+        return content;
+      }
+
+      // 初期化
+      document.addEventListener("DOMContentLoaded", function () {
+        previewArticle();
+      });
+    </script>
+  </body>
+</html>

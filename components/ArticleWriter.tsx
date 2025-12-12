@@ -1955,7 +1955,7 @@ ${
         // フォールバック: 別タブで開く
         const imageGenUrl =
           import.meta.env.VITE_IMAGE_GEN_URL ||
-          "https://ai-article-imager-for-wordpress.vercel.app";
+          "http://localhost:5177";
         const newWindow = window.open(imageGenUrl, "_blank");
 
         if (newWindow) {
@@ -3018,7 +3018,7 @@ const startImageGeneration = async (
       // フォールバック: 別タブで開く
       const imageGenUrl =
         import.meta.env.VITE_IMAGE_GEN_URL ||
-        "https://ai-article-imager-for-wordpress.vercel.app";
+        "http://localhost:5177";
       const newWindow = window.open(imageGenUrl, "_blank");
 
       if (newWindow) {

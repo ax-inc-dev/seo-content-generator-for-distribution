@@ -168,7 +168,7 @@ const App: React.FC<AppProps> = ({ initialArticleData }) => {
       const ALLOWED_ORIGINS = [
         "http://localhost:5178", // 現行開発環境
         "http://localhost:5176", // レガシー（互換性）
-        "https://seo-content-generator-seven.vercel.app", // 本番環境
+        "http://localhost:5177", // 画像生成エージェント
         import.meta.env.VITE_MAIN_APP_URL, // 本番用（.envで設定）
       ].filter(Boolean); // undefined を除外
 
@@ -313,7 +313,7 @@ const App: React.FC<AppProps> = ({ initialArticleData }) => {
       const ALLOWED_ORIGINS = [
         "http://localhost:5178", // 現行開発環境
         "http://localhost:5176", // レガシー（互換性）
-        "https://seo-content-generator-seven.vercel.app", // 本番環境
+        "http://localhost:5177", // 画像生成エージェント
         import.meta.env.VITE_MAIN_APP_URL, // 本番用（.envで設定）
       ].filter(Boolean); // undefined を除外
 

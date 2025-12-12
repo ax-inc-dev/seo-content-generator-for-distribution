@@ -14,6 +14,55 @@ const genAI = new GoogleGenerativeAI(
   import.meta.env.VITE_GEMINI_API_KEY || process.env.GEMINI_API_KEY || ""
 );
 
+// 環境変数から自社URLパターンを取得（出典優先順位に使用）
+const COMPANY_NOTE_URL = import.meta.env.VITE_COMPANY_NOTE_URL || "";
+const COMPANY_MEDIA_URL = import.meta.env.VITE_COMPANY_MEDIA_URL || "";
+
+// 出典URL優先順位ルールを動的に生成
+function getCitationPriorityRules(): string {
+  if (!COMPANY_NOTE_URL && !COMPANY_MEDIA_URL) {
+    // 環境変数が未設定の場合は汎用的なルール
+    return `## 出典URL優先順位ルール（厳守）
+- 【優先順位】自社一次情報（note等）> 自社メディア記事 > 外部ソース
+- 【自社URL】必ずaタグで埋め込み（ベタ貼り禁止）
+  - 形式：（出典：<a href="https://..." target="_blank" rel="noopener noreferrer">タイトル</a>）
+- 【外部URL】出典として使う場合はaタグ、内部リンクとしてのベタ貼りは別途保護`;
+  }
+
+  const noteRule = COMPANY_NOTE_URL
+    ? `${COMPANY_NOTE_URL} の事例・インタビュー`
+    : "自社note";
+  const mediaRule = COMPANY_MEDIA_URL
+    ? `${COMPANY_MEDIA_URL} の記事`
+    : "自社メディア記事";
+
+  return `## 出典URL優先順位ルール（厳守）
+- 【優先順位】${noteRule} > ${mediaRule}
+- 【note URL】必ずaタグで埋め込み（ベタ貼り禁止）
+  - 形式：（出典：<a href="https://..." target="_blank" rel="noopener noreferrer">タイトル</a>）
+- 【media URL】出典として使う場合はaタグ、内部リンクとしてのベタ貼りは別途保護
+- 【フォールバック】noteがない場合のみ自社メディアを使用
+- 【両方ある場合】必ずnoteを優先的に採用`;
+}
+
+// 内部リンク保護ルールを動的に生成
+function getInternalLinkProtectionRule(): string {
+  if (COMPANY_MEDIA_URL) {
+    return `【内部リンク保護】見出し間に配置されたURLベタ貼り（https://${COMPANY_MEDIA_URL}/...）は絶対に削除・変更しない`;
+  }
+  return `【内部リンク保護】見出し間に配置されたURLベタ貼り（自社サイトへのリンク）は絶対に削除・変更しない`;
+}
+
+// 出典URL優先順位の修正ルールを動的に生成
+function getCitationPriorityRevisionRule(): string {
+  if (!COMPANY_NOTE_URL && !COMPANY_MEDIA_URL) {
+    return `【出典URL優先順位】自社一次情報（note等）があれば、自社メディアより優先して採用する（URLは必ずaタグで埋め込み、ベタ貼り禁止）`;
+  }
+  const noteRef = COMPANY_NOTE_URL || "自社note";
+  const mediaRef = COMPANY_MEDIA_URL || "自社メディア";
+  return `【出典URL優先順位】${noteRef} の事例・インタビューがあれば、${mediaRef} より優先して採用する（note URLは必ずaタグで埋め込み、ベタ貼り禁止）`;
+}
+
 // リード文の「」前後を改行する後処理関数
 // 参考記事のリード文は「」で無駄に改行されていないため、
 // この処理を無効化し、元のテキストをそのまま返す
@@ -220,12 +269,12 @@ meta:
 - 例外：新しい内部リンクを追加してはいけない（既存のもののみ保持）
 
 ## 出典URL優先順位ルール（厳守）
-- 【優先順位】note.com/onte の事例・インタビュー > media.a-x.inc の記事
-- 【note URL】必ずaタグで埋め込み（ベタ貼り禁止）
-  - 形式：（出典：<a href="https://note.com/onte/..." target="_blank" rel="noopener noreferrer">タイトル</a>）
-- 【media URL】出典として使う場合はaタグ、内部リンクとしてのベタ貼りは別途保護
-- 【フォールバック】noteがない場合のみmedia.a-x.incを使用
-- 【両方ある場合】必ずnote.com/onteを優先的に採用
+- 【優先順位】自社一次情報（note等）> 自社メディア記事 > 外部ソース
+- 【自社URL】必ずaタグで埋め込み（ベタ貼り禁止）
+  - 形式：（出典：<a href="https://..." target="_blank" rel="noopener noreferrer">タイトル</a>）
+- 【外部URL】出典として使う場合はaタグ、内部リンクとしてのベタ貼りは別途保護
+- 【フォールバック】noteがない場合のみ自社メディアを使用
+- 【両方ある場合】必ず自社一次情報を優先的に採用
 
 ## 内部リンク戦略
 - 関連する用語集ページへのリンク
@@ -640,7 +689,7 @@ ${originalArticle}
 
 【修正要件】
 1. 【最優先】最終校閲エージェントからの問題を確実に修正する
-2. 【内部リンク保護】見出し間に配置されたURLベタ貼り（https://media.a-x.inc/...）は絶対に削除・変更しない
+2. 【内部リンク保護】見出し間に配置されたURLベタ貼り（自社サイトへのリンク）は絶対に削除・変更しない
    - URLベタ貼りの形式変更（aタグへの変換など）は絶対禁止
    - 段落終了後、見出し前に配置されたURLベタ貼りは完全保持
    - 理由：これらは記事執筆時にwritingAgentV3が自動挿入した関連記事へのリンク
@@ -675,10 +724,8 @@ ${originalArticle}
 17. 研究ポリシーの優先順位を守る（省庁→学協会→企業IR→大手メディア→自社資料）
 18. logic_methodsを活用（SDS、PREP（連打禁止）、Q→A→Why→How）
 19. quality_gatesとself_checklistの全項目を満たす
-20. 【内部リンク保護】見出し間に配置されたURLベタ貼り（https://media.a-x.inc/...）は絶対に削除・変更しない
-21. 【出典URL優先順位】note.com/onte の事例・インタビューがあれば、media.a-x.inc より優先して採用する（note URLは必ずaタグで埋め込み、ベタ貼り禁止）
-19. 【内部リンク保護】見出し間に配置されたURLベタ貼り（https://media.a-x.inc/...）は絶対に削除・変更しない
-20. 【出典URL優先順位】note.com/onte の事例・インタビューがあれば、media.a-x.inc より優先して採用する（note URLは必ずaタグで埋め込み、ベタ貼り禁止）
+20. 【内部リンク保護】見出し間に配置されたURLベタ貼り（自社サイトへのリンク）は絶対に削除・変更しない
+21. 【出典URL優先順位】自社一次情報（note等）があれば、自社メディアより優先して採用する（URLは必ずaタグで埋め込み、ベタ貼り禁止）
 
 【出力形式】
 1. 修正された記事全文をHTMLで出力

@@ -27,13 +27,10 @@ const allowedOrigins = [
   "http://127.0.0.1:5176",
   "http://localhost:5177", // 画像生成エージェント
   "http://127.0.0.1:5177",
-  // Vercel本番環境
-  "https://seo-content-generator-seven.vercel.app",
-  "https://ai-article-imager-for-wordpress.vercel.app",
-  // 環境変数で追加設定（Cloud Run等）
-  process.env.PRODUCTION_DOMAIN,
-  process.env.SEO_FRONTEND_URL,    // SEOエージェントのCloud Run URL
-  process.env.IMAGE_AGENT_URL,     // 画像生成エージェントのCloud Run URL
+  // 環境変数で追加設定（本番環境用）
+  process.env.PRODUCTION_DOMAIN,   // 本番ドメイン
+  process.env.SEO_FRONTEND_URL,    // SEOエージェントのURL
+  process.env.IMAGE_AGENT_URL,     // 画像生成エージェントのURL
 ].filter(Boolean);
 
 app.use(

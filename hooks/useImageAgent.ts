@@ -81,7 +81,7 @@ export function useImageAgent(options: UseImageAgentOptions = {}): UseImageAgent
   const getImageGenUrl = useCallback(() => {
     return (
       import.meta.env.VITE_IMAGE_GEN_URL ||
-      "https://ai-article-imager-for-wordpress.vercel.app"
+      "http://localhost:5177"
     );
   }, []);
 

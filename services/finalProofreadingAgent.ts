@@ -83,9 +83,10 @@ first_party:
   owner: "" # 環境変数 VITE_COMPANY_NAME で設定
   aliases: [] # 自社ブランドの別名（必要に応じて設定）
   url_patterns:
-    # ここに自社一次情報URLのパターンを必要に応じて追記してください
-    - "https://note.com/onte/*"
-    - "https://a-x.inc/*"
+    # 環境変数で設定してください
+    # VITE_COMPANY_NOTE_URL: 自社noteアカウントURL（例：note.com/yourcompany）
+    # VITE_COMPANY_MEDIA_URL: 自社メディアサイトURL（例：media.yourcompany.com）
+    # VITE_COMPANY_SITE_URL: 自社コーポレートサイトURL（例：yourcompany.com）
   policy:
     treat_as_primary: true
     skip_external_verification: true

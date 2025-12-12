@@ -36,7 +36,8 @@ const KeywordInputForm: React.FC<KeywordInputFormProps> = ({
   apiUsageToday = 0,
   apiUsageWarning,
   apiBaseUrl = import.meta.env.VITE_API_URL?.replace("/api", "") ||
-    "https://seo-content-generator-backend.onrender.com",
+    import.meta.env.VITE_BACKEND_URL ||
+    "http://localhost:3001",
   onOpenImageAgent,
 }) => {
   // デバッグ用ログ
@@ -371,7 +372,7 @@ const KeywordInputForm: React.FC<KeywordInputFormProps> = ({
               // フォールバック: 別タブで開く
               const imageGenUrl =
                 import.meta.env.VITE_IMAGE_GEN_URL ||
-                "https://ai-article-imager-for-wordpress.vercel.app";
+                "http://localhost:5177";
               const newWindow = window.open(imageGenUrl, "_blank");
 
               if (newWindow) {

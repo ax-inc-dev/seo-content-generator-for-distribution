@@ -30,13 +30,15 @@ app.use(
 
 // CORS設定（許可するオリジンのみ）
 const allowedOrigins = [
+  // ローカル開発環境
   "http://localhost:5176",
   "http://127.0.0.1:5176",
   "http://localhost:5177", // 画像生成エージェント
   "http://127.0.0.1:5177",
-  "https://seo-content-generator-seven.vercel.app", // Vercelプロダクションドメイン
-  "https://ai-article-imager-for-wordpress.vercel.app", // 新しい画像生成アプリ
-  process.env.PRODUCTION_DOMAIN, // 追加の本番ドメインを環境変数で設定
+  // 環境変数で追加設定（本番環境用）
+  process.env.PRODUCTION_DOMAIN,   // 本番ドメイン
+  process.env.SEO_FRONTEND_URL,    // SEOエージェントのURL
+  process.env.IMAGE_AGENT_URL,     // 画像生成エージェントのURL
 ].filter(Boolean);
 
 app.use(

@@ -798,7 +798,8 @@ const App: React.FC = () => {
     try {
       const apiUrl =
         import.meta.env.VITE_API_URL?.replace("/api", "") ||
-        "https://seo-content-generator-backend.onrender.com";
+        import.meta.env.VITE_BACKEND_URL ||
+        "http://localhost:3001";
 
       console.log("🏥 ヘルスチェック開始:", `${apiUrl}/api/health`);
 
@@ -1217,7 +1218,8 @@ const App: React.FC = () => {
       const apiKey = import.meta.env.VITE_INTERNAL_API_KEY;
       const apiUrl =
         import.meta.env.VITE_API_URL?.replace("/api", "") ||
-        "https://seo-content-generator-backend.onrender.com";
+        import.meta.env.VITE_BACKEND_URL ||
+        "http://localhost:3001";
 
       if (!apiKey) {
         throw new Error(

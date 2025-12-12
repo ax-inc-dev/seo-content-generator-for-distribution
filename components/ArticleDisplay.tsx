@@ -100,7 +100,7 @@ ${article.plainText}`;
       // フォールバック: 別タブで開く
       const imageGenUrl =
         import.meta.env.VITE_IMAGE_GEN_URL ||
-        "https://ai-article-imager-for-wordpress.vercel.app";
+        "http://localhost:5177";
       const imageGenOrigin = new URL(imageGenUrl).origin;
 
       console.log(`🚀 AI Article Imager for WordPressを開きます: ${imageGenUrl}`);

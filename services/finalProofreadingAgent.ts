@@ -292,20 +292,20 @@ outputs:
       - "判定"
       - "修正案/補足"
       - "信頼度(0-100)"
-      - "根拠リンク（最低2件※AXは1件）"
+      - "根拠リンク（最低2件※自社実績は1件）"
       - "アクセス日(JST)"
       - "影響度（高/中/低）"
     link_format: '<a href="{url}" target="_blank" rel="noopener">{title}</a>'
   uncertainties:
     include:
       - "裁定に迷った点と理由"
-      - "単一ソースで妥協した項目と追跡計画（AXは除外可）"
+      - "単一ソースで妥協した項目と追跡計画（自社実績は除外可）"
       - "追加で裏取りしたい論点と候補ソース"
 
 HITL_escalation:
   when:
     - "法令/規制/判例に関わる重要箇所"
-    - "相反情報が解消できない（AX主張は原則除外）"
+    - "相反情報が解消できない（自社主張は原則除外）"
     - "記事合成スコア<80のままmax_rounds到達"
   deliverables: ["change_log", "factcheck_report", "uncertainties"]
 
@@ -329,7 +329,7 @@ notes:
     rate_limit_retry_cache: "アクセス回数や速度を控えめに（レート制限）。失敗時は待って再試行。結果はキャッシュ。"
     japanese_sources_priority: "日本語情報源を最優先で検索。内容に応じて最適な日本語サイトを選択。"
     english_sources: "日本語に一次情報がない時は英語の公式資料OK。単位や通貨は日本向けに換算。"
-    uncertainty_section: "判断が割れる所は『uncertainties』にまとめて人の最終確認。AX主張は原則対象外。"
+    uncertainty_section: "判断が割れる所は『uncertainties』にまとめて人の最終確認。自社主張は原則対象外。"
   styling:
     tone: "です・ます調。断定は出典で裏付け。"
     bias_avoidance: "誹謗中傷・不当な貶めはしない。"

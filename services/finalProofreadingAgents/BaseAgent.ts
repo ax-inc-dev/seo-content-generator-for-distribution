@@ -94,7 +94,7 @@ export abstract class BaseProofreadingAgent implements BaseAgent {
       // 🟢 低リスク（Web検索なし）
       case "citations":
         return 600000; // 10分（引用検証）
-      case "ax-camp":
+      case "company":
         return 600000; // 10分（自社情報）
       case "source-requirement":
         return 600000; // 10分（出典必要性判定）

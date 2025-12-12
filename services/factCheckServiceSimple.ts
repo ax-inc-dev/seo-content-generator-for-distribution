@@ -42,7 +42,7 @@ export async function performFactCheck(text: string, options: FactCheckOptions =
   const orchestrator = new MultiAgentOrchestrator({
     enableLegalCheck: false, // 法令チェックは省略
     parallel: true,
-    disableAxCampAgent: !options.includeCompanyCheck, // オプションに基づいて自社サービスエージェントを制御
+    disableCompanyAgent: !options.includeCompanyCheck, // オプションに基づいて自社サービスエージェントを制御
     onProgress: (message, progress) => {
       console.log(`  進捗 ${progress}%: ${message}`);
     }

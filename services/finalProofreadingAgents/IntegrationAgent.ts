@@ -243,8 +243,8 @@ export class IntegrationAgent extends BaseProofreadingAgent {
           // 信頼性・引用系（各12.5点、合計25点）
           scores.reliability += weight * 12.5;
           break;
-        case 'ax-camp':
-          // 自社サービスエージェントは無視（削除済み）
+        case 'company':
+          // 自社サービスエージェント
           break;
         case 'legal':
           // 法的コンプライアンス（7点）

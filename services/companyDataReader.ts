@@ -3,7 +3,7 @@
 /**
  * データを読み取る（スタブ実装）
  */
-export async function readAxCampDataFromDrive(): Promise<any> {
+export async function readCompanyDataFromDrive(): Promise<any> {
   console.log('📚 データ読み取り（スタブ）');
   return getCachedData();
 }
@@ -30,7 +30,7 @@ export async function readSpecificFile(fileName: string): Promise<any> {
 /**
  * サービス情報を抽出（スタブ実装）
  */
-export async function extractAxCampServiceInfo(): Promise<any> {
+export async function extractCompanyServiceInfo(): Promise<any> {
   return {
     company: '',
     service: '',

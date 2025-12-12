@@ -34,8 +34,7 @@ async function handleCompanyData(req, res) {
   }
 
   try {
-    const FOLDER_ID =
-      process.env.COMPANY_DATA_FOLDER_ID || "1Rf4X5PxJj1en4NcpYIUmF-98jTSJv3dR";
+    const FOLDER_ID = process.env.COMPANY_DATA_FOLDER_ID || "";
 
     // 本番環境ではADC認証をスキップ（gcloudコマンドが利用できないため）
     if (process.env.NODE_ENV !== "production" && driveAuth) {

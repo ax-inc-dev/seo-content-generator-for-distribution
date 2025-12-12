@@ -6,7 +6,7 @@ import type { SeoOutline, FrequencyWord, SubheadingWithNote } from '../types';
 import type { WritingRegulation } from './articleWriterService';
 import { proofreadArticle, autoFixArticle, autoFixArticleBySection } from './proofreadingAgent';
 import { checkFactsForSection, type FactInfo } from './factCheckService';
-import { getAxCampInfo, generateAxCampContext } from './axCampService';
+import { getCompanyInfo, generateCompanyContext } from './companyService';
 
 const apiKey = import.meta.env.VITE_GEMINI_API_KEY || import.meta.env.GEMINI_API_KEY;
 if (!apiKey) {
@@ -222,7 +222,7 @@ async function generateSection(
 
   if (isServiceSection) {
     // サービス訴求セクション用の特別なプロンプト
-    const axCampInfo = getAxCampInfo();
+    const companyInfo = getCompanyInfo();
     prompt = `
 あなたはSEOライターです。サービス訴求セクションを執筆してください。
 
@@ -250,12 +250,12 @@ ${section.subheadings.map((sub: any) => {
 ` : ''}
 
 【サービス情報】
-- サービス名: ${axCampInfo.company.service_name || serviceName}
-- 会社名: ${axCampInfo.company.name || ''}
+- サービス名: ${companyInfo.company.service_name || serviceName}
+- 会社名: ${companyInfo.company.name || ''}
 - 対象: 法人向けサービス
 
 【導入事例】（業種名で記載、社名は出さない）
-${axCampInfo.case_studies.map(cs => {
+${companyInfo.case_studies.map(cs => {
   const industry = cs.industry || '企業';
   return `- ${industry}: ${cs.result}`;
 }).join('\n')}

@@ -10,8 +10,8 @@ import type {
 } from '../types';
 import { countCharacters } from '../utils/characterCounter';
 import { generateOutlineV2 } from './outlineGeneratorV2';
-// AX CAMP関連のimportは汎用化のため削除
-// import { getAxCampInfo } from './axCampService';
+// 自社サービス関連のimportは汎用化のため削除
+// import { getCompanyInfo } from './companyService';
 
 // ノイズ記事を除外して平均値を計算
 function calculateAveragesExcludingNoise(

@@ -2,11 +2,11 @@
 import { BaseProofreadingAgent } from './BaseAgent';
 import type { Issue, Suggestion } from './types';
 
-export class AxCampAgent extends BaseProofreadingAgent {
+export class CompanyAgent extends BaseProofreadingAgent {
   constructor() {
     super(
       'サービス専門エージェント',
-      'ax-camp',
+      'company',
       'gpt-5-nano'
     );
   }

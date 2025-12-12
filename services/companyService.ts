@@ -1,9 +1,9 @@
-// AX CAMPサービス情報を提供するサービス（汎用スタブ版）
+// 自社サービス情報を提供するサービス（汎用スタブ版）
 // 既存のインポートとの互換性を維持するための空実装
 
 import { COMPANY_MASTER, getAllCompanies, formatCompanyResultAsMarkdown, type CompanyInfo } from './companyMasterData';
 
-export interface AxCampInfo {
+export interface ServiceInfo {
   company: {
     name: string;
     service_name: string;
@@ -40,7 +40,7 @@ export interface AxCampInfo {
 /**
  * サービス情報を取得（汎用スタブ）
  */
-export function getAxCampInfo(): AxCampInfo {
+export function getCompanyInfo(): ServiceInfo {
   return {
     company: {
       name: '',
@@ -65,35 +65,35 @@ export function getAxCampInfo(): AxCampInfo {
 /**
  * 事例を取得（汎用スタブ）
  */
-export function getAxCampCaseStudies() {
+export function getCompanyCaseStudies() {
   return [];
 }
 
 /**
  * サービスカテゴリを取得（汎用スタブ）
  */
-export function getAxCampServiceCategories() {
+export function getCompanyServiceCategories() {
   return [];
 }
 
 /**
  * コンテキストを生成（汎用スタブ）
  */
-export function generateAxCampContext(keyword: string): string {
+export function generateCompanyContext(keyword: string): string {
   return '';
 }
 
 /**
  * CTA用のテキストを生成（汎用スタブ）
  */
-export function generateAxCampCTA(): string {
+export function generateCompanyCTA(): string {
   return '';
 }
 
 /**
  * メタディスクリプション用の訴求文を生成（汎用スタブ）
  */
-export function generateAxCampMetaDescription(): string {
+export function generateCompanyMetaDescription(): string {
   return '';
 }
 

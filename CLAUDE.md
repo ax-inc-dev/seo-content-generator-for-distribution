@@ -68,7 +68,7 @@ curl http://localhost:3001/api/health
 
 #### 1. タイトル（最重要）
 - **文字数**: 29〜50文字だが、**基本は32文字前後を目指す**（理想: 29〜35文字）
-- **禁止事項**: 「AX CAMP」は含めない
+- **禁止事項**: 自社サービス名は含めない
 - **記号**: 過度な記号使用は避ける
 
 #### 2. H2見出しのフォーマット
@@ -82,12 +82,12 @@ curl http://localhost:3001/api/health
 
 #### 4. 最後3つのH2は固定順序（絶対厳守）
 1. FAQ・よくある質問（ある場合）
-2. **AX CAMPサービス訴求**（最後から2番目、必須）
+2. **自社サービス訴求**（最後から2番目、必須）
 3. **まとめ**（最後、必須）
 
-#### 5. AX CAMP訴求セクション
+#### 5. 自社サービス訴求セクション
 - **位置**: まとめの直前（最後から2番目）
-- **タイトル**: 必ず「AX CAMP」を含める
+- **タイトル**: 自社サービス名を含める
 - **H3数**: 2〜3個程度
 - **内容**: サービスの価値訴求、無料相談への誘導
 
@@ -110,7 +110,7 @@ curl http://localhost:3001/api/health
 
 3. **H2構成を設計**
    - 検索意図に沿った流れ
-   - 最後3つは固定（FAQ → AX CAMP → まとめ）
+   - 最後3つは固定（FAQ → 自社サービス → まとめ）
 
 4. **H3を適切に配分**
    - 数字付きH2には対応する数のH3
@@ -126,7 +126,7 @@ curl http://localhost:3001/api/health
 1. ❌ タイトルが長すぎる（40文字以上）
 2. ❌ H2に【】などの記号を使う
 3. ❌ 数字付きH2なのにH3の数が合わない
-4. ❌ AX CAMP訴求がまとめの前にない
+4. ❌ 自社サービス訴求がまとめの前にない
 5. ❌ まとめ見出しにキーワードが正確に入っていない
 6. ❌ まとめにH3を付けてしまう
 
@@ -144,7 +144,6 @@ npm run dev
 ### ファイル構成
 
 - `/utils/testDataGeneratorV2.ts` - テスト構成のデータ
-- `/test-outline-ai-training.md` - AI研修テスト構成の詳細
 - `/services/outlineGeneratorV2.ts` - 構成生成ロジック（ルール定義）
 - `/services/outlineCheckerV2.ts` - 構成チェッカー
 
@@ -640,10 +639,10 @@ const completion = await (openai as any).responses.create({
    - URLの有効性・引用文の正確性: 10点
    - 技術仕様・API情報の正確性: 10点
 
-3. **AX CAMP準拠（15点）** ← エージェント5の評価
+3. **自社サービス準拠（15点）** ← エージェント5の評価
    - 自社実績データの正確性: 5点
    - サービス内容・料金情報の最新性: 5点
-   - AX CAMP訴求の適切性: 5点
+   - 自社サービス訴求の適切性: 5点
 
 4. **構成・執筆ルール（15点）** ← 既存レギュレーション評価
    - タイトル32文字前後・H2/H3配分: 5点
@@ -671,7 +670,7 @@ const completion = await (openai as any).responses.create({
 ├─ DatesTimelineAgent（日付・時系列検証）
 ├─ FactsCasesAgent（事例・ファクト検証）
 ├─ TechnicalAgent（技術仕様確認）
-├─ AxCampAgent（AX CAMP専門）
+├─ CompanyAgent（自社サービス専門）
 └─ LegalAgent（法令チェック - オプション）
 
 フェーズ2: 出典処理（順次実行）
@@ -692,7 +691,7 @@ services/finalProofreadingAgents/
 ├── NumbersStatsAgent.ts       # 数値・統計
 ├── DatesTimelineAgent.ts      # 日付・時系列
 ├── FactsCasesAgent.ts         # 事例・ファクト
-├── AxCampAgent.ts             # AX CAMP専門
+├── CompanyAgent.ts            # 自社サービス専門
 ├── CitationsAgent.ts          # 引用・出典検証
 ├── TechnicalAgent.ts          # 技術仕様
 ├── LegalAgent.ts              # 法令・規制
@@ -755,7 +754,7 @@ console.log('合否判定:', result.overallScore >= 75 ? '合格' : '要修正')
 1. **リード文（導入）**
    - 200-350字
    - 悩みの代弁→解決策→読むベネフィット→読み進め促し
-   - AX CAMPサービス認知を自然に1文挿入
+   - 自社サービス認知を自然に1文挿入
 
 2. **段落構成**
    - 1段落2-4文
@@ -821,7 +820,7 @@ console.log('合否判定:', result.overallScore >= 75 ? '合格' : '要修正')
    - 日付・期間
    - ランキング・最上級表現
 
-2. **AX CAMP関連**
+2. **自社サービス関連**
    - 自社実績は外部裏取り不要
    - 実績数値の正確性確認
    - 企業名と成果の対応確認

@@ -13,8 +13,8 @@ import type {
 } from '../types';
 import { countCharacters, truncateToLength } from '../utils/characterCounter';
 import { generateTitleHook, generateFullTitle } from '../utils/titleHookGenerator';
-// AX CAMP関連のimportは汎用化のため削除
-// import { getAxCampInfo, generateAxCampContext } from './axCampService';
+// 自社サービス関連のimportは汎用化のため削除
+// import { getCompanyInfo, generateCompanyContext } from './companyService';
 // import { curriculumDataService } from './curriculumDataService';
 import { getContextForKeywords, isSupabaseAvailable } from './primaryDataService';
 
@@ -181,7 +181,7 @@ function calculateAveragesExcludingNoise(
   // Step 6: FAQ検出
   const faqDetection = detectCompetitorFAQ(finalArticles);
 
-  // Step 7: 調整後の数を計算（AX CAMP削除済み）
+  // Step 7: 調整後の数を計算
   // FAQは競合の状況に応じて追加
   const faqH2Addition = faqDetection.hasFAQ ? 0 : 0; // FAQは競合にある場合は平均に含まれているので追加しない
   const faqH3Addition = faqDetection.hasFAQ ? 0 : 0; // FAQのH3も同様
@@ -440,8 +440,7 @@ export async function generateOutlineV2(
   const currentYear = new Date().getFullYear();
   const currentMonth = new Date().getMonth() + 1;
   
-  // AX CAMP情報は汎用化のため削除
-  // const axCampContext = curriculumDataService.buildArticleContext(keyword) || '';
+  // 自社サービス情報は外部設定で管理（汎用版）
   
   // FAQ見出しを生成
   const faqHeading = generateFAQHeading(keyword);
@@ -628,7 +627,7 @@ ${primaryDataContext}
       max: 50
       ideal: 35
     キーワード位置: "冒頭5-10文字以内"
-    禁止: ["AX CAMP"]
+    禁止: ["自社サービス名"]
     隅付き括弧【】ルール:
       - "【】を使用する場合は、必ずタイトルの最初に配置"
       - "タイトルの途中や最後での【】使用は禁止"

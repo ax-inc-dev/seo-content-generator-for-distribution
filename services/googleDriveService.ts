@@ -83,7 +83,7 @@ export async function getRelevantCaseStudies(keyword: string): Promise<DriveComp
 /**
  * 構成生成用のコンテキストを生成（汎用版）
  */
-export async function generateEnhancedAxCampContext(keyword: string): Promise<string> {
+export async function generateEnhancedCompanyContext(keyword: string): Promise<string> {
   const companies = await getRelevantCaseStudies(keyword);
 
   let context = `

@@ -39,7 +39,7 @@ export type AgentType =
   | 'numbers-stats'       // 数値・統計確認
   | 'dates-timeline'      // 日付・時系列検証
   | 'facts-cases'         // 事例・ファクト検証
-  | 'ax-camp'            // 自社サービス専門
+  | 'company'            // 自社サービス専門
   | 'citations'          // 引用・出典検証
   | 'technical'          // 技術仕様確認
   | 'legal'              // 法令・規制チェック
@@ -92,7 +92,7 @@ export interface IntegrationResult {
   regulationScore: {
     factChecking: number;       // 45点満点（旧40点から+5点）
     reliability: number;        // 25点満点（旧20点から+5点）
-    axCampCompliance?: number;  // 削除済み（汎用版では使用しない）
+    companyCompliance?: number;  // 自社サービス準拠（汎用版）
     structureRules: number;     // 18点満点（旧15点から+3点）
     legalCompliance: number;    // 7点満点（旧5点から+2点）
     overallQuality: number;     // 5点満点（変更なし）

@@ -11,7 +11,7 @@ router.get('/api/company-data', async (req, res) => {
   try {
     // 自動認証モジュールを使用してCSVファイルを取得
     const csvContent = await driveAuth.getCSVFile(
-      process.env.COMPANY_DATA_FOLDER_ID || '1Rf4X5PxJj1en4NcpYIUmF-98jTSJv3dR',
+      process.env.COMPANY_DATA_FOLDER_ID || '',
       'pdf_segments_index.csv'
     );
     

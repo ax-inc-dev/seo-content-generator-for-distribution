@@ -55,7 +55,7 @@ echo "service-account-key.json" >> .gitignore
 ```bash
 # .envファイル
 GOOGLE_APPLICATION_CREDENTIALS=./service-account-key.json
-COMPANY_DATA_FILE_ID=1Rf4X5PxJj1en4NcpYIUmF-98jTSJv3dR
+COMPANY_DATA_FILE_ID=YOUR_FILE_ID_HERE
 USE_GOOGLE_DRIVE_API=true
 ```
 

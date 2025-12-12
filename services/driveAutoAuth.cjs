@@ -99,7 +99,7 @@ class DriveAutoAuth {
   /**
    * CSVファイルを取得（自動認証付き）
    */
-  async getCSVFile(folderId = '1Rf4X5PxJj1en4NcpYIUmF-98jTSJv3dR', fileName = 'pdf_segments_index.csv') {
+  async getCSVFile(folderId = process.env.COMPANY_DATA_FOLDER_ID || '', fileName = 'pdf_segments_index.csv') {
     // 認証を確認
     const drive = await this.ensureAuthenticated();
     
@@ -143,7 +143,7 @@ class DriveAutoAuth {
   /**
    * 複数のCSVファイルを統合して取得
    */
-  async getAllSegments(folderId = '1Rf4X5PxJj1en4NcpYIUmF-98jTSJv3dR') {
+  async getAllSegments(folderId = process.env.COMPANY_DATA_FOLDER_ID || '') {
     console.log('📚 PDF & Video セグメントを統合取得中...');
     
     let allContent = '';

@@ -50,9 +50,9 @@ class CompanyDataService {
   private readonly LOCAL_CSV_PATH =
     "/Users/motoki/Downloads/pdf_segments_index.csv";
 
-  // Google DriveのフォルダID（メイン）
+  // Google DriveのフォルダID（メイン）- 環境変数で設定
   private readonly DRIVE_FOLDER_ID =
-    process.env.COMPANY_DATA_FOLDER_ID || "1Rf4X5PxJj1en4NcpYIUmF-98jTSJv3dR";
+    process.env.COMPANY_DATA_FOLDER_ID || "";
 
   // Google APIキー
   private readonly API_KEY =

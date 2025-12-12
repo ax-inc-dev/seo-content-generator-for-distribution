@@ -4,7 +4,7 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import type { SeoOutline, FrequencyWord } from '../types';
 import type { WritingRegulation } from './articleWriterService';
-import { getAxCampInfo, generateAxCampContext } from './axCampService';
+import { getCompanyInfo, generateCompanyContext } from './companyService';
 
 const apiKey = import.meta.env.VITE_GEMINI_API_KEY || process.env.GEMINI_API_KEY;
 if (!apiKey) {
@@ -244,7 +244,7 @@ export async function generateArticleV2(
 
     if (isServiceSection) {
       // サービス訴求セクション用の特別なプロンプト
-      const axCampInfo = getAxCampInfo();
+      const companyInfo = getCompanyInfo();
       sectionPrompt = `
 「${keyword}」に関する記事のサービス訴求セクションを執筆してください。
 
@@ -258,12 +258,12 @@ ${section.subheadings?.join('\n') || 'なし'}
 ${sectionCharCount}文字
 
 【サービス情報】
-- サービス名: ${axCampInfo.company.service_name || serviceName}
-- 会社名: ${axCampInfo.company.name || ''}
+- サービス名: ${companyInfo.company.service_name || serviceName}
+- 会社名: ${companyInfo.company.name || ''}
 - 対象: 法人向けサービス
 
 【導入事例】（業種名で記載、社名は出さない）
-${axCampInfo.case_studies.map(cs => {
+${companyInfo.case_studies.map(cs => {
   const industry = cs.industry || '企業';
   return `- ${industry}: ${cs.result}`;
 }).join('\n')}

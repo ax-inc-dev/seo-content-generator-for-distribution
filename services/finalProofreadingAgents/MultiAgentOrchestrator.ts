@@ -3,7 +3,7 @@ import { ProperNounsAgent } from "./ProperNounsAgent";
 import { NumbersStatsAgent } from "./NumbersStatsAgent";
 import { DatesTimelineAgent } from "./DatesTimelineAgent";
 import { FactsCasesAgent } from "./FactsCasesAgent";
-import { AxCampAgent } from "./AxCampAgent";
+import { CompanyAgent } from "./CompanyAgent";
 import { CitationsAgent } from "./CitationsAgent";
 import { TechnicalAgent } from "./TechnicalAgent";
 import { LegalAgent } from "./LegalAgent";
@@ -15,7 +15,7 @@ import type { AgentResult, IntegrationResult } from "./types";
 
 export interface MultiAgentConfig {
   enableLegalCheck?: boolean; // 法令チェックを実行するか
-  disableAxCampAgent?: boolean; // 自社サービスエージェントを無効化（ファクトチェック用）
+  disableCompanyAgent?: boolean; // 自社サービスエージェントを無効化（ファクトチェック用）
   timeout?: number; // 各エージェントのタイムアウト（ミリ秒）
   parallel?: boolean; // 並列実行するか
   onProgress?: (message: string, progress: number) => void;
@@ -37,8 +37,8 @@ export class MultiAgentOrchestrator {
     ];
 
     // 自社サービスエージェント（記事執筆時のみ）
-    if (!config.disableAxCampAgent) {
-      this.phaseOneAgents.push(new AxCampAgent());
+    if (!config.disableCompanyAgent) {
+      this.phaseOneAgents.push(new CompanyAgent());
     }
 
     // オプション：法令チェック
@@ -229,7 +229,7 @@ export class MultiAgentOrchestrator {
       facts: results.find((r) => r.agentType === "facts-cases")?.issues || [],
       technical: results.find((r) => r.agentType === "technical")?.issues || [],
       legal: results.find((r) => r.agentType === "legal")?.issues || [],
-      axcamp: results.find((r) => r.agentType === "ax-camp")?.issues || [],
+      company: results.find((r) => r.agentType === "company")?.issues || [],
     };
   }
 

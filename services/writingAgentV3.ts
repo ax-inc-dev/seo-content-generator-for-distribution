@@ -8,7 +8,7 @@
 
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { companyDataService } from "./companyDataService";
-// AX CAMP関連のimportは汎用化のため削除
+// 自社サービス関連のimportは汎用化のため削除
 // import { curriculumDataService } from "./curriculumDataService";
 import { getContextForKeywords, isSupabaseAvailable } from "./primaryDataService";
 // latestAIModelsは汎用化のため削除

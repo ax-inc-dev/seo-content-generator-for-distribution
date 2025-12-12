@@ -8,7 +8,7 @@
 3. 「リンクを知っている全員」に変更
 4. これで以下のURLでアクセス可能：
    ```
-   https://drive.google.com/uc?export=download&id=1Rf4X5PxJj1en4NcpYIUmF-98jTSJv3dR
+   https://drive.google.com/uc?export=download&id=YOUR_FILE_ID_HERE
    ```
 
 ### メリット
@@ -99,11 +99,11 @@ async function downloadFile(fileId: string) {
 # .env ファイル
 
 # 方法1: 公開共有リンク（APIキー不要）
-COMPANY_DATA_FILE_ID=1Rf4X5PxJj1en4NcpYIUmF-98jTSJv3dR
+COMPANY_DATA_FILE_ID=YOUR_FILE_ID_HERE
 
 # 方法2: Google Drive API（サービスアカウント）
 GOOGLE_APPLICATION_CREDENTIALS=./service-account-key.json
-COMPANY_DATA_FILE_ID=1Rf4X5PxJj1en4NcpYIUmF-98jTSJv3dR
+COMPANY_DATA_FILE_ID=YOUR_FILE_ID_HERE
 ```
 
 ## トラブルシューティング

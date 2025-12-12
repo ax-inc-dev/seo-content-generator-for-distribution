@@ -8,7 +8,7 @@ export const mockProofreadingResult: IntegrationResult = {
   regulationScore: {
     factChecking: 18,
     reliability: 8,
-    axCampCompliance: 7,
+    companyCompliance: 7,
     structureRules: 12,
     legalCompliance: 3,
     overallQuality: 10

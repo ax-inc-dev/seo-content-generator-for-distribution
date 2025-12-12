@@ -678,7 +678,7 @@ class CompanyDataService {
 
     markdown += `**課題**: ${data.challenge}\n\n`;
     markdown += `**実施内容**: ${data.actions}\n\n`;
-    markdown += `**成果**: <b>${data.result.before}→${data.result.after}</b>`;
+    markdown += `**成果**: <strong>${data.result.before}→${data.result.after}</strong>`;
 
     if (data.result.delta) {
       markdown += ` (${data.result.delta})`;

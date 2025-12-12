@@ -158,7 +158,7 @@ function formatBulletPoints(items: string[]): string[] {
 function generateSectionSummary(sectionContent: string, heading: string): string {
   // セクションの要点を3つ抽出（仮実装）
   const summary = `
-<p><b>この章の要点</b></p>
+<p><strong>この章の要点</strong></p>
 <ul>
   <li>${heading.substring(0, 14)}</li>
   <li>実践ポイント</li>
@@ -382,7 +382,12 @@ HTML形式で出力してください。
     console.error('まとめ生成エラー:', error);
     htmlContent += '<h2>まとめ</h2>\n<p>本記事では' + keyword + 'について解説しました。</p>';
   }
-  
+
+  // <b>タグを<strong>タグに変換
+  htmlContent = htmlContent
+    .replace(/<b>/gi, "<strong>")
+    .replace(/<\/b>/gi, "</strong>");
+
   // プレーンテキスト版と文字数カウント
   const plainText = htmlContent
     .replace(/<[^>]*>/g, '')

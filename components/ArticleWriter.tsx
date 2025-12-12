@@ -77,20 +77,20 @@ function cleanupArticleContent(content: string): string {
   // 1. アスタリスク（*）を削除
   let cleaned = content.replace(/\*/g, "");
 
-  // 2. <strong>タグを<b>タグに変換
+  // 2. <b>タグを<strong>タグに変換
   cleaned = cleaned
-    .replace(/<strong>/gi, "<b>")
-    .replace(/<\/strong>/gi, "</b>");
+    .replace(/<b>/gi, "<strong>")
+    .replace(/<\/b>/gi, "</strong>");
 
   // 変更内容をログ出力
   const asteriskCount = (content.match(/\*/g) || []).length;
-  const strongCount = (content.match(/<strong>/gi) || []).length;
+  const bCount = (content.match(/<b>/gi) || []).length;
 
   if (asteriskCount > 0) {
     console.log(`  ✅ アスタリスク削除: ${asteriskCount}箇所`);
   }
-  if (strongCount > 0) {
-    console.log(`  ✅ strongタグ→bタグ変換: ${strongCount}箇所`);
+  if (bCount > 0) {
+    console.log(`  ✅ bタグ→strongタグ変換: ${bCount}箇所`);
   }
 
   console.log("🧹 クリーンアップ処理完了");

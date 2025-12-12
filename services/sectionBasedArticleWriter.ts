@@ -265,7 +265,7 @@ ${targetCharCount}文字（厳守）
 
 【執筆ルール】
 1. 必ず${targetCharCount}文字程度で執筆（±10%以内）
-2. HTML形式で出力（h2, h3, p, ul, li, b タグを使用）
+2. HTML形式で出力（h2, h3, p, ul, li, strong タグを使用）
 3. 検索意図「${keyword}」に自然につながる内容
 4. 具体的な料金は記載しない
 5. 無料相談への誘導にフォーカス
@@ -308,7 +308,7 @@ ${targetCharCount}文字（厳守）
 
 【執筆ルール】
 1. 必ず${targetCharCount}文字程度で執筆（±10%以内）
-2. HTML形式で出力（h2, h3, p, ul, li, b タグを使用）
+2. HTML形式で出力（h2, h3, p, ul, li, strong タグを使用）
 3. 前のセクションから自然に続くように書く
 4. PREP法の構造を使うが、ラベルは絶対に使用禁止：
    【禁止例】

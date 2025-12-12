@@ -89,15 +89,15 @@ meta:
 - 【重要】リード文は一文ごとに<p>タグで囲む（複数文を1つの<p>にまとめない）
 
 ## 強調ルール
-- HTMLタグ：<b>タグで重要部分を強調
+- HTMLタグ：<strong>タグで重要部分を強調
 - 強調対象：各見出しの結論文、数値・条件・判断基準
 - 頻度：1見出しあたり1-3箇所
 - 制限：同一段落文字数の10%以内
 - 公式定義/ガイドラインは短文引用＋近傍に出典リンク
-- 【重要】見出しタグ内での<b>使用禁止：
-  - <h2>〜</h2>タグの中では<b>タグを削除する
-  - <h3>〜</h3>タグの中では<b>タグを削除する
-  - 見出しタグ以降の本文（<p>タグ内など）では<b>タグは維持する
+- 【重要】見出しタグ内での<strong>使用禁止：
+  - <h2>〜</h2>タグの中では<strong>タグを削除する
+  - <h3>〜</h3>タグの中では<strong>タグを削除する
+  - 見出しタグ以降の本文（<p>タグ内など）では<strong>タグは維持する
 
 ## 出典・引用ルール
 - 原則dofollow（信頼できるサイトへのリンク）
@@ -149,7 +149,7 @@ meta:
 - 数値は前提・条件・出所とセットで提示（単位・分母・時点を明記）
 - Before/After/Deltaを分離して明確に記載
 - 期間・前提（例：3営業日・毎日・1本あたりなど）があれば併記
-- 主要数値は<b>太字</b>で強調（例：<b>24時間→10秒</b>）
+- 主要数値は<strong>太字</strong>で強調（例：<strong>24時間→10秒</strong>）
 - 出典は本文近傍にdofollowで明記（タイトル）
 
 ### サービスの特徴
@@ -240,7 +240,7 @@ logic_methods:
   
 ## micro_templates（文章パターン集）
 micro_templates:
-  conclusion_snippet: "結論：<b>〜</b>。"
+  conclusion_snippet: "結論：<strong>〜</strong>。"
   decision_snippet: "〜なら、〜を選ぶべきです。理由は〜。"
   steps_intro: "最短手順は次の3つです。"
   caution_snippet: "よくある失敗は〜。避けるには〜。"
@@ -249,12 +249,12 @@ micro_templates:
 ## samples（具体的な文章例）
 samples:
   sample_paragraph: |
-    結論：<b>業務効率化の成否は"課題に最適化した設計"が最短で成果に直結します</b>。
+    結論：<strong>業務効率化の成否は"課題に最適化した設計"が最短で成果に直結します</strong>。
     部門ごとに優先課題が異なるためです。現場担当は実務フローの改善を重視し、管理部門はコスト削減を優先します。
   sample_criteria: |
-    - <b>費用対効果</b>：投資額あたりの削減コスト/時間
-    - <b>業務適合度</b>：自社フローへの適用可否
-    - <b>拡張性</b>：他業務への展開可能性
+    - <strong>費用対効果</strong>：投資額あたりの削減コスト/時間
+    - <strong>業務適合度</strong>：自社フローへの適用可否
+    - <strong>拡張性</strong>：他業務への展開可能性
 
 ## quality_gates（品質ゲート）
 quality_gates:
@@ -280,7 +280,7 @@ self_checklist:
     - "[ ] 一文≤80字/平均40–60字"
     - "[ ] 主述ねじれ無し・語尾/書き出し同型3連続回避"
   emphasis_links:
-    - "[ ] 各見出しの<b>は1–3箇所、本文全体で10%未満"
+    - "[ ] 各見出しの<strong>は1–3箇所、本文全体で10%未満"
     - "[ ] 画像はキャプション案とalt案を提示し、本文でも要点を説明"
 
 ## per_heading_requirements（見出し単位の要件）
@@ -493,12 +493,17 @@ ${articleContent}
     // リード文の「」前後の改行処理
     const formattedContent = formatLeadQuotes(revisedContent);
 
+    // <b>タグを<strong>タグに変換
+    const tagConvertedContent = formattedContent
+      .replace(/<b>/gi, "<strong>")
+      .replace(/<\/b>/gi, "</strong>");
+
     console.log("✅ 記事修正完了");
-    console.log("  - 修正後の長さ:", formattedContent.length, "文字");
+    console.log("  - 修正後の長さ:", tagConvertedContent.length, "文字");
 
     return {
       success: true,
-      revised: formattedContent,
+      revised: tagConvertedContent,
     };
   } catch (error) {
     console.error("❌ 記事修正エラー:", error);
@@ -814,8 +819,13 @@ ${originalArticle}
     // 「」「」の連続を改行する後処理
     const formattedArticle = formatLeadQuotes(revisedArticle);
 
+    // <b>タグを<strong>タグに変換
+    const tagConvertedArticle = formattedArticle
+      .replace(/<b>/gi, "<strong>")
+      .replace(/<\/b>/gi, "</strong>");
+
     console.log("✅ 修正完了");
-    return formattedArticle;
+    return tagConvertedArticle;
   } catch (error) {
     console.error("❌ 記事修正エラー:", error);
     console.error(
@@ -954,10 +964,10 @@ export async function insertSourcesAfterRevision(
       // H3がある場合：H3セクションの末尾に挿入
       targetHeading = source.h3;
       console.log(`  🎯 H3セクションを対象: ${targetHeading}`);
-      // <b>タグが含まれている可能性も考慮してパターンを柔軟に
+      // <strong>タグが含まれている可能性も考慮してパターンを柔軟に
       const escapedH3 = targetHeading.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
       searchPattern = new RegExp(
-        `<h3[^>]*>\\s*(?:<b>)?${escapedH3}(?:</b>)?\\s*</h3>`,
+        `<h3[^>]*>\\s*(?:<strong>)?${escapedH3}(?:</strong>)?\\s*</h3>`,
         "i"
       );
     } else if (source.h2 && source.h2.trim() !== "") {
@@ -966,7 +976,7 @@ export async function insertSourcesAfterRevision(
       console.log(`  🎯 H2セクションを対象: ${targetHeading}`);
       const escapedH2 = targetHeading.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
       searchPattern = new RegExp(
-        `<h2[^>]*>\\s*(?:<b>)?${escapedH2}(?:</b>)?\\s*</h2>`,
+        `<h2[^>]*>\\s*(?:<strong>)?${escapedH2}(?:</strong>)?\\s*</h2>`,
         "i"
       );
     } else if (source.h2 === "" && source.h3 === "") {
@@ -1587,9 +1597,14 @@ ${originalArticle}
     // 「」「」の連続を改行する後処理
     const formattedArticle = formatLeadQuotes(revisedArticle);
 
+    // <b>タグを<strong>タグに変換
+    const tagConvertedArticle = formattedArticle
+      .replace(/<b>/gi, "<strong>")
+      .replace(/<\/b>/gi, "</strong>");
+
     console.log("✅ 一括修正完了");
 
-    return formattedArticle;
+    return tagConvertedArticle;
   } catch (error) {
     console.error("❌ 一括修正エラー:", error);
     console.error(

@@ -2,7 +2,7 @@
 import { BaseProofreadingAgent } from './BaseAgent';
 import type { Issue, Suggestion } from './types';
 import { COMPANY_MASTER } from '../companyMasterData';
-import latestAIModels from '../../data/latestAIModels.json';
+// latestAIModelsは汎用化のため削除
 
 export class ProperNounsAgent extends BaseProofreadingAgent {
   constructor() {
@@ -11,34 +11,6 @@ export class ProperNounsAgent extends BaseProofreadingAgent {
       'proper-nouns',
       'gpt-5-mini' // Web検索を使うため中規模モデル
     );
-  }
-  
-  // AIモデル名の最新性をチェック
-  private checkAIModelNames(content: string): Issue[] {
-    const issues: Issue[] = [];
-
-    // 古いモデル名が使われていないかチェック
-    for (const oldModel of latestAIModels.deprecatedTerms.doNotUse) {
-      const regex = new RegExp(`\\b${oldModel.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'gi');
-      const matches = content.match(regex);
-
-      if (matches) {
-        const newModel = latestAIModels.replacementRules[oldModel as keyof typeof latestAIModels.replacementRules];
-        if (newModel) {
-          issues.push({
-            type: 'factual-error',
-            severity: 'critical',
-            location: `AIモデル名の言及`,
-            description: `古いAIモデル名「${oldModel}」が使用されています。${latestAIModels.currentDate.displayText}時点の最新モデルに更新してください。`,
-            original: oldModel,
-            suggestion: newModel,
-            confidence: 100
-          });
-        }
-      }
-    }
-
-    return issues;
   }
 
   // 登録企業の誤情報をチェック
@@ -105,7 +77,6 @@ export class ProperNounsAgent extends BaseProofreadingAgent {
   }> {
     // まず内部データで登録企業をチェック
     const registeredCompanyIssues = this.checkRegisteredCompanies(content);
-    const aiModelIssues = this.checkAIModelNames(content);
 
     // 登録企業の正確な情報を準備
     const registeredCompanies = Object.entries(COMPANY_MASTER).map(([key, info]) =>
@@ -125,24 +96,6 @@ ${content}
 3. 人物名・役職の正確性
 4. 地名・施設名の正確性
 5. ブランド名・商標の適切な使用
-6. AIモデル名の最新性（${latestAIModels.currentDate.displayText}時点）
-
-【AIモデル名の確認】
-${latestAIModels.currentDate.displayText}時点で実在する最新AIモデル：
-${latestAIModels.categories.llm.latest.map(m =>
-  `- ${m.model}（${m.company}、${m.releaseDate}リリース済み）`
-).join('\n')}
-${latestAIModels.categories.reasoning.latest.map(m =>
-  `- ${m.model}（${m.company}、${m.releaseDate}リリース済み）`
-).join('\n')}
-
-これらは全て実在する最新モデルです。記事内でこれらが使用されていても「未リリース」「存在しない」と指摘しないでください。
-
-古いモデル名（使用禁止）：
-${latestAIModels.deprecatedTerms.doNotUse.slice(0, 10).map(m => `- ${m}`).join('\n')}
-
-推奨される置き換え：
-${Object.entries(latestAIModels.replacementRules).slice(0, 5).map(([old, newer]) => `- ${old} → ${newer}`).join('\n')}
 
 【登録企業の情報（これらは内部データを優先）】
 ${registeredCompanies}
@@ -182,10 +135,10 @@ ${registeredCompanies}
       const gptResult = this.parseResponse(response);
 
       // 内部チェックの結果を統合
-      const allIssues = [...registeredCompanyIssues, ...aiModelIssues, ...gptResult.issues];
+      const allIssues = [...registeredCompanyIssues, ...gptResult.issues];
 
-      // 登録企業やAIモデルの誤情報があった場合、スコアを減点
-      const internalIssuesCount = registeredCompanyIssues.length + aiModelIssues.length;
+      // 登録企業の誤情報があった場合、スコアを減点
+      const internalIssuesCount = registeredCompanyIssues.length;
       const score = internalIssuesCount > 0
         ? Math.max(0, gptResult.score - (internalIssuesCount * 10))
         : gptResult.score;
@@ -199,10 +152,9 @@ ${registeredCompanies}
     } catch (error) {
       console.error('固有名詞チェックエラー:', error);
       // エラー時でも内部チェックの結果は返す
-      const allInternalIssues = [...registeredCompanyIssues, ...aiModelIssues];
       return {
-        score: allInternalIssues.length > 0 ? 60 : 75,
-        issues: allInternalIssues,
+        score: registeredCompanyIssues.length > 0 ? 60 : 75,
+        issues: registeredCompanyIssues,
         suggestions: [],
         confidence: 50
       };

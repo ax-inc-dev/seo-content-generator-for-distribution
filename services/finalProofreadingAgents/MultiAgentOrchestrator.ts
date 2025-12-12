@@ -11,7 +11,7 @@ import { SourceRequirementAgent } from "./SourceRequirementAgent";
 import { SourceEnhancementAgent } from "./SourceEnhancementAgent";
 import { IntegrationAgent } from "./IntegrationAgent";
 import type { AgentResult, IntegrationResult } from "./types";
-import latestAIModels from "../../data/latestAIModels.json";
+// latestAIModelsは汎用化のため削除
 
 export interface MultiAgentConfig {
   enableLegalCheck?: boolean; // 法令チェックを実行するか
@@ -159,15 +159,9 @@ export class MultiAgentOrchestrator {
     console.log("⚡ フェーズ1: 並列実行");
     console.log(`⚡ 実行予定エージェント数: ${this.phaseOneAgents.length}`);
 
-    // 最新AIモデル情報をcontextに追加
-    const enhancedContext = {
-      ...context,
-      latestAIModels: latestAIModels,
-    };
-
     const promises = this.phaseOneAgents.map((agent, index) => {
       console.log(`⚡ エージェント${index + 1}を開始: ${agent.name}`);
-      return this.executeWithTimeout(agent, content, enhancedContext);
+      return this.executeWithTimeout(agent, content, context);
     });
 
     console.log(`⚡ ${promises.length}個のPromiseを並列実行開始`);
@@ -184,19 +178,13 @@ export class MultiAgentOrchestrator {
     console.log("📝 フェーズ2: 順次実行");
     const results: AgentResult[] = [];
 
-    // 最新AIモデル情報をcontextに追加（フェーズ2にも）
-    const enhancedContext = {
-      ...context,
-      latestAIModels: latestAIModels,
-    };
-
     // 1. 出典必要性判定
     const requirementAgent = this.phaseTwoAgents[0];
     console.log("🔍 出典必要性を判定中...");
     const requirementResult = await this.executeWithTimeout(
       requirementAgent,
       content,
-      enhancedContext
+      context
     );
     results.push(requirementResult);
 
@@ -211,7 +199,7 @@ export class MultiAgentOrchestrator {
     const searchAgent = this.phaseTwoAgents[1];
     console.log(`🔎 ${requirements.length}箇所の出典を検索中...`);
     const searchResult = await this.executeWithTimeout(searchAgent, content, {
-      ...enhancedContext,
+      ...context,
       requirements,
       parsedElements,
     });

@@ -52,46 +52,12 @@
       "D社導入事例.pdf"
     ]
   },
-  "keywords": {
-    "AI": 150,
-    "研修": 120,
-    "Claude": 85,
-    "ChatGPT": 75,
-    "プロンプト": 97,
-    "法人": 60,
-    "自動化": 80,
-    "API": 45,
-    "Python": 40,
-    "カリキュラム": 35
-  },
+  "keywords": {},
   "service_info": {
     "company": "",
     "service_name": "",
-    "description": "法人向けAI研修サービス",
-    "main_contents": [
-      "AI活用基礎研修",
-      "Claude実践研修",
-      "ChatGPT API活用研修",
-      "プロンプトエンジニアリング研修",
-      "業務自動化研修"
-    ],
-    "case_studies": [
-      {
-        "company": "A社",
-        "result": "LP制作費10万円→0円"
-      },
-      {
-        "company": "B社",
-        "result": "原稿執筆時間大幅短縮"
-      },
-      {
-        "company": "C社",
-        "result": "月間1,000万impを自動化"
-      },
-      {
-        "company": "D社",
-        "result": "採用業務の効率化"
-      }
-    ]
+    "description": "",
+    "main_contents": [],
+    "case_studies": []
   }
 }

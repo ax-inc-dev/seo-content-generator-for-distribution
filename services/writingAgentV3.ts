@@ -11,7 +11,7 @@ import { companyDataService } from "./companyDataService";
 // AX CAMP関連のimportは汎用化のため削除
 // import { curriculumDataService } from "./curriculumDataService";
 import { getContextForKeywords, isSupabaseAvailable } from "./primaryDataService";
-import latestAIModels from "../data/latestAIModels.json";
+// latestAIModelsは汎用化のため削除
 
 const API_KEY =
   import.meta.env.VITE_GEMINI_API_KEY || process.env.GEMINI_API_KEY;
@@ -240,7 +240,7 @@ link_citation:
 images_tables:
   when: "理解促進に資する場合（図解/比較表/簡易表）"
   caption: "図の要点と結論を10〜30字で要約"
-  alt_policy: "該当H2の主要語を含む自然文（例：『AI研修の助成金要件の概念図』）"
+  alt_policy: "該当H2の主要語を含む自然文（例：『[H2主題]の要件を示す概念図』）"
 
 natural_flow_examples:
   good:
@@ -298,49 +298,6 @@ numbers_terms:
     instruction: "【自社実績データ】が提供された場合は必ず記事内で活用"
     examples: []
     usage: "数値を示す際は実績データを引用し説得力を高める（前提・時点・分母を併記）"
-
-ai_model_updates:
-  current_date: "${latestAIModels.currentDate.displayText}"
-  instruction: |
-    【重要】AIモデル名は必ず最新のものを使用してください。
-    記事執筆時は${
-      latestAIModels.currentDate.displayText
-    }時点の最新モデルを使用し、
-    古いモデル名は自動的に最新版に置き換えてください。
-
-  deprecated_models: |
-    使用禁止（古いモデル）:
-${latestAIModels.deprecatedTerms.doNotUse
-  .map((model) => `    - ${model}`)
-  .join("\n")}
-
-  replacement_rules: |
-    置き換えルール:
-${Object.entries(latestAIModels.replacementRules)
-  .map(([old, newer]) => `    - ${old} → ${newer}`)
-  .join("\n")}
-
-  latest_models: |
-    最新モデル一覧:
-    【大規模言語モデル】
-${latestAIModels.categories.llm.latest
-  .map((m) => `    - ${m.company}: ${m.model}（${m.releaseDate}リリース）`)
-  .join("\n")}
-
-    【推論特化モデル】
-${latestAIModels.categories.reasoning.latest
-  .map((m) => `    - ${m.company}: ${m.model}（${m.releaseDate}リリース）`)
-  .join("\n")}
-
-    【画像生成AI】
-${latestAIModels.categories.imageGeneration.latest
-  .map((m) => `    - ${m.company}: ${m.model}（${m.releaseDate}リリース）`)
-  .join("\n")}
-
-    【動画生成AI】
-${latestAIModels.categories.videoGeneration.latest
-  .map((m) => `    - ${m.company}: ${m.model}（${m.releaseDate}リリース）`)
-  .join("\n")}
 
 cta_rules:
   shortcode: "日本語形式のショートコードを使用"
@@ -621,12 +578,12 @@ micro_templates:
 
 samples:
   sample_paragraph: |
-    <b>社内のAI研修は"目的別カリキュラム設計"が最短で成果に直結します</b>。
-    職種ごとに到達目標が異なるためです。実装担当は演習比率を高め、企画職はユースケース選定を重視します。
+    <b>業務効率化の成否は"課題に最適化した設計"が最短で成果に直結します</b>。
+    部門ごとに優先課題が異なるためです。現場担当は実務フローの改善を重視し、管理部門はコスト削減を優先します。
   sample_criteria: |
-    - <b>費用対効果</b>：1人あたり単価×到達目標
-    - <b>実務適合度</b>：自社データ/環境で演習可否
-    - <b>継続支援</b>：受講後QA/アップデート頻度
+    - <b>費用対効果</b>：投資額あたりの削減コスト/時間
+    - <b>業務適合度</b>：自社フローへの適用可否
+    - <b>拡張性</b>：他業務への展開可能性
 `;
 
 interface WritingRequest {

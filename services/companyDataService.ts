@@ -192,7 +192,7 @@ class CompanyDataService {
             company: company,
             industry: industry,
             challenge: this.extractChallenge(text),
-            actions: "AI研修プログラムを導入",
+            actions: "業務効率化プログラムを導入",
             result: {
               before: beforeAfter[0].trim(),
               after: beforeAfter[1].trim(),
@@ -214,7 +214,7 @@ class CompanyDataService {
           company: company,
           industry: industry,
           challenge: this.extractChallenge(text),
-          actions: "AI研修でLP制作内製化",
+          actions: "ツール導入でLP制作内製化",
           result: {
             before: "LP外注費",
             after: "0円（内製化）",
@@ -311,7 +311,7 @@ class CompanyDataService {
       }
     }
 
-    return "AI研修プログラムを導入";
+    return "業務効率化プログラムを導入";
   }
 
   // Before状態の推測
@@ -706,14 +706,14 @@ class CompanyDataService {
         company: "A社",
         industry: "マーケティング支援",
         challenge: "LP制作の外注費用と制作時間の削減",
-        actions: "AI研修を受講し、AI活用によるLP制作の内製化を実現",
+        actions: "業務効率化プログラムを導入し、LP制作の内製化を実現",
         result: {
           before: "LP外注費10万円/月、制作時間3営業日",
           after: "LP制作費0円、制作時間2時間",
           delta: "LP制作の内製化を実現、制作時間93%削減",
         },
         source: {
-          title: "AI研修受講企業の成果事例",
+          title: "業務効率化成功事例",
           page: 1,
         },
       },
@@ -721,14 +721,14 @@ class CompanyDataService {
         company: "B社",
         industry: "Webマーケティング",
         challenge: "原稿執筆の時間短縮と効率化",
-        actions: "実践型研修により、AI執筆ツールを導入",
+        actions: "実践型研修により、執筆支援ツールを導入",
         result: {
           before: "原稿執筆時間8時間",
           after: "15分",
           delta: "96.9%削減",
         },
         source: {
-          title: "AI研修受講企業の成果事例",
+          title: "業務効率化成功事例",
           page: 1,
         },
       },
@@ -738,14 +738,14 @@ class CompanyDataService {
         challenge:
           "属人化による業務の非効率性とSNS運用の負担",
         actions:
-          "AI研修の導入により、非エンジニアチームでSNS運用を自動化",
+          "業務効率化プログラムにより、非エンジニアチームでSNS運用を自動化",
         result: {
           before: "1日3時間以上",
           after: "わずか1時間",
           delta: "66%削減",
         },
         source: {
-          title: "AI活用事例",
+          title: "業務自動化事例",
           page: 1,
         },
       },
@@ -753,14 +753,14 @@ class CompanyDataService {
         company: "D社",
         industry: "広告運用",
         challenge: "既存事業の成長限界",
-        actions: "AI研修でAI活用スキルを習得",
+        actions: "業務効率化プログラムでスキルを習得",
         result: {
           before: "既存事業のみ",
           after: "新規事業創出を実現",
-          delta: "AI活用により新規事業創出",
+          delta: "ツール活用により新規事業創出",
         },
         source: {
-          title: "AI研修受講企業の成果事例",
+          title: "業務効率化成功事例",
           page: 1,
         },
       },
@@ -768,14 +768,14 @@ class CompanyDataService {
         company: "E社",
         industry: "SNS広告・動画制作",
         challenge: "人材採用コストと業務負荷の増大",
-        actions: "AI研修でAI活用スキルを習得し、業務自動化を推進",
+        actions: "業務効率化プログラムでスキルを習得し、業務自動化を推進",
         result: {
           before: "採用2名分の業務負荷",
-          after: "AI活用で業務自動化",
-          delta: "AI導入で2名分の業務を自動化",
+          after: "ツール活用で業務自動化",
+          delta: "ツール導入で2名分の業務を自動化",
         },
         source: {
-          title: "AI研修受講企業の成果事例",
+          title: "業務効率化成功事例",
           page: 1,
         },
       },
@@ -784,14 +784,14 @@ class CompanyDataService {
         industry: "ITサービス",
         challenge: "毎日の広告チェック業務に時間がかかる",
         actions:
-          "AIツールの活用方法を学び、広告チェック業務を完全自動化",
+          "ツールの活用方法を学び、広告チェック業務を完全自動化",
         result: {
           before: "毎日1時間以上の広告チェック業務",
           after: "0時間（完全自動化）",
           delta: "2週間でゼロに",
         },
         source: {
-          title: "AI研修受講企業の成果事例",
+          title: "業務効率化成功事例",
           page: 1,
         },
       },
@@ -799,14 +799,14 @@ class CompanyDataService {
         company: "G社",
         industry: "製造販売",
         challenge: "コールセンターの履歴確認やレポート作成などの手作業",
-        actions: "AI研修を受講し、業務自動化を実現",
+        actions: "業務効率化プログラムを受講し、業務自動化を実現",
         result: {
           before: "月16時間の手作業",
           after: "ほぼ0時間",
           delta: "全社で月100時間以上の業務削減",
         },
         source: {
-          title: "AI活用事例",
+          title: "業務自動化事例",
           page: 1,
         },
       },

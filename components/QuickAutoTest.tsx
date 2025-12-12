@@ -105,7 +105,7 @@ const QuickAutoTest: React.FC = () => {
         category: 'critical',
         detailedReport: mockProofreadResult.detailedReport,
         sourceInsertions: mockProofreadResult.sourceInsertions,
-        keyword: 'AI研修'  // テスト用のキーワードを追加
+        keyword: '業務効率化'  // テスト用のキーワード
       });
 
       setStatus('✅ テスト完了！');

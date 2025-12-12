@@ -2,7 +2,7 @@
 // 生成された構成案の品質チェックと自動修正
 
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import latestAIModels from '../data/latestAIModels.json';
+// latestAIModelsは汎用化のため削除
 import type { 
   SeoOutlineV2, 
   OutlineCheckResult,
@@ -199,72 +199,6 @@ export function checkOutline(
     });
   }
 
-  // 5.5 古いAIモデル名のチェック
-  const checkForOutdatedModels = (text: string): string[] => {
-    const outdatedModels: string[] = [];
-    for (const model of latestAIModels.deprecatedTerms.doNotUse) {
-      if (text.includes(model)) {
-        outdatedModels.push(model);
-      }
-    }
-    return outdatedModels;
-  };
-
-  // タイトルのチェック
-  const titleOutdated = checkForOutdatedModels(outline.title);
-  if (titleOutdated.length > 0) {
-    errors.push({
-      field: 'title',
-      message: `古いAIモデル名が含まれています: ${titleOutdated.join(', ')}`,
-      severity: 'critical'
-    });
-    titleOutdated.forEach(model => {
-      const replacement = latestAIModels.replacementRules[model as keyof typeof latestAIModels.replacementRules];
-      if (replacement) {
-        suggestions.push(`「${model}」を「${replacement}」に更新してください`);
-      }
-    });
-  }
-
-  // 見出しのチェック
-  outline.outline.forEach((h2, h2Index) => {
-    const h2Outdated = checkForOutdatedModels(h2.heading);
-    if (h2Outdated.length > 0) {
-      errors.push({
-        field: `outline[${h2Index}].heading`,
-        message: `古いAIモデル名が含まれています: ${h2Outdated.join(', ')}`,
-        severity: 'major'
-      });
-      h2Outdated.forEach(model => {
-        const replacement = latestAIModels.replacementRules[model as keyof typeof latestAIModels.replacementRules];
-        if (replacement) {
-          suggestions.push(`H2「${h2.heading}」の「${model}」を「${replacement}」に更新してください`);
-        }
-      });
-    }
-
-    // H3のチェック
-    h2.subheadings?.forEach((h3, h3Index) => {
-      // H3のheadingプロパティが存在することを確認
-      if (h3 && h3.heading) {
-        const h3Outdated = checkForOutdatedModels(h3.heading);
-        if (h3Outdated.length > 0) {
-          errors.push({
-            field: `outline[${h2Index}].subheadings[${h3Index}].heading`,
-            message: `古いAIモデル名が含まれています: ${h3Outdated.join(', ')}`,
-            severity: 'major'
-          });
-          h3Outdated.forEach(model => {
-            const replacement = latestAIModels.replacementRules[model as keyof typeof latestAIModels.replacementRules];
-            if (replacement) {
-              suggestions.push(`H3「${h3.heading}」の「${model}」を「${replacement}」に更新してください`);
-            }
-          });
-        }
-      }
-    });
-  });
-  
   // 6. 差分ポイントチェック
   if (outline.competitorComparison.differentiators.length < 3) {
     errors.push({

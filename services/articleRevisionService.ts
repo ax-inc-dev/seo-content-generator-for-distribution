@@ -7,7 +7,7 @@ import {
 } from "./finalProofreadingAgents/utils/articleParser";
 import { slackNotifier } from "./slackNotificationService";
 import { curriculumDataService } from "./curriculumDataService";
-import latestAIModels from "../data/latestAIModels.json";
+// latestAIModelsは汎用化のため削除
 
 // Gemini APIクライアントの初期化
 const genAI = new GoogleGenerativeAI(
@@ -171,7 +171,7 @@ meta:
 ## 画像・表の扱い
 - 理解促進に資する場合に使用（図解/比較表/簡易表）
 - キャプション案：図の要点と結論を10-30字で要約
-- alt案：該当H2の主要語を含む自然文（例：「AI研修の助成金要件の概念図」）
+- alt案：該当H2の主要語を含む自然文（例：「[H2主題]の要件を示す概念図」）
 - 画像内テキストの要点は本文でも説明
 
 ## 表・箇条書き・リストの活用ルール（重要）
@@ -249,12 +249,12 @@ micro_templates:
 ## samples（具体的な文章例）
 samples:
   sample_paragraph: |
-    結論：<b>社内のAI研修は"目的別カリキュラム設計"が最短で成果に直結します</b>。
-    職種ごとに到達目標が異なるためです。実装担当は演習比率を高め、企画職はユースケース選定を重視します。
+    結論：<b>業務効率化の成否は"課題に最適化した設計"が最短で成果に直結します</b>。
+    部門ごとに優先課題が異なるためです。現場担当は実務フローの改善を重視し、管理部門はコスト削減を優先します。
   sample_criteria: |
-    - <b>費用対効果</b>：1人あたり単価×到達目標
-    - <b>実務適合度</b>：自社データ/環境で演習可否
-    - <b>継続支援</b>：受講後QA/アップデート頻度
+    - <b>費用対効果</b>：投資額あたりの削減コスト/時間
+    - <b>業務適合度</b>：自社フローへの適用可否
+    - <b>拡張性</b>：他業務への展開可能性
 
 ## quality_gates（品質ゲート）
 quality_gates:
@@ -811,11 +811,8 @@ ${originalArticle}
       console.log("  変更後:", revisedArticle.substring(0, 100) + "...");
     }
 
-    // AIモデル名の自動更新
-    const updatedArticle = replaceOutdatedAIModels(revisedArticle);
-
     // 「」「」の連続を改行する後処理
-    const formattedArticle = formatLeadQuotes(updatedArticle);
+    const formattedArticle = formatLeadQuotes(revisedArticle);
 
     console.log("✅ 修正完了");
     return formattedArticle;
@@ -1142,24 +1139,6 @@ export async function insertSourcesAfterRevision(
   }
 
   return modifiedArticle;
-}
-
-// AIモデル名の自動更新機能
-function replaceOutdatedAIModels(text: string): string {
-  let updatedText = text;
-
-  // 古いモデル名を最新版に置き換え
-  for (const [oldModel, newModel] of Object.entries(
-    latestAIModels.replacementRules
-  )) {
-    const regex = new RegExp(
-      `\\b${oldModel.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`,
-      "g"
-    );
-    updatedText = updatedText.replace(regex, newModel);
-  }
-
-  return updatedText;
 }
 
 // 複数の問題を一括修正
@@ -1605,12 +1584,8 @@ ${originalArticle}
       }${lengthDiff}文字, ${percentChange}%)`
     );
 
-    // AIモデル名の自動更新
-    const updatedArticle = replaceOutdatedAIModels(revisedArticle);
-    console.log("🤖 AIモデル名を最新版に更新");
-
     // 「」「」の連続を改行する後処理
-    const formattedArticle = formatLeadQuotes(updatedArticle);
+    const formattedArticle = formatLeadQuotes(revisedArticle);
 
     console.log("✅ 一括修正完了");
 

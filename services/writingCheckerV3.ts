@@ -3,7 +3,7 @@
 
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { curriculumDataService } from './curriculumDataService';
-import latestAIModels from '../data/latestAIModels.json';
+// latestAIModelsは汎用化のため削除
 
 const API_KEY = import.meta.env.VITE_GEMINI_API_KEY || process.env.GEMINI_API_KEY;
 const genAI = new GoogleGenerativeAI(API_KEY!);
@@ -54,15 +54,7 @@ const CHECK_CRITERIA = `
    - 企業名、サービス名、製品名の表記確認
    - 人名、地名の正確な表記
    - ブランド名の統一性
-   - AIモデル名の最新性確認（${latestAIModels.currentDate.displayText}時点の最新版を使用）
    - 必ずWeb検索でファクトチェックを実施
-
-【AIモデル名の確認（超重要）】🔥
-記事内で以下の古いモデル名が使われていないか厳密にチェック：
-${latestAIModels.deprecatedTerms.doNotUse.map(model => `   - ${model}（使用禁止）`).join('\n')}
-
-正しい最新モデル名：
-${Object.entries(latestAIModels.replacementRules).map(([old, newer]) => `   - ${old} → ${newer}`).join('\n')}
 
 2. 定量データ・数値の正確性（特に重要）
    - 統計データ、パーセンテージの正確性
@@ -148,10 +140,6 @@ export async function checkArticleV3(request: CheckRequest): Promise<CheckResult
     const prompt = `
 あなたはSEOとコンテンツマーケティングの専門家です。
 以下の記事を厳密に評価し、改善提案を行ってください。
-
-【特に重要】
-記事内でAIモデル名が言及されている場合、${latestAIModels.currentDate.displayText}時点の最新モデル名を使用しているか必ず確認してください。
-古いモデル名（GPT-4、Claude 3.5 Sonnet、o1など）が使われている場合は「critical」レベルの問題として指摘し、最新版への修正を提案してください。
 
 ${CHECK_CRITERIA}
 

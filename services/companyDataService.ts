@@ -47,8 +47,7 @@ interface PDFSegment {
 
 class CompanyDataService {
   // ローカルファイルパス（開発環境用フォールバック）
-  private readonly LOCAL_CSV_PATH =
-    "/Users/motoki/Downloads/pdf_segments_index.csv";
+  private readonly LOCAL_CSV_PATH = "./data/pdf_segments_index.csv";
 
   // Google DriveのフォルダID（メイン）- 環境変数で設定
   private readonly DRIVE_FOLDER_ID =

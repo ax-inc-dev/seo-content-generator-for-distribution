@@ -5,8 +5,7 @@
 
 const { google } = require("googleapis");
 
-const SPREADSHEET_ID =
-  process.env.SPREADSHEET_ID || "1GrTLMiyAqwQbZesp_uyEQeMxPw0dHF_T6AVzzNA0jzI";
+const SPREADSHEET_ID = process.env.SPREADSHEET_ID || "";
 
 /**
  * スプレッドシートのキーワードに一致する行のD列（URL）、G列（slug）、H列（タイトル）、N列（メタディスクリプション）を更新

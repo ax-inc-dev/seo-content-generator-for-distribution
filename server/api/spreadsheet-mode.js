@@ -6,8 +6,7 @@
 
 const { google } = require("googleapis");
 
-const SPREADSHEET_ID =
-  process.env.SPREADSHEET_ID || "1GrTLMiyAqwQbZesp_uyEQeMxPw0dHF_T6AVzzNA0jzI";
+const SPREADSHEET_ID = process.env.SPREADSHEET_ID || "";
 
 /**
  * スプレッドシートから「■」マークのあるキーワードを取得

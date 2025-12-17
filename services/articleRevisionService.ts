@@ -431,12 +431,6 @@ export async function reviseArticle(
       companyData = null; // フォールバック
     }
 
-    // 最新AIモデル情報を整形
-    const latestModelsInfo = Object.values(latestAIModels.categories)
-      .flatMap((category) => category.latest)
-      .map((m) => `${m.model}（${m.company}）: ${m.releaseDate}リリース`)
-      .join("\n");
-
     // カリキュラムデータを取得
     const curriculumData = curriculumDataService.getAllCurriculumData();
     const curriculumInfo = curriculumData
@@ -502,9 +496,6 @@ ${JSON.stringify(companyData.segments?.slice(0, 5), null, 2)}
 `
     : ""
 }
-
-## 最新AIモデル情報（2025年1月時点）
-${latestModelsInfo}
 
 ## カリキュラム情報
 ${curriculumInfo}

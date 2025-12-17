@@ -540,10 +540,6 @@ ${checkResult.errors.map(e => `- ${e.field}: ${e.message}`).join('\n')}
 【修正の提案】
 ${checkResult.suggestions.join('\n')}
 
-【最新AIモデル情報（${latestAIModels.metadata.lastUpdated}時点）】
-古いAIモデル名を検出した場合は、以下の置換ルールに従って最新版に更新してください：
-${JSON.stringify(latestAIModels.replacementRules, null, 2)}
-
 ${h3Shortage ? `
 【重要：H3の追加指示】
 現在のH3数が不足しています。以下の方法でH3を追加してください：

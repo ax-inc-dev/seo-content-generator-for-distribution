@@ -169,6 +169,9 @@ const App: React.FC<AppProps> = ({ initialArticleData }) => {
         "http://localhost:5178", // 現行開発環境
         "http://localhost:5176", // レガシー（互換性）
         "http://localhost:5177", // 画像生成エージェント
+        "http://127.0.0.1:5176", // 127.0.0.1でアクセスした場合
+        "http://127.0.0.1:5177", // 127.0.0.1でアクセスした場合
+        "http://127.0.0.1:5178", // 127.0.0.1でアクセスした場合
         import.meta.env.VITE_MAIN_APP_URL, // 本番用（.envで設定）
       ].filter(Boolean); // undefined を除外
 
@@ -314,6 +317,9 @@ const App: React.FC<AppProps> = ({ initialArticleData }) => {
         "http://localhost:5178", // 現行開発環境
         "http://localhost:5176", // レガシー（互換性）
         "http://localhost:5177", // 画像生成エージェント
+        "http://127.0.0.1:5176", // 127.0.0.1でアクセスした場合
+        "http://127.0.0.1:5177", // 127.0.0.1でアクセスした場合
+        "http://127.0.0.1:5178", // 127.0.0.1でアクセスした場合
         import.meta.env.VITE_MAIN_APP_URL, // 本番用（.envで設定）
       ].filter(Boolean); // undefined を除外
 

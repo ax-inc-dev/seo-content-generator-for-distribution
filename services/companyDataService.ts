@@ -481,16 +481,8 @@ class CompanyDataService {
       return keywords.some((kw) => searchText.includes(kw));
     });
 
-    // デバッグログ
-    console.log(`🔍 キーワード「${keyword}」でフィルタリング`);
-    console.log(`  - フィルタ前: ${data.length}件`);
-    console.log(`  - フィルタ後: ${relevantData.length}件`);
-    if (relevantData.length > 0) {
-      console.log(
-        "  - 該当企業:",
-        relevantData.map((d) => d.company).join(", ")
-      );
-    }
+    // デバッグログ（簡潔に）
+    console.log(`🔍 キーワード「${keyword}」でフィルタリング: ${data.length}件 → ${relevantData.length}件`);
 
     // キーワードにマッチする企業が少ない場合は、全データからランダムに選択
     if (relevantData.length < 3) {

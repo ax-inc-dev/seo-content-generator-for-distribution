@@ -2692,7 +2692,7 @@ ${
                                 </div>
                               )}
                               {issue.suggestion && (
-                                <div className="text-cyan-300 mt-1">
+                                <div className="text-blue-500 mt-1">
                                   💡 {issue.suggestion}
                                 </div>
                               )}
@@ -2781,7 +2781,7 @@ ${
                                 </div>
                               )}
                               {issue.suggestion && (
-                                <div className="text-cyan-300 mt-1">
+                                <div className="text-blue-500 mt-1">
                                   💡 {issue.suggestion}
                                 </div>
                               )}

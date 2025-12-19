@@ -7,7 +7,7 @@
  * C列: 編集用URL（処理後に記事編集URLを書き込む）
  * D列: Slug
  * E列: タイトル
- * F列: 公開用URL（内部リンクURL）
+ * F列: 公開用URL（内部リンクURL）※読取専用
  * G列: メタディスクリプション
  */
 
@@ -17,11 +17,11 @@ const SPREADSHEET_ID = process.env.SPREADSHEET_ID || "";
 
 /**
  * スプレッドシートのキーワードに一致する行を更新
- * C列（編集用URL）、D列（Slug）、E列（タイトル）、F列（公開用URL）、G列（メタディスクリプション）
+ * C列（編集用URL）、D列（Slug）、E列（タイトル）、G列（メタディスクリプション）
  */
 async function updateSpreadsheetCell(req, res) {
   try {
-    const { keyword, url, slug, title, publicUrl, metaDescription } = req.body;
+    const { keyword, url, slug, title, metaDescription } = req.body;
 
     if (!keyword || !url) {
       return res.status(400).json({
@@ -37,9 +37,6 @@ async function updateSpreadsheetCell(req, res) {
     }
     if (title) {
       console.log(`  - E列（タイトル）: "${title}"`);
-    }
-    if (publicUrl) {
-      console.log(`  - F列（公開用URL）: "${publicUrl}"`);
     }
     if (metaDescription) {
       console.log(`  - G列（メタディスクリプション）: "${metaDescription.substring(0, 50)}..."`);
@@ -151,20 +148,6 @@ async function updateSpreadsheetCell(req, res) {
       console.log(`✅ E列更新完了: "${title}"`);
     }
 
-    // F列（公開用URL）を更新（publicUrlが提供されている場合のみ）
-    if (publicUrl) {
-      const publicUrlUpdateRange = `シート1!F${targetRow}`;
-      await sheets.spreadsheets.values.update({
-        spreadsheetId: SPREADSHEET_ID,
-        range: publicUrlUpdateRange,
-        valueInputOption: "RAW",
-        resource: {
-          values: [[publicUrl]],
-        },
-      });
-      console.log(`✅ F列更新完了: "${publicUrl}"`);
-    }
-
     // G列（メタディスクリプション）を更新（metaDescriptionが提供されている場合のみ）
     if (metaDescription) {
       const metaDescUpdateRange = `シート1!G${targetRow}`;
@@ -188,7 +171,6 @@ async function updateSpreadsheetCell(req, res) {
       url: url,
       slug: slug || null,
       title: title || null,
-      publicUrl: publicUrl || null,
       metaDescription: metaDescription || null,
     });
   } catch (error) {

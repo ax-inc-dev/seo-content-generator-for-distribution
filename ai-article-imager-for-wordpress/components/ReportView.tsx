@@ -370,15 +370,15 @@ export const ReportView: React.FC<ReportViewProps> = ({
         const articleMetaDescription = metaData?.metaDescription;
         if (keyword) {
           console.log(`📊 スプレッドシート更新: キーワード "${keyword}"`);
-          console.log(`  - D列（URL）: "${link}"`);
+          console.log(`  - C列（編集用URL）: "${link}"`);
           if (slug) {
-            console.log(`  - G列（slug）: "${slug}"`);
+            console.log(`  - D列（Slug）: "${slug}"`);
           }
           if (articleTitle) {
-            console.log(`  - H列（タイトル）: "${articleTitle}"`);
+            console.log(`  - E列（タイトル）: "${articleTitle}"`);
           }
           if (articleMetaDescription) {
-            console.log(`  - N列（メタディスクリプション）: "${articleMetaDescription.substring(0, 50)}..."`);
+            console.log(`  - G列（メタディスクリプション）: "${articleMetaDescription.substring(0, 50)}..."`);
           }
           const apiUrl =
             import.meta.env.VITE_API_URL || "http://localhost:3001/api";

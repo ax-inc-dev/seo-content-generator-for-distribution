@@ -1,6 +1,14 @@
 /**
  * スプレッドシート更新API
- * D列に記事URL、G列にslug、H列に記事タイトル、N列にメタディスクリプションを書き込む
+ *
+ * スプレッドシートフォーマット:
+ * A列: No.
+ * B列: KW（キーワード）
+ * C列: 編集用URL（処理後に記事編集URLを書き込む）
+ * D列: Slug
+ * E列: タイトル
+ * F列: 公開用URL（内部リンクURL）
+ * G列: メタディスクリプション
  */
 
 const { google } = require("googleapis");
@@ -8,11 +16,12 @@ const { google } = require("googleapis");
 const SPREADSHEET_ID = process.env.SPREADSHEET_ID || "";
 
 /**
- * スプレッドシートのキーワードに一致する行のD列（URL）、G列（slug）、H列（タイトル）、N列（メタディスクリプション）を更新
+ * スプレッドシートのキーワードに一致する行を更新
+ * C列（編集用URL）、D列（Slug）、E列（タイトル）、F列（公開用URL）、G列（メタディスクリプション）
  */
 async function updateSpreadsheetCell(req, res) {
   try {
-    const { keyword, url, slug, title, metaDescription } = req.body;
+    const { keyword, url, slug, title, publicUrl, metaDescription } = req.body;
 
     if (!keyword || !url) {
       return res.status(400).json({
@@ -22,15 +31,18 @@ async function updateSpreadsheetCell(req, res) {
     }
 
     console.log(`📝 スプレッドシート更新: キーワード "${keyword}"`);
-    console.log(`  - D列（URL）: "${url}"`);
+    console.log(`  - C列（編集用URL）: "${url}"`);
     if (slug) {
-      console.log(`  - G列（slug）: "${slug}"`);
+      console.log(`  - D列（Slug）: "${slug}"`);
     }
     if (title) {
-      console.log(`  - H列（タイトル）: "${title}"`);
+      console.log(`  - E列（タイトル）: "${title}"`);
+    }
+    if (publicUrl) {
+      console.log(`  - F列（公開用URL）: "${publicUrl}"`);
     }
     if (metaDescription) {
-      console.log(`  - N列（メタディスクリプション）: "${metaDescription.substring(0, 50)}..."`);
+      console.log(`  - G列（メタディスクリプション）: "${metaDescription.substring(0, 50)}..."`);
     }
 
     // デバッグ: 環境変数の確認
@@ -99,8 +111,8 @@ async function updateSpreadsheetCell(req, res) {
 
     console.log(`✅ キーワード "${keyword}" を行${targetRow}で発見`);
 
-    // D列（URL）を更新
-    const urlUpdateRange = `シート1!D${targetRow}`;
+    // C列（編集用URL）を更新
+    const urlUpdateRange = `シート1!C${targetRow}`;
     await sheets.spreadsheets.values.update({
       spreadsheetId: SPREADSHEET_ID,
       range: urlUpdateRange,
@@ -109,11 +121,11 @@ async function updateSpreadsheetCell(req, res) {
         values: [[url]],
       },
     });
-    console.log(`✅ D列更新完了: "${url}"`);
+    console.log(`✅ C列更新完了: "${url}"`);
 
-    // G列（slug）を更新（slugが提供されている場合のみ）
+    // D列（Slug）を更新（slugが提供されている場合のみ）
     if (slug) {
-      const slugUpdateRange = `シート1!G${targetRow}`;
+      const slugUpdateRange = `シート1!D${targetRow}`;
       await sheets.spreadsheets.values.update({
         spreadsheetId: SPREADSHEET_ID,
         range: slugUpdateRange,
@@ -122,12 +134,12 @@ async function updateSpreadsheetCell(req, res) {
           values: [[slug]],
         },
       });
-      console.log(`✅ G列更新完了: "${slug}"`);
+      console.log(`✅ D列更新完了: "${slug}"`);
     }
 
-    // H列（タイトル）を更新（titleが提供されている場合のみ）
+    // E列（タイトル）を更新（titleが提供されている場合のみ）
     if (title) {
-      const titleUpdateRange = `シート1!H${targetRow}`;
+      const titleUpdateRange = `シート1!E${targetRow}`;
       await sheets.spreadsheets.values.update({
         spreadsheetId: SPREADSHEET_ID,
         range: titleUpdateRange,
@@ -136,12 +148,26 @@ async function updateSpreadsheetCell(req, res) {
           values: [[title]],
         },
       });
-      console.log(`✅ H列更新完了: "${title}"`);
+      console.log(`✅ E列更新完了: "${title}"`);
     }
 
-    // N列（メタディスクリプション）を更新（metaDescriptionが提供されている場合のみ）
+    // F列（公開用URL）を更新（publicUrlが提供されている場合のみ）
+    if (publicUrl) {
+      const publicUrlUpdateRange = `シート1!F${targetRow}`;
+      await sheets.spreadsheets.values.update({
+        spreadsheetId: SPREADSHEET_ID,
+        range: publicUrlUpdateRange,
+        valueInputOption: "RAW",
+        resource: {
+          values: [[publicUrl]],
+        },
+      });
+      console.log(`✅ F列更新完了: "${publicUrl}"`);
+    }
+
+    // G列（メタディスクリプション）を更新（metaDescriptionが提供されている場合のみ）
     if (metaDescription) {
-      const metaDescUpdateRange = `シート1!N${targetRow}`;
+      const metaDescUpdateRange = `シート1!G${targetRow}`;
       await sheets.spreadsheets.values.update({
         spreadsheetId: SPREADSHEET_ID,
         range: metaDescUpdateRange,
@@ -150,7 +176,7 @@ async function updateSpreadsheetCell(req, res) {
           values: [[metaDescription]],
         },
       });
-      console.log(`✅ N列更新完了: "${metaDescription.substring(0, 50)}..."`);
+      console.log(`✅ G列更新完了: "${metaDescription.substring(0, 50)}..."`);
     }
 
     console.log(`✅ スプレッドシート更新完了: 行${targetRow}`);
@@ -162,6 +188,7 @@ async function updateSpreadsheetCell(req, res) {
       url: url,
       slug: slug || null,
       title: title || null,
+      publicUrl: publicUrl || null,
       metaDescription: metaDescription || null,
     });
   } catch (error) {

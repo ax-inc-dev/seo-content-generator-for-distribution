@@ -1,7 +1,16 @@
 /**
  * スプレッドシートモードAPI
- * 「■」マークのあるキーワードを取得
+ * 「1」または「１」マークのあるキーワードを取得
  * Google API Key認証対応版（本番環境対応）
+ *
+ * スプレッドシートフォーマット:
+ * A列: No.
+ * B列: KW（キーワード）
+ * C列: 編集用URL（マーカー: 1 or １ で処理対象を指定）
+ * D列: Slug
+ * E列: タイトル
+ * F列: 公開用URL（内部リンクURL）
+ * G列: メタディスクリプション
  */
 
 const { google } = require("googleapis");
@@ -9,7 +18,7 @@ const { google } = require("googleapis");
 const SPREADSHEET_ID = process.env.SPREADSHEET_ID || "";
 
 /**
- * スプレッドシートから「■」マークのあるキーワードを取得
+ * スプレッドシートから「1」または「１」マークのあるキーワードを取得
  */
 async function getMarkedKeywords(req, res) {
   try {
@@ -54,8 +63,8 @@ async function getMarkedKeywords(req, res) {
     const authClient = await auth.getClient();
     const sheets = google.sheets({ version: "v4", auth: authClient });
 
-    // シート1のB列とD列を取得（最大500行）
-    const range = "シート1!B1:D500";
+    // シート1のA列〜G列を取得（最大500行）
+    const range = "シート1!A1:G500";
     console.log("📋 スプレッドシートからデータを取得中...");
 
     const response = await sheets.spreadsheets.values.get({
@@ -72,26 +81,26 @@ async function getMarkedKeywords(req, res) {
       });
     }
 
-    // 「■」マークの検索
+    // 「1」または「１」マークの検索
     const markedItems = [];
 
     for (let i = 0; i < rows.length; i++) {
-      const dColumn = rows[i][2]; // D列
-      const bColumn = rows[i][0]; // B列（KW）
+      const cColumn = rows[i][2]; // C列（編集用URL / マーカー）
+      const bColumn = rows[i][1]; // B列（KW）
 
-      // 空白を完全除去、全角・半角の■両方に対応
-      const normalizedD = dColumn ? dColumn.replace(/\s+/g, "") : "";
+      // 空白を完全除去、全角・半角の1両方に対応
+      const normalizedC = cColumn ? cColumn.toString().replace(/\s+/g, "") : "";
 
       if (
-        normalizedD === "■" ||
-        normalizedD === "●" ||
-        normalizedD.includes("■") ||
-        normalizedD.includes("●")
+        normalizedC === "1" ||
+        normalizedC === "１" ||
+        normalizedC === "■" ||
+        normalizedC === "●"
       ) {
         // B列が空の場合はスキップ
         if (!bColumn || bColumn.trim() === "") {
           console.log(
-            `⚠️ 行${i + 1}: 「■」はあるがB列（KW）が空のためスキップ`
+            `⚠️ 行${i + 1}: マーカーはあるがB列（KW）が空のためスキップ`
           );
           continue;
         }
@@ -99,10 +108,10 @@ async function getMarkedKeywords(req, res) {
         markedItems.push({
           row: i + 1,
           keyword: bColumn.trim(),
-          originalMarker: dColumn,
+          originalMarker: cColumn,
         });
 
-        console.log(`✅ 行${i + 1}: 「■」を発見 - KW: ${bColumn.trim()}`);
+        console.log(`✅ 行${i + 1}: マーカーを発見 - KW: ${bColumn.trim()}`);
       }
     }
 
@@ -111,12 +120,12 @@ async function getMarkedKeywords(req, res) {
       return res.status(404).json({
         success: false,
         error:
-          "「■」マークが見つかりませんでした。スプレッドシートのD列に「■」を入力してください。",
+          "処理対象のマーカーが見つかりませんでした。スプレッドシートのC列に「1」または「１」を入力してください。",
       });
     }
 
     // B列全体が空かチェック
-    const hasAnyKeyword = rows.some((row) => row[0] && row[0].trim() !== "");
+    const hasAnyKeyword = rows.some((row) => row[1] && row[1].trim() !== "");
     if (!hasAnyKeyword) {
       return res.status(400).json({
         success: false,
@@ -165,7 +174,7 @@ async function getMarkedKeywords(req, res) {
 }
 
 /**
- * スプレッドシートからB列（キーワード）とM列（公開予定URL）のマッピングを取得
+ * スプレッドシートからB列（キーワード）とF列（公開用URL）のマッピングを取得
  * 内部リンク挿入用
  */
 async function getInternalLinkMap(req, res) {
@@ -209,8 +218,8 @@ async function getInternalLinkMap(req, res) {
     const authClient = await auth.getClient();
     const sheets = google.sheets({ version: "v4", auth: authClient });
 
-    // シート1のB列とM列を取得（最大500行）
-    const range = "シート1!B1:M500";
+    // シート1のA列〜G列を取得（最大500行）
+    const range = "シート1!A1:G500";
     const response = await sheets.spreadsheets.values.get({
       spreadsheetId: SPREADSHEET_ID,
       range: range,
@@ -225,27 +234,27 @@ async function getInternalLinkMap(req, res) {
       });
     }
 
-    // B列（キーワード）とM列（URL）のマッピングを構築
+    // B列（キーワード）とF列（公開用URL）のマッピングを構築
     const internalLinkMap = [];
 
     for (let i = 0; i < rows.length; i++) {
-      const bColumn = rows[i][0]; // B列（KW）
-      const mColumn = rows[i][11]; // M列（URL） - 0-indexed なので 11
+      const bColumn = rows[i][1]; // B列（KW）- 0-indexed なので 1
+      const fColumn = rows[i][5]; // F列（公開用URL）- 0-indexed なので 5
 
-      // B列とM列が両方存在する場合のみ追加
+      // B列とF列が両方存在する場合のみ追加
       if (
         bColumn &&
         bColumn.trim() !== "" &&
-        mColumn &&
-        mColumn.trim() !== ""
+        fColumn &&
+        fColumn.trim() !== ""
       ) {
         internalLinkMap.push({
           row: i + 1,
           keyword: bColumn.trim(),
-          url: mColumn.trim(),
+          url: fColumn.trim(),
         });
 
-        console.log(`✅ 行${i + 1}: ${bColumn.trim()} → ${mColumn.trim()}`);
+        console.log(`✅ 行${i + 1}: ${bColumn.trim()} → ${fColumn.trim()}`);
       }
     }
 

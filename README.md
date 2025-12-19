@@ -47,28 +47,34 @@ GOOGLE_SEARCH_ENGINE_ID=your_search_engine_id
 VITE_GOOGLE_SEARCH_ENGINE_ID=your_search_engine_id
 ```
 
-#### 3. アプリを起動（2つのターミナルが必要）
+#### 3. アプリを起動
 
-**ターミナル1: メインアプリ**
-```bash
-npm run dev
-```
-→ http://localhost:5176/ で起動
+**基本モード（2つのターミナル）**
 
-**ターミナル2: スクレイピングサーバー**
-```bash
-cd server && node scraping-server.js
-```
-→ http://localhost:3001/ で起動
+| ターミナル | コマンド | ポート |
+|-----------|---------|-------|
+| 1 | `npm run dev` | http://localhost:5176/ |
+| 2 | `cd server && node scraping-server.js` | http://localhost:3001/ |
+
+**フル自動モード（3つのターミナル）**
+
+フル自動モードでAI画像生成まで行う場合は、画像生成エージェントも起動してください：
+
+| ターミナル | コマンド | ポート |
+|-----------|---------|-------|
+| 1 | `npm run dev` | http://localhost:5176/ |
+| 2 | `cd server && node scraping-server.js` | http://localhost:3001/ |
+| 3 | `cd ai-article-imager-for-wordpress && npm install && npm run dev` | http://localhost:5177/ |
 
 #### 4. 動作確認
 
-以下の両方が正常に動作していることを確認してください：
+以下が正常に動作していることを確認してください：
 
-| URL | 期待される結果 |
-|-----|--------------|
-| http://localhost:5176/ | アプリ画面が表示される |
-| http://localhost:3001/api/health | `{"status":"ok",...}` が返る |
+| URL | 用途 | 期待される結果 |
+|-----|------|--------------|
+| http://localhost:5176/ | メインアプリ | アプリ画面が表示される |
+| http://localhost:3001/api/health | スクレイピング | `{"status":"ok",...}` が返る |
+| http://localhost:5177/ | 画像生成（フル自動時のみ） | 画像生成画面が表示される |
 
 ---
 

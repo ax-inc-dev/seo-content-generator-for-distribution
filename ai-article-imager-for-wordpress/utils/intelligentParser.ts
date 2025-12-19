@@ -91,15 +91,15 @@ export const parseHtmlWithIntelligentMatching = async (
           continue;
       }
 
-      // 次の見出しが「まとめ」の場合、現在の見出し（通常サービス訴求セクション）もスキップ
-      if (index + 1 < h2s.length) {
-          const nextH2 = h2s[index + 1];
-          const nextH2Text = nextH2.textContent?.trim() || '';
-          if (isSummaryHeading(nextH2Text)) {
-              console.log(`⏭️ "${h2Text}" は「まとめ」の直前（サービス訴求セクション）のため、画像配置をスキップします`);
-              continue;
-          }
-      }
+      // まとめ直前のセクション（サービス訴求）にも画像を配置するため、スキップ処理を無効化
+      // if (index + 1 < h2s.length) {
+      //     const nextH2 = h2s[index + 1];
+      //     const nextH2Text = nextH2.textContent?.trim() || '';
+      //     if (isSummaryHeading(nextH2Text)) {
+      //         console.log(`⏭️ "${h2Text}" は「まとめ」の直前（サービス訴求セクション）のため、画像配置をスキップします`);
+      //         continue;
+      //     }
+      // }
 
       const altText = summarizeH2(h2Text);
       
@@ -186,18 +186,18 @@ export const parseHtmlWithFilenameMatching = async (
             continue;
         }
 
-        // 次の見出しが「まとめ」の場合、現在の見出し（通常サービス訴求セクション）もスキップ
-        if (index + 1 < h2s.length) {
-            const nextH2 = h2s[index + 1];
-            const nextH2Text = nextH2.textContent?.trim() || '';
-            if (isSummaryHeading(nextH2Text)) {
-                console.log(`⏭️ "${h2Text}" は「まとめ」の直前（サービス訴求セクション）のため、画像配置をスキップします`);
-                continue;
-            }
-        }
+        // まとめ直前のセクション（サービス訴求）にも画像を配置するため、スキップ処理を無効化
+        // if (index + 1 < h2s.length) {
+        //     const nextH2 = h2s[index + 1];
+        //     const nextH2Text = nextH2.textContent?.trim() || '';
+        //     if (isSummaryHeading(nextH2Text)) {
+        //         console.log(`⏭️ "${h2Text}" は「まとめ」の直前（サービス訴求セクション）のため、画像配置をスキップします`);
+        //         continue;
+        //     }
+        // }
 
         const altText = summarizeH2(h2Text);
-        
+
         let paragraphText = '';
         let nextElement = h2.nextElementSibling;
         if (nextElement && nextElement.tagName.toLowerCase() === 'p') {
@@ -289,18 +289,18 @@ export const parseHtmlSimple = (htmlContent: string, baseImageMap: Map<string, s
             return;
         }
 
-        // 次の見出しが「まとめ」の場合、現在の見出し（通常サービス訴求セクション）もスキップ
-        if (index + 1 < h2s.length) {
-            const nextH2 = h2s[index + 1];
-            const nextH2Text = nextH2.textContent?.trim() || '';
-            if (isSummaryHeading(nextH2Text)) {
-                console.log(`⏭️ "${h2Text}" は「まとめ」の直前（サービス訴求セクション）のため、画像配置をスキップします`);
-                return;
-            }
-        }
+        // まとめ直前のセクション（サービス訴求）にも画像を配置するため、スキップ処理を無効化
+        // if (index + 1 < h2s.length) {
+        //     const nextH2 = h2s[index + 1];
+        //     const nextH2Text = nextH2.textContent?.trim() || '';
+        //     if (isSummaryHeading(nextH2Text)) {
+        //         console.log(`⏭️ "${h2Text}" は「まとめ」の直前（サービス訴求セクション）のため、画像配置をスキップします`);
+        //         return;
+        //     }
+        // }
 
         const altText = summarizeH2(h2Text);
-        
+
         let paragraphText = '';
         let nextElement = h2.nextElementSibling;
         if (nextElement && nextElement.tagName.toLowerCase() === 'p') {

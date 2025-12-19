@@ -236,156 +236,37 @@ const KeywordInputForm: React.FC<KeywordInputFormProps> = ({
         </div>
       )}
 
-      {/* 開発用：画像生成テストボタン */}
+{/* 開発用テストボタン - コメントアウト
       <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
         <h3 className="text-amber-700 font-semibold mb-2">開発用テスト</h3>
         <button
           onClick={() => {
-            // テスト用の記事データを作成
             const testArticleData = {
-              title: `【2025年最新】${
-                keyword || "テストキーワード"
-              }完全ガイド | 初心者から上級者まで徹底解説`,
-              htmlContent: `<h1>${keyword || "テストキーワード"}完全ガイド</h1>
-
-<p>${
-                keyword || "テストキーワード"
-              }は、現代のビジネスや日常生活において重要な要素となっています。この記事では、${
-                keyword || "テストキーワード"
-              }について基礎から応用まで詳しく解説していきます。</p>
-
-<h2>${keyword || "テストキーワード"}とは？基本概念の解説</h2>
-
-<p>${
-                keyword || "テストキーワード"
-              }とは、簡単に言うと〇〇のことを指します。近年、その重要性が高まっており、多くの企業や個人が注目しています。</p>
-
-<p>具体的には以下のような特徴があります：</p>
-<ul>
-<li>効率性の向上</li>
-<li>コスト削減効果</li>
-<li>品質の安定化</li>
-<li>スケーラビリティの確保</li>
-</ul>
-
-<h2>${keyword || "テストキーワード"}の実践方法</h2>
-
-<p>実際に${
-                keyword || "テストキーワード"
-              }を実践するには、以下のステップを踏むことが重要です。</p>
-
-<h3>ステップ1: 現状分析</h3>
-<p>まずは現在の状況を正確に把握することから始めましょう。データの収集と分析が重要になります。</p>
-
-<h3>ステップ2: 目標設定</h3>
-<p>明確な目標を設定することで、${
-                keyword || "テストキーワード"
-              }の効果を最大化できます。SMART原則に基づいた目標設定を心がけましょう。</p>
-
-<h3>ステップ3: 実装と運用</h3>
-<p>計画に基づいて実際に${
-                keyword || "テストキーワード"
-              }を実装し、継続的な改善を行います。</p>
-
-<h2>${keyword || "テストキーワード"}のメリットとデメリット</h2>
-
-<h3>メリット</h3>
-<p>${
-                keyword || "テストキーワード"
-              }を導入することで得られる主なメリットは以下の通りです：</p>
-<ul>
-<li><strong>効率性の向上</strong>: 作業時間の短縮と生産性の向上</li>
-<li><strong>品質向上</strong>: 一貫した高品質なアウトプット</li>
-<li><strong>コスト削減</strong>: 長期的な運用コストの削減</li>
-</ul>
-
-<h3>デメリット・注意点</h3>
-<p>一方で、以下のような注意点もあります：</p>
-<ul>
-<li>初期導入コストが必要</li>
-<li>学習コストがかかる場合がある</li>
-<li>適切な運用が必要</li>
-</ul>
-
-<h2>成功事例とベストプラクティス</h2>
-
-<p>多くの企業が${
-                keyword || "テストキーワード"
-              }を成功裏に導入しています。例えば、A社では導入後3ヶ月で効率が30%向上し、B社では年間コストを20%削減することに成功しました。</p>
-
-<p>成功のポイントは以下の通りです：</p>
-<ol>
-<li>段階的な導入</li>
-<li>継続的な改善</li>
-<li>チーム全体での取り組み</li>
-<li>定期的な効果測定</li>
-</ol>
-
-<h2>まとめ</h2>
-
-<p>${
-                keyword || "テストキーワード"
-              }は、適切に活用することで大きな効果を得ることができる重要な要素です。本記事で紹介した内容を参考に、ぜひ実践してみてください。</p>
-
-<p>重要なポイントをまとめると：</p>
-<ul>
-<li>基本概念の理解が重要</li>
-<li>段階的な実装が成功の鍵</li>
-<li>継続的な改善が必要</li>
-<li>メリットとデメリットを理解した上で導入</li>
-</ul>
-
-<p>${
-                keyword || "テストキーワード"
-              }について更に詳しく知りたい方は、関連記事もご覧ください。</p>`,
-              metaDescription: `${
-                keyword || "テストキーワード"
-              }について、基礎から応用まで幅広くカバーした完全ガイドです。初心者にもわかりやすく解説しています。`,
+              title: `【2025年最新】${keyword || "テストキーワード"}完全ガイド | 初心者から上級者まで徹底解説`,
+              htmlContent: `<h1>${keyword || "テストキーワード"}完全ガイド</h1>...`,
+              metaDescription: `${keyword || "テストキーワード"}について、基礎から応用まで幅広くカバーした完全ガイドです。`,
               keyword: keyword || "テストキーワード",
               slug: "test-article-for-image-generation",
-              isTestMode: true, // テストモードフラグを追加
+              isTestMode: true,
             };
-
             console.log("🧪 テスト用記事データで画像生成エージェントを起動");
-            console.log("  データ:", testArticleData);
-
-            // localStorageにテストデータを保存
-            localStorage.setItem(
-              "articleDataForImageGen_5176",
-              JSON.stringify(testArticleData)
-            );
-
-            // iframe版で開く
+            localStorage.setItem("articleDataForImageGen_5176", JSON.stringify(testArticleData));
             if (onOpenImageAgent) {
-              console.log("🖼️ 画像生成エージェントをiframeで開きます...");
               onOpenImageAgent({
                 title: testArticleData.title,
                 content: testArticleData.htmlContent,
                 keyword: testArticleData.keyword,
-                autoMode: false, // テストなのでautoModeはfalse
+                autoMode: false,
                 metaDescription: testArticleData.metaDescription,
                 slug: testArticleData.slug,
-                isTestMode: true, // テストモード
+                isTestMode: true,
               });
-              console.log("✅ iframe起動完了");
             } else {
-              // フォールバック: 別タブで開く
-              const imageGenUrl =
-                import.meta.env.VITE_IMAGE_GEN_URL ||
-                "http://localhost:5177";
+              const imageGenUrl = import.meta.env.VITE_IMAGE_GEN_URL || "http://localhost:5177";
               const newWindow = window.open(imageGenUrl, "_blank");
-
               if (newWindow) {
                 setTimeout(() => {
-                  console.log("📮 テストデータをimage-agent.htmlに送信中...");
-                  newWindow.postMessage(
-                    {
-                      type: "ARTICLE_DATA",
-                      data: testArticleData,
-                    },
-                    imageGenUrl
-                  );
-                  console.log("✅ テストデータ送信完了");
+                  newWindow.postMessage({ type: "ARTICLE_DATA", data: testArticleData }, imageGenUrl);
                 }, 2000);
               }
             }
@@ -399,6 +280,7 @@ const KeywordInputForm: React.FC<KeywordInputFormProps> = ({
           記事作成をスキップして、テスト用データで画像生成エージェントを直接起動します
         </p>
       </div>
+      */}
     </div>
   );
 };

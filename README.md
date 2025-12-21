@@ -1,112 +1,179 @@
 # SEO Content Generator
 
-SEOコンテンツの構成・記事を自動生成するツールです。
+キーワードを入力するだけで、SEOに最適化された記事を自動で作成できるツールです。
 
-## ドキュメント
+## はじめに
 
-| ドキュメント | 内容 |
-|------------|------|
-| [デプロイマニュアル](docs/DEPLOY_MANUAL.md) | Google Cloud Runへのデプロイ手順 |
-| [カスタマイズガイド](docs/CUSTOMIZATION_GUIDE.md) | 自社用にカスタマイズする方法 |
+このドキュメントは、**自分のパソコンでこのツールを動かす手順**を説明しています。
+
+| やりたいこと | 読むドキュメント |
+|------------|----------------|
+| まず自分のPCで試してみたい | このREADME（続きを読んでください） |
+| インターネット上で公開したい | [デプロイマニュアル](docs/DEPLOY_MANUAL.md) |
+| 自社の情報を反映させたい | [カスタマイズガイド](docs/CUSTOMIZATION_GUIDE.md) |
 
 ---
 
-## ローカル環境での実行
+## このツールでできること
 
-### 必要なもの
+- キーワードから記事の構成（目次）を自動作成
+- 構成をもとに記事を自動執筆
+- 記事の校正・ファクトチェック
+- 記事に合った画像をAIで自動生成
+- 完成した記事をWordPressに自動投稿
+- Googleスプレッドシートと連携して記事を一括作成
 
-- Node.js（v18以上推奨）
-- Gemini APIキー
-- Google Search APIキー + カスタム検索エンジンID
+---
+
+## パソコンで動かしてみる（ローカル実行）
+
+このツールを自分のパソコンで動かす手順です。
+
+### 事前に用意するもの
+
+| 必要なもの | 説明 | 入手先 |
+|-----------|------|--------|
+| Node.js | このツールを動かすために必要なソフト | [公式サイト](https://nodejs.org/)からダウンロード（v18以上） |
+| Gemini APIキー | AIが記事を書くために必要 | [Google AI Studio](https://aistudio.google.com/)で無料取得 |
+| Google Search APIキー | 競合サイトを調べるために必要 | [Google Cloud Console](https://console.cloud.google.com/)で取得 |
+| カスタム検索エンジンID | 上記と一緒に使う | [Programmable Search Engine](https://programmablesearchengine.google.com/)で作成 |
+
+---
 
 ### セットアップ手順
 
-#### 1. 依存パッケージをインストール
+#### ステップ1: 必要なファイルをダウンロード
+
+1. このプロジェクトのフォルダを開きます
+
+2. **コマンドプロンプト（Windows）またはターミナル（Mac）を開きます**
+   - **Windows**: フォルダのアドレスバーに `cmd` と入力してEnter
+   - **Mac**: フォルダを右クリック →「フォルダに新規ターミナル」
+
+3. 以下を入力してEnterを押します：
 
 ```bash
 npm install
 ```
 
-#### 2. 環境変数を設定
+これで必要なファイルが自動でダウンロードされます。数分かかることがあります。
 
-```bash
-cp .env.example .env
-```
+#### ステップ2: APIキーを設定する
 
-`.env` ファイルを開いて、以下のAPIキーを設定してください：
+1. プロジェクトフォルダ内の `.env.example` というファイルをコピーして `.env` という名前に変更します
+
+2. `.env` ファイルをメモ帳などで開いて、以下の部分を自分のAPIキーに書き換えます：
 
 ```env
-# 必須: Gemini API（Google AI Studioで取得）
-GEMINI_API_KEY=your_gemini_api_key
-VITE_GEMINI_API_KEY=your_gemini_api_key
+# Gemini API（Google AI Studioで取得したキー）
+GEMINI_API_KEY=ここにあなたのGemini APIキーを貼り付け
+VITE_GEMINI_API_KEY=ここにも同じキーを貼り付け
 
-# 必須: Google Search API（競合調査機能に必要）
-GOOGLE_API_KEY=your_google_api_key
-VITE_GOOGLE_API_KEY=your_google_api_key
-GOOGLE_SEARCH_ENGINE_ID=your_search_engine_id
-VITE_GOOGLE_SEARCH_ENGINE_ID=your_search_engine_id
+# Google Search API（競合調査に使用）
+GOOGLE_API_KEY=ここにGoogle APIキーを貼り付け
+VITE_GOOGLE_API_KEY=ここにも同じキーを貼り付け
+GOOGLE_SEARCH_ENGINE_ID=ここに検索エンジンIDを貼り付け
+VITE_GOOGLE_SEARCH_ENGINE_ID=ここにも同じIDを貼り付け
 ```
 
-#### 3. アプリを起動
+3. ファイルを保存して閉じます
 
-**基本モード（2つのターミナル）**
+#### ステップ3: ツールを起動する
 
-| ターミナル | コマンド | ポート |
-|-----------|---------|-------|
-| 1 | `npm run dev` | http://localhost:5176/ |
-| 2 | `cd server && node scraping-server.js` | http://localhost:3001/ |
+**記事作成だけなら → 2つのウィンドウを開く**
 
-**フル自動モード（3つのターミナル）**
+**画像生成もするなら → 3つのウィンドウを開く**
 
-フル自動モードでAI画像生成まで行う場合は、画像生成エージェントも起動してください：
-
-| ターミナル | コマンド | ポート |
-|-----------|---------|-------|
-| 1 | `npm run dev` | http://localhost:5176/ |
-| 2 | `cd server && node scraping-server.js` | http://localhost:3001/ |
-| 3 | `cd ai-article-imager-for-wordpress && npm install && npm run dev` | http://localhost:5177/ |
-
-#### 4. 動作確認
-
-以下が正常に動作していることを確認してください：
-
-| URL | 用途 | 期待される結果 |
-|-----|------|--------------|
-| http://localhost:5176/ | メインアプリ | アプリ画面が表示される |
-| http://localhost:3001/api/health | スクレイピング | `{"status":"ok",...}` が返る |
-| http://localhost:5177/ | 画像生成（フル自動時のみ） | 画像生成画面が表示される |
+> **ヒント**: 各ウィンドウは閉じずに開いたままにしておいてください。すべてのウィンドウが起動している必要があります。
 
 ---
 
-## 主な機能
+**ウィンドウ1: メインアプリ**
 
-- キーワードからSEO記事構成を自動生成
-- 記事の自動執筆（Gemini 2.5 Pro使用）
-- 最終校閲・ファクトチェック
-- AI画像生成
-- WordPress自動投稿
-- スプレッドシート連携による一括処理
+プロジェクトフォルダでコマンドプロンプトを開いて（ステップ1と同じ方法）：
+
+```bash
+npm run dev
+```
+
+→ `http://localhost:5176/` で起動します
 
 ---
 
-## トラブルシューティング
+**ウィンドウ2: 競合調査サーバー**
 
-### 「Puppeteer not available」エラーが出る
-
-スクレイピングサーバーが起動していません。別ターミナルで以下を実行：
+**新しい**コマンドプロンプトを開いて（ウィンドウ1は閉じない）：
 
 ```bash
-cd server && node scraping-server.js
+cd server
+node scraping-server.js
 ```
 
-### スクレイピングサーバーが起動しない
+→ `http://localhost:3001/` で起動します
 
-`npm run server` ではなく、直接起動してください：
+---
+
+**ウィンドウ3: 画像生成エージェント（フル自動モードで使う場合）**
+
+さらに**新しい**コマンドプロンプトを開いて（ウィンドウ1・2は閉じない）：
 
 ```bash
-cd server && node scraping-server.js
+cd ai-article-imager-for-wordpress
+npm install
+npm run dev
+```
+
+→ `http://localhost:5177/` で起動します
+
+#### ステップ4: 動作確認
+
+ブラウザ（Chrome等）を開いて、以下のURLにアクセスしてください。
+
+> **「localhost」とは？** 自分のパソコン内で動いているサーバーを指します。インターネットには公開されていません。
+
+| 確認項目 | URL | 正常なら |
+|---------|-----|---------|
+| メインアプリ | http://localhost:5176/ | ツールの画面が表示される |
+| 競合調査サーバー | http://localhost:3001/api/health | `{"status":"ok"...}` と表示される |
+| 画像生成（使う場合のみ） | http://localhost:5177/ | 画像生成の画面が表示される |
+
+---
+
+## よくあるトラブルと解決方法
+
+### 「Puppeteer not available」というエラーが出る
+
+**原因**: 競合調査サーバーが起動していません
+
+**解決方法**: 別のコマンドプロンプトで以下を実行してください
+
+```bash
+cd server
+node scraping-server.js
+```
+
+### 競合調査サーバーが起動しない
+
+**解決方法**: `npm run server` ではなく、直接起動してください
+
+```bash
+cd server
+node scraping-server.js
 ```
 
 ### APIキーのエラーが出る
 
-`.env` ファイルに正しいAPIキーが設定されているか確認してください。
+**原因**: `.env` ファイルにAPIキーが正しく設定されていない可能性があります
+
+**解決方法**:
+1. `.env` ファイルを開く
+2. APIキーが正しくコピーされているか確認
+3. キーの前後に余計なスペースが入っていないか確認
+4. ファイルを保存してツールを再起動
+
+---
+
+## 困ったときは
+
+- [デプロイマニュアル](docs/DEPLOY_MANUAL.md) - インターネット上で公開する方法
+- [カスタマイズガイド](docs/CUSTOMIZATION_GUIDE.md) - 自社の情報を反映させる方法

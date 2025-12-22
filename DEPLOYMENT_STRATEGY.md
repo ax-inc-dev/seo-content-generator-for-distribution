@@ -80,9 +80,9 @@ services:
         value: production
       - key: OPENAI_API_KEY
         sync: false
-      - key: GOOGLE_CUSTOM_SEARCH_API_KEY
+      - key: GOOGLE_API_KEY
         sync: false
-      - key: GOOGLE_CUSTOM_SEARCH_ENGINE_ID
+      - key: GOOGLE_SEARCH_ENGINE_ID
         sync: false
       - key: SLACK_WEBHOOK_URL
         sync: false
@@ -91,8 +91,8 @@ services:
 #### 1.3 環境変数の設定
 Render.comダッシュボードで以下を設定：
 - `OPENAI_API_KEY`
-- `GOOGLE_CUSTOM_SEARCH_API_KEY`
-- `GOOGLE_CUSTOM_SEARCH_ENGINE_ID`
+- `GOOGLE_API_KEY`
+- `GOOGLE_SEARCH_ENGINE_ID`
 - `SLACK_WEBHOOK_URL`
 - `PORT` (Render.comが自動設定)
 

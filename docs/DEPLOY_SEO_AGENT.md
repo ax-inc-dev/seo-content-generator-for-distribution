@@ -23,7 +23,7 @@
 - クレジットカードまたは請求先アカウントが設定可能
 - 以下のAPIキーを取得済み：
   - Gemini APIキー
-  - Google Search APIキー + カスタム検索エンジンID
+  - Custom Search APIキー + カスタム検索エンジンID
   - OpenAI APIキー（GPT-5 最終校閲エージェント用）
   - Supabase URL + Anon Key（一次情報データベース用）
 
@@ -97,7 +97,7 @@ APIキーなどの機密情報をSecret Managerに保存します。
 | シークレット名 | 説明 |
 |---------------|------|
 | `GEMINI_API_KEY` | Gemini API認証キー |
-| `GOOGLE_API_KEY` | Google Search API用キー |
+| `GOOGLE_API_KEY` | Custom Search API用キー |
 | `GOOGLE_SEARCH_ENGINE_ID` | カスタム検索エンジンID |
 | `OPENAI_API_KEY` | OpenAI API認証キー（GPT-5用） |
 | `SUPABASE_URL` | SupabaseプロジェクトURL |

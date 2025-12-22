@@ -55,7 +55,7 @@ curl http://localhost:3001/api/health
 
 ## 重要な環境変数
 - `GEMINI_API_KEY`: Gemini API認証用
-- `GOOGLE_API_KEY`: Google Search API用  
+- `GOOGLE_API_KEY`: Custom Search API用  
 - `GOOGLE_SEARCH_ENGINE_ID`: カスタム検索エンジンID
 - `OPENAI_API_KEY`: GPT-5用（最終校閲エージェント）
 - `VITE_`プレフィックス: ブラウザ側で使用する環境変数に必須

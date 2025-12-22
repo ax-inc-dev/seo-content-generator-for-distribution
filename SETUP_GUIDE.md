@@ -19,7 +19,7 @@
 
 ### 2. 🟡 推奨（機能が制限される）
 
-#### Google Search API（競合分析の精度向上）
+#### Custom Search API（競合分析の精度向上）
 - [ ] **Google APIキー**
   - 取得先: https://console.cloud.google.com/
   - Custom Search APIを有効化
@@ -81,7 +81,7 @@
 5. テストキーワードで構成生成を試す
 
 ### ステップ2: 機能拡張
-- Google Search APIを追加 → 競合分析の精度UP
+- Custom Search APIを追加 → 競合分析の精度UP
 - OpenAI APIを追加 → 最終校閲機能ON
 
 ### ステップ3: WordPress連携（必要な場合）

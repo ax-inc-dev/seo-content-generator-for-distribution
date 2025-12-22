@@ -94,7 +94,7 @@
 | APIキー | 用途 | 取得先 |
 |---------|------|--------|
 | Gemini API Key | AI構成・執筆生成 | [Google AI Studio](https://aistudio.google.com/) |
-| Google Search API Key | 検索機能 | [Google Cloud Console](https://console.cloud.google.com/apis/credentials) |
+| Custom Search API Key | 検索機能 | [Google Cloud Console](https://console.cloud.google.com/apis/credentials) |
 | Google Search Engine ID | カスタム検索 | [Programmable Search Engine](https://programmablesearchengine.google.com/) |
 | OpenAI API Key | GPT-5 最終校閲（オプション） | [OpenAI Platform](https://platform.openai.com/) |
 | Supabase URL + Anon Key | 一次情報DB（オプション） | [Supabase](https://supabase.com/) |

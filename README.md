@@ -35,7 +35,7 @@
 |-----------|------|--------|
 | Node.js | このツールを動かすために必要なソフト | [公式サイト](https://nodejs.org/)からダウンロード（v18以上） |
 | Gemini APIキー | AIが記事を書くために必要 | [Google AI Studio](https://aistudio.google.com/)で無料取得 |
-| Google Search APIキー | 競合サイトを調べるために必要 | [Google Cloud Console](https://console.cloud.google.com/)で取得 |
+| Custom Search APIキー | 競合サイトを調べるために必要 | [Google Cloud Console](https://console.cloud.google.com/)で取得 |
 | カスタム検索エンジンID | 上記と一緒に使う | [Programmable Search Engine](https://programmablesearchengine.google.com/)で作成 |
 
 ---
@@ -69,7 +69,7 @@ npm install
 GEMINI_API_KEY=ここにあなたのGemini APIキーを貼り付け
 VITE_GEMINI_API_KEY=ここにも同じキーを貼り付け
 
-# Google Search API（競合調査に使用）
+# Custom Search API（競合調査に使用）
 GOOGLE_API_KEY=ここにGoogle APIキーを貼り付け
 VITE_GOOGLE_API_KEY=ここにも同じキーを貼り付け
 GOOGLE_SEARCH_ENGINE_ID=ここに検索エンジンIDを貼り付け
@@ -100,7 +100,7 @@ npm run dev
 
 ---
 
-**ウィンドウ2: 競合調査サーバー**
+**ウィンドウ2: バックエンドサーバー（競合調査）**
 
 **新しい**コマンドプロンプトを開いて（ウィンドウ1は閉じない）：
 
@@ -134,7 +134,7 @@ npm run dev
 | 確認項目 | URL | 正常なら |
 |---------|-----|---------|
 | メインアプリ | http://localhost:5176/ | ツールの画面が表示される |
-| 競合調査サーバー | http://localhost:3001/api/health | `{"status":"ok"...}` と表示される |
+| バックエンドサーバー（競合調査） | http://localhost:3001/api/health | `{"status":"ok"...}` と表示される |
 | 画像生成（使う場合のみ） | http://localhost:5177/ | 画像生成の画面が表示される |
 
 ---
@@ -143,7 +143,7 @@ npm run dev
 
 ### 「Puppeteer not available」というエラーが出る
 
-**原因**: 競合調査サーバーが起動していません
+**原因**: バックエンドサーバー（競合調査）が起動していません
 
 **解決方法**: 別のコマンドプロンプトで以下を実行してください
 
@@ -152,7 +152,7 @@ cd server
 node scraping-server.js
 ```
 
-### 競合調査サーバーが起動しない
+### バックエンドサーバー（競合調査）が起動しない
 
 **解決方法**: `npm run server` ではなく、直接起動してください
 

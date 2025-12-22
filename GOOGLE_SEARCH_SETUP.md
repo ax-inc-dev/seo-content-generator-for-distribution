@@ -44,10 +44,19 @@ Google Custom Search APIを使用することで、**正確なURL**を取得で�
 `.env`ファイルに以下を追加：
 
 ```env
-# Google Custom Search API
+# Google API（複数機能で共通使用）
 GOOGLE_API_KEY=あなたのAPIキー
 GOOGLE_SEARCH_ENGINE_ID=あなたの検索エンジンID
 ```
+
+> **⚠️ 重要: GOOGLE_API_KEYの用途**
+>
+> このAPIキーは**2つの機能**で共通使用されます：
+> 1. **Custom Search API** - 競合サイトの検索（このページの主目的）
+> 2. **Google Drive API** - 自社実績データ（CSVファイル）の取得
+>
+> 自社実績データ機能も使う場合は、Google Cloud Consoleで**Google Drive API**も有効化してください：
+> 「APIとサービス」→「ライブラリ」→「Google Drive API」→ 有効にする
 
 ### 5. 動作確認
 

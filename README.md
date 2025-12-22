@@ -69,7 +69,11 @@ npm install
 GEMINI_API_KEY=ここにあなたのGemini APIキーを貼り付け
 VITE_GEMINI_API_KEY=ここにも同じキーを貼り付け
 
-# Custom Search API（競合調査に使用）
+# Google API（複数の機能で使用）
+# ※ このキーは以下の2つの機能で共通使用されます：
+#    1. Custom Search API（競合調査）
+#    2. Google Drive API（自社実績データ取得）
+# → Google Cloud Consoleで両方のAPIを有効化してください
 GOOGLE_API_KEY=ここにGoogle APIキーを貼り付け
 VITE_GOOGLE_API_KEY=ここにも同じキーを貼り付け
 GOOGLE_SEARCH_ENGINE_ID=ここに検索エンジンIDを貼り付け

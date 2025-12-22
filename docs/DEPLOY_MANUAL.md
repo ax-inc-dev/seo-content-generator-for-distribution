@@ -202,8 +202,18 @@ APIキーなどの機密情報をSecret Managerに保存します。
 
 | シークレット名 | 説明 | 取得先 |
 |---------------|------|--------|
-| `GOOGLE_API_KEY` | Google Custom Search API用キー | [Google Cloud Console](https://console.cloud.google.com/apis/credentials) |
+| `GOOGLE_API_KEY` | Google API用キー（下記参照） | [Google Cloud Console](https://console.cloud.google.com/apis/credentials) |
 | `GOOGLE_SEARCH_ENGINE_ID` | カスタム検索エンジンID | [Programmable Search Engine](https://programmablesearchengine.google.com/) |
+
+> **⚠️ 重要: GOOGLE_API_KEYの用途**
+>
+> このAPIキーは**2つの機能**で共通使用されます：
+> 1. **Custom Search API** - 競合サイトの検索・分析
+> 2. **Google Drive API** - 自社実績データ（CSVファイル）の取得
+>
+> Google Cloud Consoleで**両方のAPIを有効化**してください：
+> - 「APIとサービス」→「ライブラリ」→「Custom Search API」→ 有効にする
+> - 「APIとサービス」→「ライブラリ」→「Google Drive API」→ 有効にする
 
 > **取得手順**:
 > 1. Google Cloud Console → APIとサービス → 認証情報 → APIキーを作成

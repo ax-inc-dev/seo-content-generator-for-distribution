@@ -149,7 +149,7 @@ npm run dev
 
 ```bash
 cd server
-node scraping-server.js
+node scraping-server-full.js
 ```
 
 ### バックエンドサーバー（競合調査）が起動しない
@@ -158,7 +158,7 @@ node scraping-server.js
 
 ```bash
 cd server
-node scraping-server.js
+node scraping-server-full.js
 ```
 
 ### APIキーのエラーが出る

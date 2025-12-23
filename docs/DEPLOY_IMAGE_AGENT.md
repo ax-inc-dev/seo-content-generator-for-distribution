@@ -6,11 +6,11 @@
 
 - GCPプロジェクトが作成済み
 - gcloud CLIがインストール済み（Cloud Shellを使用する場合は不要）
-- 以下のAPIキー・設定を取得済み：
-  - Gemini APIキー（複数キー対応: `API_KEY`, `API_KEY_2`, `API_KEY_3`）
-  - バックエンドサーバーURL
-  - 内部API認証キー（`INTERNAL_API_KEY`）
-- Secret Managerに必要なシークレットが登録済み
+- Secret Managerに以下のシークレットが登録済み：
+  - `GEMINI_API_KEY`
+  - `BACKEND_URL`
+  - `INTERNAL_API_KEY`
+  - `MAIN_APP_URL`
 
 ## 必要なファイル
 
@@ -22,12 +22,12 @@
 
 | シークレット名 | 説明 |
 |---------------|------|
-| `GEMINI_API_KEY` | Gemini API認証キー（メイン） |
-| `GEMINI_API_KEY_2` | Gemini API認証キー（予備1） |
-| `GEMINI_API_KEY_3` | Gemini API認証キー（予備2） |
+| `GEMINI_API_KEY` | Gemini API認証キー |
+| `BACKEND_URL` | バックエンドサーバーのURL |
 | `INTERNAL_API_KEY` | 内部API認証用キー |
+| `MAIN_APP_URL` | SEOエージェントのURL（記事連携用） |
 
-> **注意**: 複数のGemini APIキーはレート制限対策として使用されます。
+> **注意**: Cloud Buildが自動的にSecret Managerから値を取得します。
 
 ### 1. Dockerfile
 
@@ -48,21 +48,17 @@ COPY . .
 
 # ビルド時の環境変数
 ARG VITE_GEMINI_API_KEY
-ARG VITE_GEMINI_API_KEY_2
-ARG VITE_GEMINI_API_KEY_3
-ARG VITE_API_URL
+ARG VITE_BACKEND_URL
 ARG VITE_INTERNAL_API_KEY
 ARG VITE_MAIN_APP_URL
-ARG VITE_WP_DEFAULT_POST_STATUS
 
 # .envファイルを作成（Viteが読み込めるように）
 RUN echo "GEMINI_API_KEY=${VITE_GEMINI_API_KEY}" > .env && \
-    echo "API_KEY_2=${VITE_GEMINI_API_KEY_2}" >> .env && \
-    echo "API_KEY_3=${VITE_GEMINI_API_KEY_3}" >> .env && \
-    echo "VITE_API_URL=${VITE_API_URL}" >> .env && \
+    echo "VITE_GEMINI_API_KEY=${VITE_GEMINI_API_KEY}" >> .env && \
+    echo "VITE_BACKEND_URL=${VITE_BACKEND_URL}" >> .env && \
+    echo "VITE_API_URL=${VITE_BACKEND_URL}/api" >> .env && \
     echo "VITE_INTERNAL_API_KEY=${VITE_INTERNAL_API_KEY}" >> .env && \
-    echo "VITE_MAIN_APP_URL=${VITE_MAIN_APP_URL}" >> .env && \
-    echo "VITE_WP_DEFAULT_POST_STATUS=${VITE_WP_DEFAULT_POST_STATUS}" >> .env
+    echo "VITE_MAIN_APP_URL=${VITE_MAIN_APP_URL}" >> .env
 
 # ビルド
 RUN npm run build
@@ -116,40 +112,40 @@ server {
 
 ```yaml
 steps:
-  - name: 'gcr.io/cloud-builders/docker'
+  - name: gcr.io/cloud-builders/docker
+    entrypoint: bash
     args:
-      - 'build'
-      - '--build-arg'
-      - 'VITE_GEMINI_API_KEY=$_GEMINI_API_KEY'
-      - '--build-arg'
-      - 'VITE_GEMINI_API_KEY_2=$_GEMINI_API_KEY_2'
-      - '--build-arg'
-      - 'VITE_GEMINI_API_KEY_3=$_GEMINI_API_KEY_3'
-      - '--build-arg'
-      - 'VITE_API_URL=$_API_URL'
-      - '--build-arg'
-      - 'VITE_INTERNAL_API_KEY=$_INTERNAL_API_KEY'
-      - '--build-arg'
-      - 'VITE_MAIN_APP_URL=$_MAIN_APP_URL'
-      - '--build-arg'
-      - 'VITE_WP_DEFAULT_POST_STATUS=$_WP_DEFAULT_POST_STATUS'
-      - '-t'
-      - 'asia-northeast1-docker.pkg.dev/${PROJECT_ID}/seo-app/ai-article-imager'
-      - '.'
+      - -c
+      - "docker build --build-arg VITE_GEMINI_API_KEY=$$GEMINI_API_KEY --build-arg VITE_BACKEND_URL=$$BACKEND_URL --build-arg VITE_INTERNAL_API_KEY=$$INTERNAL_API_KEY --build-arg VITE_MAIN_APP_URL=$$MAIN_APP_URL -t asia-northeast1-docker.pkg.dev/$PROJECT_ID/seo-app/ai-article-imager:latest ."
+    secretEnv:
+      - GEMINI_API_KEY
+      - BACKEND_URL
+      - INTERNAL_API_KEY
+      - MAIN_APP_URL
 images:
-  - 'asia-northeast1-docker.pkg.dev/${PROJECT_ID}/seo-app/ai-article-imager'
+  - asia-northeast1-docker.pkg.dev/$PROJECT_ID/seo-app/ai-article-imager:latest
+availableSecrets:
+  secretManager:
+    - versionName: projects/$PROJECT_ID/secrets/GEMINI_API_KEY/versions/latest
+      env: GEMINI_API_KEY
+    - versionName: projects/$PROJECT_ID/secrets/BACKEND_URL/versions/latest
+      env: BACKEND_URL
+    - versionName: projects/$PROJECT_ID/secrets/INTERNAL_API_KEY/versions/latest
+      env: INTERNAL_API_KEY
+    - versionName: projects/$PROJECT_ID/secrets/MAIN_APP_URL/versions/latest
+      env: MAIN_APP_URL
 ```
 
-> **注意**: `${PROJECT_ID}` は実際のプロジェクトIDに置き換えてください（例: `seo-agent-476808`）
+> **注意**: `$PROJECT_ID` はCloud Buildが自動的に現在のプロジェクトIDに置き換えます。Secret Managerから環境変数を自動取得するため、手動での設定は不要です。
 
 ### 環境変数の説明
 
 | 変数名 | 説明 | 例 |
 |--------|------|-----|
-| `VITE_API_URL` | バックエンドサーバーのURL | `https://backend-server-xxx.run.app/api` |
-| `VITE_INTERNAL_API_KEY` | バックエンドAPI認証キー | Secret Managerから取得 |
-| `VITE_MAIN_APP_URL` | SEOエージェントのURL（記事連携用） | `https://seo-frontend-xxx.run.app` |
-| `VITE_WP_DEFAULT_POST_STATUS` | WordPress投稿のデフォルトステータス | `draft` または `publish` |
+| `GEMINI_API_KEY` | Gemini API認証キー | Secret Managerから自動取得 |
+| `BACKEND_URL` | バックエンドサーバーのURL | `https://backend-server-xxx.run.app` |
+| `INTERNAL_API_KEY` | バックエンドAPI認証キー | Secret Managerから自動取得 |
+| `MAIN_APP_URL` | SEOエージェントのURL（記事連携用） | `https://seo-frontend-xxx.run.app` |
 
 ---
 
@@ -203,23 +199,11 @@ cd seo-content-generator
 ```bash
 cd ai-article-imager-for-wordpress
 
-# Secret Managerからキーを取得
-export GEMINI_KEY=$(gcloud secrets versions access latest --secret=GEMINI_API_KEY)
-export GEMINI_KEY_2=$(gcloud secrets versions access latest --secret=GEMINI_API_KEY_2)
-export GEMINI_KEY_3=$(gcloud secrets versions access latest --secret=GEMINI_API_KEY_3)
-export INTERNAL_KEY=$(gcloud secrets versions access latest --secret=INTERNAL_API_KEY)
-
-# 他のサービスのURL（デプロイ後に設定）
-export API_URL="https://backend-server-xxxxx-an.a.run.app/api"
-export MAIN_APP_URL="https://seo-frontend-xxxxx-an.a.run.app"
-export WP_STATUS="draft"
-
-# ビルド実行
-gcloud builds submit --config=cloudbuild.yaml \
-  --substitutions=_GEMINI_API_KEY="$GEMINI_KEY",_GEMINI_API_KEY_2="$GEMINI_KEY_2",_GEMINI_API_KEY_3="$GEMINI_KEY_3",_API_URL="$API_URL",_INTERNAL_API_KEY="$INTERNAL_KEY",_MAIN_APP_URL="$MAIN_APP_URL",_WP_DEFAULT_POST_STATUS="$WP_STATUS"
+# ビルド実行（Secret Managerから自動的に環境変数を取得）
+gcloud builds submit --config=cloudbuild.yaml
 ```
 
-> **重要**: `API_URL` と `MAIN_APP_URL` は、それぞれバックエンドサーバーとSEOエージェントをデプロイした後のURLに置き換えてください。
+> **注意**: `cloudbuild.yaml` の `availableSecrets` 設定により、Secret Managerから自動的に環境変数が取得されます。手動での設定は不要です。
 
 成功すると以下のように表示されます：
 ```
@@ -260,27 +244,25 @@ STATUS: SUCCESS
 
 ## 更新時のデプロイ手順
 
-コードを更新した場合は、以下の手順で再デプロイします：
+コードや環境変数を更新した場合は、以下の手順で再デプロイします：
 
-### 1. 再ビルド
+### 1. 環境変数を変更する場合（必要な場合のみ）
+
+1. GCPコンソール → **「セキュリティ」** → **「Secret Manager」**
+2. 変更したいシークレットをクリック
+3. **「+ 新しいバージョン」** をクリック
+4. 新しい値を入力 → **「バージョンを追加」**
+
+### 2. 再ビルド
 
 ```bash
 cd ~/seo-content-generator/ai-article-imager-for-wordpress
 
-# Secret Managerからキーを取得
-export GEMINI_KEY=$(gcloud secrets versions access latest --secret=GEMINI_API_KEY)
-export GEMINI_KEY_2=$(gcloud secrets versions access latest --secret=GEMINI_API_KEY_2)
-export GEMINI_KEY_3=$(gcloud secrets versions access latest --secret=GEMINI_API_KEY_3)
-export INTERNAL_KEY=$(gcloud secrets versions access latest --secret=INTERNAL_API_KEY)
-export API_URL="https://backend-server-xxxxx-an.a.run.app/api"
-export MAIN_APP_URL="https://seo-frontend-xxxxx-an.a.run.app"
-export WP_STATUS="draft"
-
-gcloud builds submit --config=cloudbuild.yaml \
-  --substitutions=_GEMINI_API_KEY="$GEMINI_KEY",_GEMINI_API_KEY_2="$GEMINI_KEY_2",_GEMINI_API_KEY_3="$GEMINI_KEY_3",_API_URL="$API_URL",_INTERNAL_API_KEY="$INTERNAL_KEY",_MAIN_APP_URL="$MAIN_APP_URL",_WP_DEFAULT_POST_STATUS="$WP_STATUS"
+# ビルド実行（Secret Managerから自動的に環境変数を取得）
+gcloud builds submit --config=cloudbuild.yaml
 ```
 
-### 2. 新しいリビジョンをデプロイ（GUI）
+### 3. 新しいリビジョンをデプロイ（GUI）
 
 1. Cloud Run → `ai-article-imager` サービスをクリック
 2. **「新しいリビジョンの編集とデプロイ」** をクリック
@@ -346,4 +328,5 @@ ERROR: (gcloud.builds.submit) unrecognized arguments: --build-arg
 
 | 日付 | 内容 |
 |------|------|
+| 2025-12-23 | Secret Manager自動取得に対応、ビルド手順を簡略化 |
 | 2025-12-05 | 初版作成 |

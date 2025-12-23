@@ -115,6 +115,33 @@ const App: React.FC = () => {
     queueActiveRef.current = queueActive;
   }, [queueActive]);
 
+  // Keep-alive: フル自動モード処理中はバックエンドを5分ごとにpingしてアイドル終了を防ぐ
+  useEffect(() => {
+    // フル自動モード（単体 or スプシモード）の時に有効
+    if (!isFullAutoMode) return;
+
+    const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:3001";
+
+    const keepAlive = () => {
+      fetch(`${backendUrl}/api/health`)
+        .then(() => console.log("🏓 Keep-alive ping成功"))
+        .catch(() => console.warn("⚠️ Keep-alive ping失敗"));
+    };
+
+    // 開始時に1回ping
+    keepAlive();
+
+    // 5分ごとにping（Cloud Runのアイドルタイムアウトは約15分）
+    const interval = setInterval(keepAlive, 5 * 60 * 1000);
+
+    console.log("🔄 Keep-alive開始（5分間隔）");
+
+    return () => {
+      clearInterval(interval);
+      console.log("🔄 Keep-alive停止");
+    };
+  }, [isFullAutoMode]);
+
   useEffect(() => {
     keywordQueueRef.current = keywordQueue;
   }, [keywordQueue]);

@@ -421,6 +421,12 @@ const ArticleWriter: React.FC<ArticleWriterProps> = ({
       return;
     }
 
+    // フル自動モードまたはスプレッドシートモードの場合はドラフト自動保存を無効化
+    if (isAutoMode) {
+      console.log("🚀 フル自動モード: ドラフト自動保存を無効化");
+      return;
+    }
+
     const saveTimer = setInterval(() => {
       // 修正中でないことを再確認
       if (isRevising) {
@@ -438,9 +444,13 @@ const ArticleWriter: React.FC<ArticleWriterProps> = ({
         outline: outline || null,
       };
 
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToSave));
-      setLastSaveTime(new Date());
-      console.log("💾 記事を自動保存しました");
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToSave));
+        setLastSaveTime(new Date());
+        console.log("💾 記事を自動保存しました");
+      } catch (error) {
+        console.warn("⚠️ ドラフト自動保存スキップ（容量不足）");
+      }
     }, 60000); // 60秒ごとに保存
 
     return () => clearInterval(saveTimer);
@@ -453,6 +463,7 @@ const ArticleWriter: React.FC<ArticleWriterProps> = ({
     outline,
     STORAGE_KEY,
     isRevising,
+    isAutoMode,
   ]);
 
   // 初回マウント時に保存データをチェック、またはテストモードの場合はテスト記事を設定
@@ -2992,13 +3003,8 @@ const startImageGeneration = async (
       "bytes"
     );
 
-    // localStorageに保存
-    localStorage.setItem(
-      "articleDataForImageGen_5176",
-      JSON.stringify(imageGenData)
-    );
-
     // 🌐 画像生成エージェントを開く（iframe版）
+    // ※ postMessageで直接データを渡すため、localStorageへの保存は不要
     if (onOpenImageAgent) {
       console.log("🖼️ 画像生成エージェントをiframeで開きます...");
       onOpenImageAgent({

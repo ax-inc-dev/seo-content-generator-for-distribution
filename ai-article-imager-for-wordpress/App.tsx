@@ -186,7 +186,7 @@ const App: React.FC<AppProps> = ({ initialArticleData }) => {
       if (event.data?.type === "ARTICLE_DATA" && event.data?.data) {
         const articleData = event.data.data;
 
-        // ✅ localStorage に保存（ページ更新に備える）
+        // ✅ localStorage に保存（ページ更新に備える・容量不足時はスキップ）
         try {
           localStorage.setItem(
             "articleDataForImageGen",
@@ -194,7 +194,8 @@ const App: React.FC<AppProps> = ({ initialArticleData }) => {
           );
           console.log("💾 データを localStorage に保存しました");
         } catch (error) {
-          console.error("❌ localStorage 保存エラー:", error);
+          // 容量不足でも処理は継続（postMessageでデータは既に受信済み）
+          console.warn("⚠️ localStorage保存スキップ（容量不足）- 処理は継続します");
         }
 
         // HTMLからH1タイトルを自動抽出
@@ -219,14 +220,18 @@ const App: React.FC<AppProps> = ({ initialArticleData }) => {
 
         // スプレッドシート行番号をlocalStorageに保存（5177側で）
         if (articleData.spreadsheetRow) {
-          localStorage.setItem(
-            "currentSpreadsheetRow",
-            articleData.spreadsheetRow.toString()
-          );
-          console.log(
-            "📊 スプレッドシート行番号を保存:",
-            articleData.spreadsheetRow
-          );
+          try {
+            localStorage.setItem(
+              "currentSpreadsheetRow",
+              articleData.spreadsheetRow.toString()
+            );
+            console.log(
+              "📊 スプレッドシート行番号を保存:",
+              articleData.spreadsheetRow
+            );
+          } catch (error) {
+            console.warn("⚠️ スプレッドシート行番号の保存スキップ");
+          }
         }
 
         console.log("✅ postMessage経由で記事データを受け取りました:");
@@ -339,7 +344,7 @@ const App: React.FC<AppProps> = ({ initialArticleData }) => {
         console.log("  タイトル:", articleData.title);
         console.log("  HTML文字数:", articleData.htmlContent?.length);
 
-        // ✅ localStorage に保存（ページ更新に備える）
+        // ✅ localStorage に保存（ページ更新に備える・容量不足時はスキップ）
         try {
           localStorage.setItem(
             "articleDataForImageGen",
@@ -349,7 +354,8 @@ const App: React.FC<AppProps> = ({ initialArticleData }) => {
             "💾 ARTICLE_DATA_TRANSFER データを localStorage に保存しました"
           );
         } catch (error) {
-          console.error("❌ localStorage 保存エラー:", error);
+          // 容量不足でも処理は継続（postMessageでデータは既に受信済み）
+          console.warn("⚠️ localStorage保存スキップ（容量不足）- 処理は継続します");
         }
 
         // HTMLからH1タイトルを自動抽出

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { H2Section } from '../types';
-import { generateImage, generateBackgroundInstruction, checkForTextInImage } from '../services/geminiService';
+import { generateImage, generateBackgroundInstruction } from '../services/geminiService';
 import { ensure16x9 } from '../services/imageProcessor';
 
 interface H2ProcessingCardProps {
@@ -42,81 +42,21 @@ export const H2ProcessingCard: React.FC<H2ProcessingCardProps> = ({ section, upd
                 }
             }
 
-            let generatedImgB64: string | null = null;
-            const MAX_ATTEMPTS = 2; // Initial attempt + 1 retry
+            // 画像生成（1回のみ、テキスト検出・除去なし）
+            updateSection({
+                ...section,
+                status: 'generating',
+                prompt: currentPrompt,
+                backgroundInstruction: finalBgInstruction,
+                generationStep: 'Generating image...'
+            });
 
-            for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
-                let attemptPrompt = editablePrompt;
-                if (attempt > 1) {
-                    attemptPrompt += "\n\n**重要:** 生成するイラストには、いかなる文字、ロゴ、署名、透かしも絶対に含めないでください。";
-                    updateSection({ ...section, status: 'generating', generationStep: `Text detected, retrying... (Attempt ${attempt}/${MAX_ATTEMPTS})` });
-                } else {
-                     updateSection({ 
-                        ...section, 
-                        status: 'generating',
-                        prompt: attemptPrompt,
-                        backgroundInstruction: finalBgInstruction,
-                        generationStep: `Generating image... (Attempt ${attempt}/${MAX_ATTEMPTS})` 
-                    });
-                }
-                
-                const rawGeneratedImg = await generateImage(section.baseImage, attemptPrompt);
-                
-                updateSection({ ...section, status: 'generating', prompt: attemptPrompt, backgroundInstruction: finalBgInstruction, generationStep: 'Verifying image (checking for text)...' });
-                const hasText = await checkForTextInImage(rawGeneratedImg);
+            const generatedImgB64 = await generateImage(section.baseImage, currentPrompt);
 
-                if (hasText) {
-                    // テキストが検出された場合、除去を試みる
-                    console.warn(`🔤 テキスト検出 [H2 #${section.id}] 試行 ${attempt}/${MAX_ATTEMPTS}`, {
-                        h2Text: section.h2Text,
-                        action: 'テキスト除去を試行',
-                        timestamp: new Date().toISOString()
-                    });
-                    
-                    updateSection({ ...section, status: 'generating', generationStep: `Removing detected text... (Attempt ${attempt}/${MAX_ATTEMPTS})` });
-                    
-                    // テキスト除去を試行
-                    const cleanedImg = await generateImage(
-                        rawGeneratedImg,
-                        "Remove all text, letters, numbers, and written symbols from this image while keeping everything else exactly the same. Maintain the original style, colors, composition, and all visual elements except text."
-                    );
-                    
-                    // 再度テキストチェック
-                    updateSection({ ...section, status: 'generating', generationStep: 'Verifying text removal...' });
-                    const stillHasText = await checkForTextInImage(cleanedImg);
-                    
-                    if (!stillHasText) {
-                        console.log(`✅ テキスト除去成功 [H2 #${section.id}]`, {
-                            h2Text: section.h2Text,
-                            timestamp: new Date().toISOString()
-                        });
-                        generatedImgB64 = cleanedImg;
-                        break; // Success: Text removed successfully
-                    } else {
-                        console.warn(`⚠️ テキスト除去失敗 [H2 #${section.id}]`, {
-                            h2Text: section.h2Text,
-                            willRetry: attempt < MAX_ATTEMPTS,
-                            timestamp: new Date().toISOString()
-                        });
-                        // テキスト除去に失敗した場合、元の画像を保持
-                        generatedImgB64 = rawGeneratedImg;
-                        // 次の試行へ（MAX_ATTEMPTSまで）
-                    }
-                } else {
-                    // テキストが検出されなかった場合
-                    console.log(`✨ テキストなし - クリーンな画像 [H2 #${section.id}]`, {
-                        h2Text: section.h2Text,
-                        attempt: attempt,
-                        timestamp: new Date().toISOString()
-                    });
-                    generatedImgB64 = rawGeneratedImg;
-                    break; // Success: Image is clean, exit the loop.
-                }
-            }
-            
-            if (!generatedImgB64) {
-                 throw new Error("Image generation failed unexpectedly and produced no image.");
-            }
+            console.log(`✅ 画像生成完了 [H2 #${section.id}]`, {
+                h2Text: section.h2Text,
+                timestamp: new Date().toISOString()
+            });
 
             updateSection({ ...section, status: 'generating', generationStep: 'Finalizing image format...' });
             const finalImage = await ensure16x9(generatedImgB64, 1920, 1080);

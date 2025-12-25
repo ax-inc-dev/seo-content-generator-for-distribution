@@ -241,15 +241,8 @@ export class MultiAgentOrchestrator {
     console.log(`🔄 ${agent.name} 実行開始`);
     const startTime = Date.now();
 
-    // 出典関連は30分、他のWeb検索エージェントは10分、その他は5分
-    const timeout =
-      agent.name === "出典検索エージェント" ||
-      agent.name === "出典必要性判定エージェント"
-        ? 1800000 // 30分（1800秒）
-        : agent.name === "事例・ファクト検証エージェント" ||
-          agent.name === "固有名詞校閲エージェント"
-        ? 600000 // 10分（600秒）
-        : this.config.timeout || 300000; // デフォルト5分（300秒）
+    // BaseAgentと同じタイムアウト設定に統一（出典必要性判定のみ30分維持）
+    const timeout = this.getTimeoutForAgentType(agent.type);
 
     console.log(`⏰ ${agent.name} タイムアウト設定: ${timeout}ms`);
 
@@ -387,6 +380,33 @@ export class MultiAgentOrchestrator {
         status: "error",
         error: error.message,
       };
+    }
+  }
+
+  // BaseAgentと同じタイムアウト設定（出典必要性判定のみ30分維持）
+  private getTimeoutForAgentType(type: string): number {
+    switch (type) {
+      // 出典必要性判定は30分維持（現状通り）
+      case "source-requirement":
+        return 1800000; // 30分
+
+      // 以下はBaseAgentと同じ値
+      case "source-enhancement":
+        return 2400000; // 40分
+      case "legal":
+      case "facts-cases":
+      case "technical":
+        return 1200000; // 20分
+      case "proper-nouns":
+      case "numbers-stats":
+        return 900000; // 15分
+      case "dates-timeline":
+        return 720000; // 12分
+      case "citations":
+      case "company":
+        return 600000; // 10分
+      default:
+        return 900000; // 15分（安全マージン）
     }
   }
 

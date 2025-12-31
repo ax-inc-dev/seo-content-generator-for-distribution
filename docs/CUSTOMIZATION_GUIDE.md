@@ -45,7 +45,7 @@
 |----------------|---------|--------------|
 | サービス名 | 「当社サービス」と表示 | 自社のサービス名が表示される |
 | 会社名 | 「当社」と表示 | 自社の会社名が表示される |
-| 実績データ | **無効**（記事に挿入されない） | Google Driveから取得した実績が引用される |
+| 実績データ | Google Drive未設定なら無効 | Google Driveに登録した実績が引用される |
 | 記事内の画像 | 汎用画像 | 自社のブランドに合った画像 |
 | 出典URL | ランダム | 自社のnote記事やメディアを優先 |
 
@@ -70,7 +70,7 @@
    └─ ここで「サービス名」が使われる
    ↓
 4. 記事を執筆
-   ├─ ここで「自社実績データ」が引用される（有効化している場合のみ）
+   ├─ ここで「自社実績データ」が引用される（Google Drive設定時）
    └─ ここで「出典URL」の優先順位が適用される
    ↓
 5. 記事を校正
@@ -117,7 +117,7 @@ VITE_COMPANY_NAME=株式会社サンプル
 
 記事に「導入企業A社では○○%の削減を実現」のような実績データを入れたい場合の設定です。
 
-> **重要**: 実績データはデフォルトで**無効**になっています。有効化するには、データ登録後に「実績データの有効化/無効化」の手順も行ってください。
+> **ポイント**: 実績データはデフォルトで**有効**です。Google Driveを設定するだけで、すぐに記事に反映されます。
 
 ### 方法1: 設定ファイルを直接編集（おすすめ）
 
@@ -167,50 +167,40 @@ GoogleドライブでフォルダのURLを見ると `folders/` の後にIDが表
 
 ### 実績データの有効化/無効化
 
-**現在の設定:** 実績データはデフォルトで **無効** になっています。
+**現在の設定:** 実績データはデフォルトで **有効** になっています。
 
-記事に自社の実績事例を挿入したい場合は、以下の手順で有効化してください。
+Google Driveを設定するだけで、すぐに記事に実績データが挿入されます。
 
-#### 有効化する手順
+#### 使い方（デフォルト有効）
 
-1. `components/ArticleWriter.tsx` ファイルを開く
-2. 267行目付近の `generateArticleV3` 呼び出しを探す
-3. `useCompanyData: true` を追加：
-
-```typescript
-// 変更前
-const v3Result = await generateArticleV3({
-  outline: outlineMarkdown,
-  keyword: keyword,
-  targetAudience: actualOutline.targetAudience,
-  tone: "professional",
-  useGrounding: true,
-});
-
-// 変更後
-const v3Result = await generateArticleV3({
-  outline: outlineMarkdown,
-  keyword: keyword,
-  targetAudience: actualOutline.targetAudience,
-  tone: "professional",
-  useGrounding: true,
-  useCompanyData: true,  // ← この行を追加
-});
-```
-
-4. ファイルを保存
-
-#### 有効化時の注意点
+1. `.env` ファイルに `COMPANY_DATA_FOLDER_ID` を設定
+2. Google DriveにCSVファイル（`pdf_segments_index.csv`）をアップロード
+3. 記事を生成 → 実績データが自動で引用される
 
 | 項目 | 説明 |
 |------|------|
-| Google Drive連携 | 実績データはGoogle Drive APIから取得されます。`.env`に`COMPANY_DATA_FOLDER_ID`を設定してください |
-| API失敗時 | Google Drive APIが失敗した場合、実績データなしで記事が生成されます |
-| データ形式 | CSVファイル（`pdf_segments_index.csv`）をGoogle Driveにアップロードしてください |
+| Google Drive未設定時 | 実績データなしで記事が生成されます（エラーにはなりません） |
+| Google Drive設定済み | 実績データが自動で記事に挿入されます |
+| API失敗時 | 実績データなしで記事が生成されます |
 
-#### 無効化する（デフォルト）
+#### 無効化する手順
 
-`useCompanyData: true` の行を削除するか、`useCompanyData: false` に変更すると無効化されます。
+実績データを使いたくない場合は、`useCompanyData: false` を追加してください：
+
+1. `components/ArticleWriter.tsx` ファイルを開く
+2. 267行目付近の `generateArticleV3` 呼び出しを探す
+3. `useCompanyData: false` を追加：
+
+```typescript
+const v3Result = await generateArticleV3({
+  outline: outlineMarkdown,
+  keyword: keyword,
+  targetAudience: actualOutline.targetAudience,
+  tone: "professional",
+  useGrounding: true,
+  useCompanyData: false,  // ← この行を追加で無効化
+});
+```
 
 ### 上級者向け：最終校閲での実績データ活用
 
@@ -414,11 +404,11 @@ VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIs...（長い文字列）
 
 ### 実績データが反映されない
 
-1. `useCompanyData: true` を追加したか確認（STEP 2「実績データの有効化/無効化」参照）
-2. Google Driveの `COMPANY_DATA_FOLDER_ID` が正しいか確認
-3. ファイルを保存したか確認
+1. `.env` の `COMPANY_DATA_FOLDER_ID` が正しいか確認
+2. Google DriveにCSVファイルがアップロードされているか確認
+3. CSVのデータ形式が正しいか確認
 4. ツールを再起動
-5. データの形式が正しいか確認（カンマやカッコの閉じ忘れに注意）
+5. `useCompanyData: false` が設定されていないか確認（デフォルト有効のため、この設定があると無効になる）
 
 ### 画像が表示されない
 

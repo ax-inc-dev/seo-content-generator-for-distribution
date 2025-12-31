@@ -646,8 +646,8 @@ export async function generateArticleV3(
   try {
     // 自社データの取得（オプション）
     let companyDataText = "";
-    if (request.useCompanyData === true) {
-      // 明示的に指定された場合のみ使用
+    if (request.useCompanyData !== false) {
+      // デフォルトで有効（Google Drive設定時に自動で使用）
       try {
         console.log("\n🔄 [1/4] 自社実績データを取得中...");
         const dataStartTime = Date.now();

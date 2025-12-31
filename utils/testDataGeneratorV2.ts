@@ -77,15 +77,6 @@ export const testOutlinesV2 = {
           imageSuggestion: "5つの施策のチェックリスト"
         },
         {
-          heading: "SEO対策のプロフェッショナルサポートなら当社サービス",
-          subheadings: [
-            { text: "豊富な実績とAI活用の最新ノウハウ", writingNote: "企業向けAI研修やコンサルティング実績を紹介" },
-            { text: "無料相談で最適な戦略をご提案", writingNote: "まずは気軽に相談できることを強調" }
-          ],
-          writingNote: "自社サービスを自然に紹介",
-          imageSuggestion: "サービス紹介のイメージ図"
-        },
-        {
           heading: "まとめ：SEO対策で成果を出すための第一歩",
           subheadings: [],
           writingNote: "記事の要点をまとめ、読者が次に取るべきアクションを明確に提示",
@@ -195,16 +186,6 @@ export const testOutlinesV2 = {
           ],
           writingNote: "継続的な改善の重要性を強調",
           imageSuggestion: "効果測定ダッシュボードの例"
-        },
-        {
-          heading: "SEO対策の課題解決なら当社サービス",
-          subheadings: [
-            { text: "最新のAI技術を活用した効果的なSEO戦略", writingNote: "AIツール活用の優位性を説明" },
-            { text: "実績豊富な専門家による個別サポート", writingNote: "具体的な成功事例を交えて信頼性を訴求" },
-            { text: "無料相談で貴社に最適なプランをご提案", writingNote: "行動を促すCTAとして機能させる" }
-          ],
-          writingNote: "自然な流れで当社サービスのサービス価値を訴求",
-          imageSuggestion: "サービスの特徴を示すインフォグラフィック"
         },
         {
           heading: "まとめ：継続的なSEO対策で確実に成果を出す",
@@ -384,16 +365,6 @@ export const testOutlinesV2 = {
           imageSuggestion: "FAQ形式のアイコン付きレイアウト"
         },
         {
-          heading: "SEO対策の専門的サポートなら当社サービス",
-          subheadings: [
-            { text: "AIツール活用で効率的なSEO戦略を実現", writingNote: "ChatGPT/Claude活用による効率化を訴求" },
-            { text: "大手企業の実績多数！信頼できるパートナー", writingNote: "実績企業名を挙げて信頼性を高める" },
-            { text: "まずは無料相談から始めてみませんか", writingNote: "具体的な問い合わせ方法を案内" }
-          ],
-          writingNote: "プロフェッショナルサービスの価値を適切に訴求",
-          imageSuggestion: "実績企業のロゴ一覧"
-        },
-        {
           heading: "まとめ：SEO対策マスターへの道",
           subheadings: [],
           writingNote: "全体を総括し、読者が実践に移せるよう背中を押す",
@@ -488,16 +459,6 @@ function getBusinessEfficiencyTestOutline() {
           imageSuggestion: "業務効率化の進め方フローチャート"
         },
         {
-          heading: "業務効率化に成功した企業の事例3選",
-          subheadings: [
-            { text: "A社（マーケティング支援）：制作コスト10万円→0円、制作時間を大幅短縮", writingNote: "業務内製化により外注費を削減" },
-            { text: "B社（コンテンツ制作）：作業時間を96%以上削減", writingNote: "ツール活用により業務を大幅効率化" },
-            { text: "C社（広告運用）：業務時間66%削減、自動化を実現", writingNote: "業務フロー改善とツール導入の組み合わせ" }
-          ],
-          writingNote: "実際の企業事例を通じて、業務効率化の具体的なイメージを持ってもらう",
-          imageSuggestion: "導入企業の成果を示すビフォーアフター図"
-        },
-        {
           heading: "業務効率化ツールの選び方",
           subheadings: [
             { text: "自社の課題に合ったツールを選ぶポイント", writingNote: "機能、価格、サポート体制の確認ポイント" },
@@ -517,19 +478,9 @@ function getBusinessEfficiencyTestOutline() {
           imageSuggestion: "Q&Aのアイコン付きリスト"
         },
         {
-          heading: "業務効率化のご相談なら当社サービスへ",
-          subheadings: [
-            { text: "豊富な実績に基づく最適な提案", writingNote: "過去の支援実績と高い成功率を訴求" },
-            { text: "実践型のサポートで確実に成果を出す", writingNote: "A社、B社、C社などの具体的成果を引用" },
-            { text: "無料相談で貴社に最適なプランをご提案", writingNote: "30分の無料相談で、貴社の課題と解決策を診断" }
-          ],
-          writingNote: "業務効率化支援の実績と当社サービスの強みを訴求",
-          imageSuggestion: "当社サービスのサービス概要図"
-        },
-        {
           heading: "まとめ：業務効率化で生産性向上を実現しよう",
           subheadings: [],
-          writingNote: "本記事の重要ポイントを振り返り、業務効率化の価値を再確認。まずは現状分析から始めることを推奨。無料相談への誘導",
+          writingNote: "本記事の重要ポイントを振り返り、業務効率化の価値を再確認。まずは現状分析から始めることを推奨",
           imageSuggestion: "記事のポイントまとめ図"
         }
       ],

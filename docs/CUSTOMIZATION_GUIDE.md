@@ -45,7 +45,7 @@
 |----------------|---------|--------------|
 | サービス名 | 「当社サービス」と表示 | 自社のサービス名が表示される |
 | 会社名 | 「当社」と表示 | 自社の会社名が表示される |
-| 実績データ | サンプルデータ（A社、B社など） | 実際のクライアント実績が引用される |
+| 実績データ | **無効**（記事に挿入されない） | Google Driveから取得した実績が引用される |
 | 記事内の画像 | 汎用画像 | 自社のブランドに合った画像 |
 | 出典URL | ランダム | 自社のnote記事やメディアを優先 |
 
@@ -70,7 +70,7 @@
    └─ ここで「サービス名」が使われる
    ↓
 4. 記事を執筆
-   ├─ ここで「自社実績データ」が引用される
+   ├─ ここで「自社実績データ」が引用される（有効化している場合のみ）
    └─ ここで「出典URL」の優先順位が適用される
    ↓
 5. 記事を校正
@@ -117,6 +117,8 @@ VITE_COMPANY_NAME=株式会社サンプル
 
 記事に「導入企業A社では○○%の削減を実現」のような実績データを入れたい場合の設定です。
 
+> **重要**: 実績データはデフォルトで**無効**になっています。有効化するには、データ登録後に「実績データの有効化/無効化」の手順も行ってください。
+
 ### 方法1: 設定ファイルを直接編集（おすすめ）
 
 1. `services/companyMasterData.ts` ファイルを開く
@@ -162,6 +164,110 @@ COMPANY_DATA_FOLDER_ID=ここにGoogleドライブのフォルダID
 **フォルダIDの見つけ方:**
 GoogleドライブでフォルダのURLを見ると `folders/` の後にIDが表示されます。
 例: `https://drive.google.com/drive/folders/1ABC123xyz` → `1ABC123xyz`
+
+### 実績データの有効化/無効化
+
+**現在の設定:** 実績データはデフォルトで **無効** になっています。
+
+記事に自社の実績事例を挿入したい場合は、以下の手順で有効化してください。
+
+#### 有効化する手順
+
+1. `components/ArticleWriter.tsx` ファイルを開く
+2. 267行目付近の `generateArticleV3` 呼び出しを探す
+3. `useCompanyData: true` を追加：
+
+```typescript
+// 変更前
+const v3Result = await generateArticleV3({
+  outline: outlineMarkdown,
+  keyword: keyword,
+  targetAudience: actualOutline.targetAudience,
+  tone: "professional",
+  useGrounding: true,
+});
+
+// 変更後
+const v3Result = await generateArticleV3({
+  outline: outlineMarkdown,
+  keyword: keyword,
+  targetAudience: actualOutline.targetAudience,
+  tone: "professional",
+  useGrounding: true,
+  useCompanyData: true,  // ← この行を追加
+});
+```
+
+4. ファイルを保存
+
+#### 有効化時の注意点
+
+| 項目 | 説明 |
+|------|------|
+| Google Drive連携 | 実績データはGoogle Drive APIから取得されます。`.env`に`COMPANY_DATA_FOLDER_ID`を設定してください |
+| API失敗時 | Google Drive APIが失敗した場合、実績データなしで記事が生成されます |
+| データ形式 | CSVファイル（`pdf_segments_index.csv`）をGoogle Driveにアップロードしてください |
+
+#### 無効化する（デフォルト）
+
+`useCompanyData: true` の行を削除するか、`useCompanyData: false` に変更すると無効化されます。
+
+### 上級者向け：最終校閲での実績データ活用
+
+最終校閲エージェントで自社実績データを参照させたい場合の設定です。
+
+#### 修正ファイル
+
+`services/finalProofreadingAgents/FactsCasesAgent.ts`
+
+#### 現状の設定
+
+37-40行目に「サンプル実績データ」が設定されています：
+
+```typescript
+【サンプル実績データ】
+- A社: マーケティング支援企業、LP制作の内製化を実現
+- B社: Webマーケティング企業、原稿執筆時間大幅削減
+- C社: 製造業、業務自動化を実現
+```
+
+#### 修正方法
+
+このサンプルデータを自社の実績データに置き換えてください：
+
+```typescript
+【自社実績データ（検証時の参照用）】
+- 導入企業A様：〇〇業界、△△を実現
+- 導入企業B様：〇〇業界、△△を実現
+- 導入企業C様：〇〇業界、△△を実現
+```
+
+#### 実績データを使わない場合
+
+サンプル実績データのセクション（37-40行目）を削除してください：
+
+```typescript
+// 削除前
+【検証項目】
+...
+5. 統計データの出典確認
+
+【サンプル実績データ】
+- A社: マーケティング支援企業、LP制作の内製化を実現
+- B社: Webマーケティング企業、原稿執筆時間大幅削減
+- C社: 製造業、業務自動化を実現
+
+【出力形式】
+
+// 削除後
+【検証項目】
+...
+5. 統計データの出典確認
+
+【出力形式】
+```
+
+このように設定することで、最終校閲時に「この実績データは自社のものなので正確」と判定されるようになります。
 
 ---
 
@@ -308,9 +414,11 @@ VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIs...（長い文字列）
 
 ### 実績データが反映されない
 
-1. ファイルを保存したか確認
-2. ツールを再起動
-3. データの形式が正しいか確認（カンマやカッコの閉じ忘れに注意）
+1. `useCompanyData: true` を追加したか確認（STEP 2「実績データの有効化/無効化」参照）
+2. Google Driveの `COMPANY_DATA_FOLDER_ID` が正しいか確認
+3. ファイルを保存したか確認
+4. ツールを再起動
+5. データの形式が正しいか確認（カンマやカッコの閉じ忘れに注意）
 
 ### 画像が表示されない
 

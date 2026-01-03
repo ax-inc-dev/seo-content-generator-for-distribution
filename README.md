@@ -110,7 +110,7 @@ npm run dev
 
 ```bash
 cd server
-node scraping-server.js
+node scraping-server-full.js
 ```
 
 → `http://localhost:3001/` で起動します

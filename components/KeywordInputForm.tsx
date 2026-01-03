@@ -192,7 +192,7 @@ const KeywordInputForm: React.FC<KeywordInputFormProps> = ({
           <button
             type="submit"
             disabled={isLoading}
-            className={`w-full sm:w-auto flex items-center justify-center px-6 py-3.5 font-bold rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white transition-all duration-200 ease-in-out disabled:bg-gray-300 disabled:cursor-not-allowed transform hover:scale-105 disabled:scale-100 shadow-md ${
+            className={`w-full sm:w-auto flex items-center justify-center px-6 py-3.5 font-bold rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white transition-all duration-200 ease-in-out disabled:bg-gray-300 disabled:cursor-not-allowed transform hover:scale-105 disabled:scale-100 shadow-md whitespace-nowrap ${
               isFullAutoMode
                 ? "bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 text-white hover:from-blue-600 hover:via-indigo-600 hover:to-purple-600 focus:ring-blue-500"
                 : "bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 focus:ring-blue-500"
@@ -223,7 +223,7 @@ const KeywordInputForm: React.FC<KeywordInputFormProps> = ({
                 {isFullAutoMode ? "自動実行中..." : "分析中..."}
               </>
             ) : (
-              <>{isFullAutoMode ? "フル自動で開始" : "構成 Ver.2"}</>
+              <>{isFullAutoMode ? "フル自動で開始" : "構成"}</>
             )}
           </button>
         )}

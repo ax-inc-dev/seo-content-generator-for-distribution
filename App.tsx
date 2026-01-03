@@ -1376,12 +1376,6 @@ const App: React.FC = () => {
         {/* ツールボタン */}
         <div className="flex gap-2 sm:gap-3 justify-center flex-wrap">
           <button
-            onClick={() => setCurrentPage("factcheck")}
-            className="px-4 py-2 bg-white border border-gray-200 text-gray-700 hover:border-blue-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200 text-sm font-medium shadow-sm"
-          >
-            ファクトチェック
-          </button>
-          <button
             onClick={() => handleSpreadsheetModeWithRetry()}
             disabled={isLoading || isProcessingQueue}
             className="px-4 py-2 bg-blue-500 text-white hover:bg-blue-600 rounded-lg transition-all duration-200 text-sm font-medium shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"

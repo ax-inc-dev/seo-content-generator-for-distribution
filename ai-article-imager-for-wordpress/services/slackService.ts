@@ -19,7 +19,7 @@ class SlackService {
   private readonly SLACK_NOTIFY_URL = `${
     import.meta.env.VITE_API_URL || "http://localhost:3001/api"
   }/slack-notify`;
-  private readonly MENTION_USER_ID = "UNNNLAAHG"; // 中川さんのユーザーID
+  private readonly MENTION_USER_ID = import.meta.env.VITE_SLACK_MENTION_USER_ID || ""; // 環境変数から取得
 
   /**
    * Slack通知を送信
@@ -97,7 +97,7 @@ class SlackService {
   }
 
   /**
-   * WordPress入稿完了通知（中川さん宛メンション付き）
+   * WordPress入稿完了通知（メンション付き）
    */
   async notifyWordPressPostComplete(data: {
     title: string;

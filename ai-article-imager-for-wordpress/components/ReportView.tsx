@@ -346,7 +346,7 @@ export const ReportView: React.FC<ReportViewProps> = ({
         link,
       });
 
-      // WordPress投稿完了をSlackに通知（中川さん宛メンション付き）
+      // WordPress投稿完了をSlackに通知（設定されたユーザー宛メンション付き）
       try {
         const uploadedSectionsCount = uploadedSections.size;
         await slackService.notifyWordPressPostComplete({

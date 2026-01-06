@@ -191,6 +191,7 @@ const App: React.FC = () => {
       setQueueActive(false);
       setIsProcessingQueue(false);
       setCurrentSpreadsheetRow(null);
+      setIsFullAutoMode(false); // Keep-alive停止
       setIsWaitingForServerRecovery(false);
       setRecoveryAttempts(0);
       setLastFailedKeyword(null);
@@ -801,6 +802,7 @@ const App: React.FC = () => {
       } finally {
         setIsLoading(false);
         setIsAutoRunning(false);
+        setIsFullAutoMode(false); // Keep-alive停止
 
         // キュー実行中の場合、次のキーワードを起動（一時的に無効化）
         // 画像生成エージェントからのARTICLE_COMPLETEDメッセージを待つため
@@ -1802,6 +1804,7 @@ const App: React.FC = () => {
               // 自動実行フラグをリセット
               setIsAutoRunning(false);
               setAutoArticleWriter(false);
+              setIsFullAutoMode(false); // Keep-alive停止
 
               // ArticleWriterは開いたままにして、結果を確認できるようにする
               console.log(

@@ -122,7 +122,7 @@ ${competitorResearch ? '- 推奨文字数は競合分析に基づいて設定し
     
     // Gemini Pro モデルを使用
     const model = genAI.getGenerativeModel({ 
-      model: "gemini-2.0-flash-exp",
+      model: "gemini-2.5-flash",
       generationConfig: {
         temperature: 0.7,
         maxOutputTokens: 8192,

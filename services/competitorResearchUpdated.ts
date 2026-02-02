@@ -86,7 +86,7 @@ export const generateCompetitorResearch = async (keyword: string): Promise<Compe
     console.log('Starting competitor research for keyword:', keyword);
     
     const model = genAI.getGenerativeModel({ 
-      model: "gemini-2.0-flash-exp",
+      model: "gemini-2.5-flash",
       generationConfig: {
         temperature: 0.7,
         maxOutputTokens: 8192,

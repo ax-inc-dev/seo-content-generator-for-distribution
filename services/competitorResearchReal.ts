@@ -105,7 +105,7 @@ export const generateCompetitorResearch = async (
     console.log("Starting real competitor research for:", keyword);
 
     const model = genAI.getGenerativeModel({
-      model: "gemini-2.0-flash-exp",
+      model: "gemini-2.5-flash",
       tools: [
         {
           googleSearch: {},

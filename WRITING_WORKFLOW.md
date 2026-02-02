@@ -81,7 +81,7 @@
 ### Phase 4-A: 標準生成（一括方式）
 ```
 7. Gemini API呼び出し
-   - モデル: gemini-2.0-flash-exp
+   - モデル: gemini-2.5-flash
    - temperature: 0.7
    - maxOutputTokens: 60000
    

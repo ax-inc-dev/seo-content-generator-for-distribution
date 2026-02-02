@@ -13,8 +13,9 @@ npm run dev
 
 ### 2. スクレイピングサーバーの起動と確認（必須）
 ```bash
-# 起動コマンド（npm run serverは不安定なので直接起動推奨）
-cd server && node scraping-server.js
+# 起動（どちらでもOK）
+npm run server
+# または: cd server && node scraping-server.js
 
 # 別ターミナルで必ず確認すること：
 curl http://localhost:3001/api/health
@@ -22,9 +23,9 @@ curl http://localhost:3001/api/health
 ```
 
 ### ⚠️ よくある問題と対処法
-1. **`npm run server`が一瞬で終了する**
-   - 原因: npm scriptの問題
-   - 対処: `cd server && node scraping-server.js`を直接実行
+1. **2つのプロセスをまとめて起動したい**
+   - 推奨: `bash ./start.sh`
+   - `npm run start` は環境によってバックグラウンド起動が不安定なことがあるため、`start.sh` か「別ターミナルで `npm run dev` / `npm run server`」を推奨
 
 2. **「Puppeteer not available」エラー**
    - 原因: スクレイピングサーバーが起動していない

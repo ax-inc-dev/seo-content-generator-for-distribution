@@ -1,11 +1,13 @@
 {
-  "name": "scraping-server-full",
+  "name": "scraping-server",
   "version": "1.0.0",
-  "description": "High-performance web scraping server with Puppeteer",
-  "main": "scraping-server-full.js",
+  "description": "Web scraping + utility API server (Puppeteer/Google APIs)",
+  "main": "scraping-server.js",
   "scripts": {
-    "start": "node scraping-server-full.js",
-    "dev": "nodemon scraping-server-full.js"
+    "start": "node scraping-server.js",
+    "dev": "nodemon scraping-server.js",
+    "start:full": "node scraping-server-full.js",
+    "dev:full": "nodemon scraping-server-full.js"
   },
   "dependencies": {
     "@sparticuz/chromium": "^126.0.0",

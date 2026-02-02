@@ -1,38 +1,14 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import type { SeoOutline, GroundingChunk } from "../types";
 
-// Enhanced debug logging for environment variables
-console.log("=== Environment Variable Debug ===");
-console.log("- GEMINI_API_KEY exists:", !!process.env.GEMINI_API_KEY);
-console.log(
-  "- GEMINI_API_KEY value:",
-  process.env.GEMINI_API_KEY
-    ? `${process.env.GEMINI_API_KEY.substring(0, 10)}...`
-    : "NOT FOUND"
-);
-console.log(
-  "- GEMINI_API_KEY length:",
-  process.env.GEMINI_API_KEY?.length || 0
-);
-console.log(
-  "- All env keys with API:",
-  Object.keys(process.env).filter(
-    (k) => k.includes("API") || k.includes("GEMINI")
-  )
-);
-
 const apiKey =
   import.meta.env.VITE_GEMINI_API_KEY || process.env.GEMINI_API_KEY;
 
 if (!apiKey || apiKey === "" || apiKey === "undefined") {
-  console.error("❌ API key not found or invalid!");
-  console.error("Current value:", apiKey);
   throw new Error("GEMINI_API_KEY not set. Please check your .env file.");
 }
 
 if (apiKey.includes("PLACEHOLDER") || apiKey.length < 30) {
-  console.error("❌ API key appears to be a placeholder or invalid!");
-  console.error("Current API key:", apiKey);
   throw new Error("Please set a valid GEMINI_API_KEY in your .env file.");
 }
 

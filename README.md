@@ -42,6 +42,15 @@
 
 ### セットアップ手順
 
+#### AIドリブンセットアップ（Cursor / Claude Code 推奨）
+
+このリポジトリを **Cursor / Claude Code** で開き、AIに以下を依頼すると最短です（下のステップでも説明します）。
+
+- `.env.example` をコピーして `.env` を作成し、必要な環境変数を埋める  
+  - ※ `VITE_` で始まる値は **フロント（ブラウザ）に埋め込まれます**。公開デプロイ時は秘匿値を `VITE_` に入れないでください。
+- `npm install` を実行
+- `bash ./start.sh` で起動して、ブラウザで動作確認
+
 #### ステップ1: 必要なファイルをダウンロード
 
 1. このプロジェクトのフォルダを開きます
@@ -78,11 +87,24 @@ GOOGLE_API_KEY=ここにGoogle APIキーを貼り付け
 VITE_GOOGLE_API_KEY=ここにも同じキーを貼り付け
 GOOGLE_SEARCH_ENGINE_ID=ここに検索エンジンIDを貼り付け
 VITE_GOOGLE_SEARCH_ENGINE_ID=ここにも同じIDを貼り付け
+
+# バックエンド認証（競合調査/スプレッドシート/Slack/WordPress連携などで使用）
+# 例）openssl rand -hex 32 で生成した値を貼り付け
+INTERNAL_API_KEY=任意の長いランダム文字列
+VITE_INTERNAL_API_KEY=ここにも同じ値を貼り付け
 ```
 
 3. ファイルを保存して閉じます
 
 #### ステップ3: ツールを起動する
+
+（推奨 / Mac・Linux）まずはワンコマンドで起動できます：
+
+```bash
+bash ./start.sh
+```
+
+> Windowsの場合や、うまく動かない場合は下の「ウィンドウ1/2（+3）」で起動してください。
 
 **記事作成だけなら → 2つのウィンドウを開く**
 
@@ -109,8 +131,7 @@ npm run dev
 **新しい**コマンドプロンプトを開いて（ウィンドウ1は閉じない）：
 
 ```bash
-cd server
-node scraping-server-full.js
+npm run server
 ```
 
 → `http://localhost:3001/` で起動します
@@ -152,17 +173,20 @@ npm run dev
 **解決方法**: 別のコマンドプロンプトで以下を実行してください
 
 ```bash
-cd server
-node scraping-server-full.js
+npm run server
 ```
 
 ### バックエンドサーバー（競合調査）が起動しない
 
-**解決方法**: `npm run server` ではなく、直接起動してください
+**解決方法**: `npm start`（バックグラウンド実行）が環境によって不安定なことがあります。以下のいずれかで起動してください。
 
 ```bash
-cd server
-node scraping-server-full.js
+# 推奨（Mac・Linux）
+bash ./start.sh
+
+# もしくは、別々のターミナルで起動
+npm run server
+npm run dev
 ```
 
 ### APIキーのエラーが出る

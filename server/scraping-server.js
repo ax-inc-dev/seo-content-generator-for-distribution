@@ -1055,18 +1055,9 @@ app.post("/api/wordpress/upload-image", async (req, res) => {
     process.env.WP_APP_PASSWORD || process.env.VITE_WP_APP_PASSWORD;
 
   console.log("🔧 WordPress設定確認:");
-  console.log(
-    "  - wpBaseUrl:",
-    wpBaseUrl ? `${wpBaseUrl.substring(0, 20)}...` : "未設定"
-  );
-  console.log(
-    "  - wpUsername:",
-    wpUsername ? `${wpUsername.substring(0, 3)}***` : "未設定"
-  );
-  console.log(
-    "  - wpAppPassword:",
-    wpAppPassword ? `${wpAppPassword.substring(0, 4)}****` : "未設定"
-  );
+  console.log("  - wpBaseUrl:", wpBaseUrl ? "設定済み" : "未設定");
+  console.log("  - wpUsername:", wpUsername ? "設定済み" : "未設定");
+  console.log("  - wpAppPassword:", wpAppPassword ? "設定済み" : "未設定");
 
   if (!wpBaseUrl || !wpUsername || !wpAppPassword) {
     console.error("❌ WordPress設定が不完全です");
@@ -1341,9 +1332,6 @@ const server = app.listen(PORT, "0.0.0.0", () => {
   // 認証設定の確認
   if (process.env.INTERNAL_API_KEY) {
     console.log("✅ 認証: 有効");
-    console.log(
-      `   - API Key: ${process.env.INTERNAL_API_KEY.substring(0, 4)}****`
-    );
   } else {
     console.log("⚠️  認証: 無効（INTERNAL_API_KEYが未設定）");
   }

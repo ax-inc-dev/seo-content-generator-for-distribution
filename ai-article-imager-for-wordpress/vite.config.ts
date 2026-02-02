@@ -25,7 +25,9 @@ export default defineConfig(({ mode }) => {
         'import.meta.env.VITE_API_URL': JSON.stringify(env.VITE_API_URL || 'http://localhost:3001/api'),
         'import.meta.env.VITE_INTERNAL_API_KEY': JSON.stringify(env.VITE_INTERNAL_API_KEY),
         // WordPress設定（認証情報はサーバー側で管理、デフォルト値のみ）
-        'import.meta.env.VITE_WP_DEFAULT_POST_STATUS': JSON.stringify(env.VITE_WP_DEFAULT_POST_STATUS || 'draft')
+        'import.meta.env.VITE_WP_DEFAULT_POST_STATUS': JSON.stringify(
+          env.WP_DEFAULT_POST_STATUS || env.VITE_WP_DEFAULT_POST_STATUS || 'draft'
+        )
       },
       resolve: {
         alias: {

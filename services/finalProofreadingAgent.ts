@@ -406,14 +406,7 @@ export class FinalProofreadingAgent {
   private systemPrompt: string;
   
   constructor(model: keyof typeof GPT5_MODELS = 'MINI') {
-    // デバッグ: 環境変数の状態を確認
     const apiKey = OPENAI_API_KEY || process.env.OPENAI_API_KEY || process.env.VITE_OPENAI_API_KEY;
-    console.log('🔍 API Key チェック:', {
-      OPENAI_API_KEY: OPENAI_API_KEY?.substring(0, 20),
-      'process.env.OPENAI_API_KEY': process.env.OPENAI_API_KEY?.substring(0, 20),
-      'process.env.VITE_OPENAI_API_KEY': process.env.VITE_OPENAI_API_KEY?.substring(0, 20),
-      apiKey: apiKey?.substring(0, 20)
-    });
     
     if (!apiKey) {
       throw new Error('⚠️ OpenAI APIキーが設定されていません。.envファイルを確認してください。');

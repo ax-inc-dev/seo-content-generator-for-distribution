@@ -16,9 +16,10 @@ const __dirname = path.dirname(__filename);
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 // 環境変数から認証情報を取得
-const WP_BASE_URL = process.env.VITE_WP_BASE_URL;
-const WP_USERNAME = process.env.VITE_WP_USERNAME;
-const WP_APP_PASSWORD = process.env.VITE_WP_APP_PASSWORD;
+const WP_BASE_URL = process.env.WP_BASE_URL || process.env.VITE_WP_BASE_URL;
+const WP_USERNAME = process.env.WP_USERNAME || process.env.VITE_WP_USERNAME;
+const WP_APP_PASSWORD =
+  process.env.WP_APP_PASSWORD || process.env.VITE_WP_APP_PASSWORD;
 
 console.log('=== WordPress接続テスト ===\n');
 

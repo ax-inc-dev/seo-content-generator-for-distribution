@@ -30,18 +30,6 @@ export const SpreadsheetDataViewer: React.FC<SpreadsheetDataViewerProps> = ({
     setLoading(true);
     setError(null);
 
-    // デバッグ用ログ
-    console.log("🔍 SpreadsheetDataViewer Debug:");
-    console.log(
-      "  VITE_INTERNAL_API_KEY:",
-      import.meta.env.VITE_INTERNAL_API_KEY
-    );
-    console.log(
-      "  APIキーの長さ:",
-      import.meta.env.VITE_INTERNAL_API_KEY?.length
-    );
-    console.log("  apiBaseUrl:", apiBaseUrl);
-
     try {
       const apiKey = import.meta.env.VITE_INTERNAL_API_KEY;
 
@@ -53,7 +41,6 @@ export const SpreadsheetDataViewer: React.FC<SpreadsheetDataViewerProps> = ({
 
       console.log("📤 APIリクエスト送信中...");
       console.log("  URL:", `${apiBaseUrl}/api/spreadsheet-mode/keywords`);
-      console.log("  APIキー（最初の8文字）:", apiKey.substring(0, 8) + "...");
 
       const response = await fetch(
         `${apiBaseUrl}/api/spreadsheet-mode/keywords`,

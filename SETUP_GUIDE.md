@@ -1,5 +1,9 @@
 # 🔧 SEOコンテンツ生成ツール セットアップガイド
 
+> **NOTE**  
+> - `VITE_` で始まる環境変数はフロントエンド（ブラウザ）に埋め込まれます。  
+> - 公開デプロイする場合は、APIキー/パスワード/Webhook等の秘匿値を `VITE_` に入れないでください。
+
 ## 必要な認証情報チェックリスト
 
 ### 1. 🔴 必須（これがないと動かない）
@@ -18,6 +22,17 @@
 ---
 
 ### 2. 🟡 推奨（機能が制限される）
+
+#### 内部APIキー（バックエンドAPI保護）
+- [ ] **INTERNAL_API_KEY**
+  - 用途: バックエンド（競合調査/スプレッドシート/Slack/WordPress連携等）へのアクセス制御
+  - 設定場所: `.env`ファイル
+  - 設定方法:
+    ```
+    INTERNAL_API_KEY=（任意の長いランダム文字列）
+    VITE_INTERNAL_API_KEY=（同じ値）
+    ```
+  - 例: `openssl rand -hex 32` で生成
 
 #### Custom Search API（競合分析の精度向上）
 - [ ] **Google APIキー**
@@ -57,9 +72,9 @@
     2. ユーザー → プロフィール
     3. アプリケーションパスワードセクション
     4. 新しいアプリケーションパスワードを生成
-  - 設定場所: 今後`.env`に追加予定
+  - 設定場所: `.env`ファイル
   ```
-  WP_URL=https://yourdomain.com
+  WP_BASE_URL=https://yourdomain.com
   WP_USERNAME=your_username
   WP_APP_PASSWORD=xxxx xxxx xxxx xxxx
   ```
@@ -72,6 +87,10 @@
 ---
 
 ## 📝 セットアップ手順
+
+### AIドリブンセットアップ（Cursor / Claude Code 推奨）
+- Cursor / Claude Codeでリポジトリを開く
+- AIに「`.env.example` から `.env` を作成して、必要な環境変数を埋める」「`npm install`→起動→動作確認」まで依頼する
 
 ### ステップ1: 最低限の動作確認
 1. Gemini APIキーを取得

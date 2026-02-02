@@ -34,7 +34,6 @@ interface NotificationData {
 }
 
 class SlackNotificationService {
-  private webhookUrl: string;
   private enabled: boolean;
   private startTime: number = 0;
   private stepTimes: Map<string, number> = new Map();
@@ -42,17 +41,9 @@ class SlackNotificationService {
   private useMention: boolean = true; // メンション使用フラグ
 
   constructor() {
-    this.webhookUrl = import.meta.env.VITE_SLACK_WEBHOOK_URL || "";
     this.enabled = import.meta.env.VITE_ENABLE_SLACK_NOTIFICATIONS === "true";
     this.mentionUserId = import.meta.env.VITE_SLACK_MENTION_USER_ID || ""; // 環境変数から取得
     this.useMention = import.meta.env.VITE_SLACK_USE_MENTION !== "false"; // デフォルトtrue
-
-    if (!this.webhookUrl && this.enabled) {
-      console.warn(
-        "⚠️ Slack通知が有効になっていますが、Webhook URLが設定されていません"
-      );
-      this.enabled = false;
-    }
   }
 
   // メンション文字列を取得
@@ -74,13 +65,19 @@ class SlackNotificationService {
     try {
       // サーバー経由でSlack通知を送信（CORS回避）
       const apiKey = import.meta.env.VITE_INTERNAL_API_KEY;
+      if (!apiKey) {
+        console.warn(
+          "⚠️ Slack通知: VITE_INTERNAL_API_KEY が未設定のため送信できません"
+        );
+        return;
+      }
       const backendUrl =
         import.meta.env.VITE_BACKEND_URL || "http://localhost:3001";
       const response = await fetch(`${backendUrl}/api/slack-notify`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          ...(apiKey && { "x-api-key": apiKey }), // 認証ヘッダーを追加
+          "x-api-key": apiKey, // 認証ヘッダーを追加
         },
         body: JSON.stringify({ message }),
       });

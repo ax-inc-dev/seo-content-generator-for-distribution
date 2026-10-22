@@ -27,6 +27,11 @@ jobs:
       - run: npm run setup
       - run: npm ci
         working-directory: ai-article-imager-for-wordpress/image-generation-agent
+      - name: Reject critical dependency advisories
+        run: |
+          for directory in . server ai-article-imager-for-wordpress ai-article-imager-for-wordpress/image-generation-agent; do
+            (cd "$directory" && npm audit --audit-level=critical)
+          done
       - run: npm run test:distribution
       - run: npm run build
       - run: npm run build

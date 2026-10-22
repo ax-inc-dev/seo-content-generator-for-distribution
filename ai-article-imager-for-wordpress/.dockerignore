@@ -1,0 +1,23 @@
+# Keep local credentials and generated dependencies out of the build context.
+# Dockerfile build arguments still create the build-time .env explicitly.
+.git
+**/.git
+.claude
+.codex
+node_modules
+**/node_modules
+dist
+**/dist
+.env
+.env.*
+**/.env
+**/.env.*
+**/credentials*.json
+**/token*.json
+**/client_secret*.json
+**/service-account*.json
+**/application_default_credentials.json
+*.log
+**/*.log
+.DS_Store
+**/.DS_Store

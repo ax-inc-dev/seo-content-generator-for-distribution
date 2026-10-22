@@ -934,8 +934,8 @@ console.log("📊 環境変数チェック:");
 console.log("  - PORT:", PORT);
 console.log("  - NODE_ENV:", process.env.NODE_ENV);
 console.log(
-  "  - PUPPETEER_SKIP_CHROMIUM_DOWNLOAD:",
-  process.env.PUPPETEER_SKIP_CHROMIUM_DOWNLOAD
+  "  - PUPPETEER_SKIP_DOWNLOAD:",
+  process.env.PUPPETEER_SKIP_DOWNLOAD
 );
 console.log(
   "  - PUPPETEER_EXECUTABLE_PATH:",

@@ -1,10 +1,10 @@
 # 画像生成エージェント用 Dockerfile
-  FROM node:20-alpine AS builder
+  FROM node:24.22.1-alpine AS builder
 
   WORKDIR /app
 
   # 依存関係インストール
-  COPY package*.json ./
+  COPY package*.json check-node.cjs .npmrc ./
   RUN npm ci
 
   # ソースコードをコピー

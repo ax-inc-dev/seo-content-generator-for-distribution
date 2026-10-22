@@ -1,0 +1,15 @@
+.git
+node_modules
+**/node_modules
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*credentials*.json
+*service-account*.json
+dist
+**/dist
+release
+*.log
+.DS_Store

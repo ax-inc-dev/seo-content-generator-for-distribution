@@ -389,23 +389,18 @@ GCPコンソール右上の **Cloud Shellアイコン**（`>_`）をクリック
 
 #### 方法A: ZIPでアップロード（推奨）
 
-1. ローカルで `seo-content-generator` フォルダをZIPに圧縮
+1. 配布元で動作確認済みの `seo-content-generator-<コミットID>.zip` を受け取る（READMEの配布手順参照。フォルダ全体の圧縮やGit履歴の配布はしない）
 2. Cloud Shell右上の **「︙」メニュー** → **「アップロード」**
 3. ZIPファイルを選択
 4. アップロードが完了するまで待機
 5. アップロードが完了したら以下のコマンドを入力し、Cloud Shellで解凍：
 
 ```bash
-unzip seo-content-generator.zip
+unzip seo-content-generator-実際のコミットID.zip
 cd seo-content-generator
 ```
 
-#### 方法B: GitHubからクローン
-
-```bash
-git clone YOUR_REPOSITORY_URL
-cd seo-content-generator
-```
+配布ZIPには認証情報・ローカル設定・Git履歴を含めません。APIキーなどは受け渡し先で新規設定してください。ローカルで操作する場合はNode.js 24.22.1以上の24系LTSを使用してください。Cloud Run用Dockerも24.22.1に固定しています。バックエンドのChromeはlinux/amd64向けのため、ローカルでDockerビルドする場合は `--platform linux/amd64` を指定してください。
 
 ### 5.3 ファイル構成を確認
 
@@ -1076,12 +1071,7 @@ API [run.googleapis.com] not enabled
 npm error A complete log of this run can be found in...
 ```
 
-**解決方法**: `package-lock.json` を再生成
-
-```bash
-rm package-lock.json
-npm install
-```
+**解決方法**: まず `node -v` が24.22.1以上の24系であることと、配布ZIPに対応する `package.json`・`package-lock.json` の組み合わせを確認し、`npm ci` を再実行してください。クライアント側でロックファイルを削除して再生成せず、配布元へエラーを連絡してください。
 
 ---
 

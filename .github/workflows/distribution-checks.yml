@@ -1,0 +1,118 @@
+name: Distribution checks
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  application:
+    runs-on: ubuntu-latest
+    env:
+      PUPPETEER_SKIP_DOWNLOAD: 'true'
+      PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 'true'
+      # UI initialization fixture only; all external calls are blocked by the test.
+      GEMINI_API_KEY: local-ui-fixture-without-real-api-access
+      VITE_GEMINI_API_KEY: local-ui-fixture-without-real-api-access
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .node-version
+          cache: npm
+          cache-dependency-path: '**/package-lock.json'
+      - run: npm run setup
+      - run: npm ci
+        working-directory: ai-article-imager-for-wordpress/image-generation-agent
+      - run: npm run test:distribution
+      - run: npm run build
+      - run: npm run build
+        working-directory: ai-article-imager-for-wordpress
+      - run: npm run build
+        working-directory: ai-article-imager-for-wordpress/image-generation-agent
+      - run: npm run test:frontend
+        env:
+          PUPPETEER_EXECUTABLE_PATH: /usr/bin/google-chrome
+      - run: npm run check:distribution
+  reject-old-node:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: ['20.20.0', '25.6.0']
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '${{ matrix.node }}'
+      - name: Unsupported runtimes must stop before installation/startup
+        shell: bash
+        run: |
+          for directory in . server ai-article-imager-for-wordpress ai-article-imager-for-wordpress/image-generation-agent; do
+            if node "$directory/check-node.cjs"; then exit 1; fi
+          done
+          if node server/scraping-server.js; then exit 1; fi
+          if node server/scraping-server-full.js; then exit 1; fi
+          if npm start; then exit 1; fi
+  secrets:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Scan current distribution files (not historical commits)
+        shell: bash
+        run: |
+          curl -fsSL https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_linux_x64.tar.gz -o "$RUNNER_TEMP/gitleaks.tar.gz"
+          echo '551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb  '"$RUNNER_TEMP/gitleaks.tar.gz" | sha256sum -c -
+          tar -xzf "$RUNNER_TEMP/gitleaks.tar.gz" -C "$RUNNER_TEMP" gitleaks
+          "$RUNNER_TEMP/gitleaks" dir . --redact --no-banner
+  containers:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        component: [frontend, backend, image]
+        include:
+          - component: frontend
+            context: .
+          - component: backend
+            context: server
+          - component: image
+            context: ai-article-imager-for-wordpress
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - run: docker build --platform linux/amd64 -t distribution-test '${{ matrix.context }}'
+      - name: Backend runtime and Chrome smoke test
+        if: matrix.component == 'backend'
+        shell: bash
+        run: |
+          docker run -d --name distribution-test -p 127.0.0.1:18080:8080 -e INTERNAL_API_KEY=container-test-only distribution-test
+          trap 'docker logs distribution-test; docker rm -f distribution-test' EXIT
+          for attempt in {1..60}; do
+            if curl -fsS http://127.0.0.1:18080/api/health > "$RUNNER_TEMP/health.json"; then break; fi
+            sleep 1
+          done
+          node -e 'const h = require(process.argv[1]); if (h.status !== "ok" || h.nodeVersion !== "24.22.1") process.exit(1)' "$RUNNER_TEMP/health.json"
+          docker exec distribution-test node -e 'require("puppeteer").launch({executablePath:process.env.PUPPETEER_EXECUTABLE_PATH,headless:"new",args:["--no-sandbox","--disable-setuid-sandbox"]}).then(async b=>{const p=await b.newPage();await p.setContent("<h2>smoke</h2>");if(await p.$eval("h2",e=>e.textContent)!=="smoke")throw Error("Chrome failed");await b.close()}).catch(e=>{console.error(e);process.exit(1)})'
+  distribution:
+    needs: [application, reject-old-node, secrets, containers]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .node-version
+      - run: npm run package:distribution
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: verified-distribution
+          path: release/*.zip
+          if-no-files-found: error

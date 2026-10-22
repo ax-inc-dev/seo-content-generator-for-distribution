@@ -1,3 +1,4 @@
+require('./check-node.cjs').assertSupported();
 // スクレイピングサーバー
 // 役割：URLを受け取って、実際のH2/H3タグを正確に取得する
 
@@ -766,6 +767,7 @@ app.post("/api/scrape-multiple", async (req, res) => {
 app.get("/api/health", (req, res) => {
   res.json({
     status: "ok",
+    nodeVersion: process.versions.node,
     message: "スクレイピングサーバーは正常に動作しています",
   });
 });

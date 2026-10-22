@@ -3,9 +3,9 @@ FROM node:24.22.1-bookworm-slim
 
 # Puppeteer用の依存関係をインストール
 RUN apt-get update \
-    && apt-get install -y wget gnupg \
-    && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
-    && sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' \
+    && apt-get install -y ca-certificates wget gnupg \
+    && wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /usr/share/keyrings/google-chrome.gpg \
+    && sh -c 'echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google-chrome.gpg] https://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' \
     && apt-get update \
     && apt-get install -y google-chrome-stable fonts-ipafont-gothic fonts-wqy-zenhei fonts-thai-tlwg fonts-kacst fonts-freefont-ttf libxss1 \
       --no-install-recommends \
@@ -18,15 +18,9 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV PUPPETEER_SKIP_DOWNLOAD=true
 
-# package.jsonをコピー
-COPY package.json ./
-
-# Cloud Runでは不要な@sparticuz/chromiumを除外してからインストール
-# (Render/Vercel用のパッケージで、Cloud RunではシステムChromeを使用)
-RUN node -e "const pkg=require('./package.json'); delete pkg.dependencies['@sparticuz/chromium']; require('fs').writeFileSync('package.json', JSON.stringify(pkg, null, 2));"
-
-# 依存関係をインストール
-RUN npm install --omit=dev --omit=optional
+# Lockfileに従ってインストール（Cloud Runはlinux/amd64を使用）
+COPY package*.json check-node.cjs .npmrc ./
+RUN PUPPETEER_SKIP_DOWNLOAD=true npm ci --omit=dev
 
 # アプリケーションのソースコードをコピー
 COPY . .

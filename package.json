@@ -8,7 +8,19 @@
     "build": "vite build",
     "preview": "vite preview",
     "server": "cd server && node scraping-server.js",
-    "start": "npm run server & npm run dev"
+    "start": "node scripts/start-local.cjs",
+    "check:node": "node check-node.cjs",
+    "predev": "node check-node.cjs",
+    "prebuild": "node check-node.cjs",
+    "prepreview": "node check-node.cjs",
+    "preserver": "node check-node.cjs",
+    "prestart": "node check-node.cjs",
+    "preinstall": "node check-node.cjs",
+    "setup": "node scripts/setup.cjs",
+    "test:distribution": "node --test tests/*.test.cjs",
+    "check:distribution": "node scripts/check-distribution.cjs",
+    "package:distribution": "node scripts/package-distribution.cjs",
+    "test:frontend": "node tests/frontend-smoke.cjs"
   },
   "dependencies": {
     "@google/generative-ai": "^0.21.0",
@@ -41,5 +53,8 @@
     "tsx": "^4.20.5",
     "typescript": "~5.8.2",
     "vite": "^6.2.0"
+  },
+  "engines": {
+    "node": ">=24.22.1 <25.0.0"
   }
 }

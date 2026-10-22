@@ -6,7 +6,12 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "check:node": "node check-node.cjs",
+    "predev": "node check-node.cjs",
+    "prebuild": "node check-node.cjs",
+    "prepreview": "node check-node.cjs",
+    "preinstall": "node check-node.cjs"
   },
   "dependencies": {
     "@google/genai": "^1.17.0",
@@ -24,5 +29,8 @@
     "tailwindcss": "^4.1.13",
     "typescript": "~5.8.2",
     "vite": "^6.2.0"
+  },
+  "engines": {
+    "node": ">=24.22.1 <25.0.0"
   }
 }

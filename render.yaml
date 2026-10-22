@@ -5,14 +5,16 @@ services:
     region: oregon
     plan: starter
     buildCommand: |
-      npm install && 
-      cd server && 
-      npm install && 
-      echo "Installing Puppeteer Chrome..." && 
-      npx puppeteer browsers install chrome && 
+      npm ci &&
+      cd server &&
+      npm ci &&
+      echo "Installing Puppeteer Chrome..." &&
+      npx puppeteer browsers install chrome &&
       echo "Chrome installation completed"
-    startCommand: cd server && node scraping-server.js
+    startCommand: npm run server
     envVars:
+      - key: NODE_VERSION
+        value: 24.22.1
       - key: NODE_ENV
         value: production
       - key: PUPPETEER_CACHE_DIR

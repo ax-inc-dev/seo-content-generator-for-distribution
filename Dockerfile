@@ -4,7 +4,7 @@
   WORKDIR /app
 
   # 依存関係インストール
-  COPY package*.json ./
+  COPY package*.json check-node.cjs .npmrc ./
   RUN npm ci
 
   # ソースコードをコピー

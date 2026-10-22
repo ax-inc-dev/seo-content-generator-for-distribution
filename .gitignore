@@ -38,3 +38,11 @@ dist-ssr
 *.sln
 *.sw?
 data/*-backup.json
+
+# Distribution artifacts and credentials
+release/
+*.pem
+*.key
+*credentials*.json
+*service-account*.json
+!.env.example

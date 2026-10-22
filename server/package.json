@@ -7,7 +7,13 @@
     "start": "node scraping-server.js",
     "dev": "nodemon scraping-server.js",
     "start:full": "node scraping-server-full.js",
-    "dev:full": "nodemon scraping-server-full.js"
+    "dev:full": "nodemon scraping-server-full.js",
+    "check:node": "node check-node.cjs",
+    "prestart": "node check-node.cjs",
+    "predev": "node check-node.cjs",
+    "prestart:full": "node check-node.cjs",
+    "predev:full": "node check-node.cjs",
+    "preinstall": "node check-node.cjs"
   },
   "dependencies": {
     "@sparticuz/chromium": "^126.0.0",
@@ -23,7 +29,7 @@
     "puppeteer-core": "^21.11.0"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=24.22.1 <25.0.0"
   },
   "keywords": [
     "scraping",

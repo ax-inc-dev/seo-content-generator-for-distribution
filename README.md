@@ -33,7 +33,7 @@
 
 | 必要なもの | 説明 | 入手先 |
 |-----------|------|--------|
-| Node.js | このツールを動かすために必要なソフト | [公式サイト](https://nodejs.org/)からダウンロード（v18以上） |
+| Node.js | このツールを動かすために必要なソフト | [公式サイト](https://nodejs.org/)からダウンロード（**24.22.1以上の24系LTS**） |
 | Gemini APIキー | AIが記事を書くために必要 | [Google AI Studio](https://aistudio.google.com/)で無料取得 |
 | Custom Search APIキー | 競合サイトを調べるために必要（※） | [Google Cloud Console](https://console.cloud.google.com/)で取得 |
 | カスタム検索エンジンID | 上記と一緒に使う（※） | [Programmable Search Engine](https://programmablesearchengine.google.com/)で作成 |
@@ -63,7 +63,7 @@
 
 - `.env.example` をコピーして `.env` を作成し、必要な環境変数を埋める  
   - ※ `VITE_` で始まる値は **フロント（ブラウザ）に埋め込まれます**。公開デプロイ時は秘匿値を `VITE_` に入れないでください。
-- `npm install` を実行
+- `node -v` が24.22.1以上の24系であることを確認し、`npm run setup` を実行
 - `bash ./start.sh` で起動して、ブラウザで動作確認
 
 #### ステップ1: 必要なファイルをダウンロード
@@ -77,10 +77,13 @@
 3. 以下を入力してEnterを押します：
 
 ```bash
-npm install
+node -v
+npm run setup
 ```
 
-これで必要なファイルが自動でダウンロードされます。数分かかることがあります。
+これでメインアプリ・サーバー・画像生成の必要なファイルを、固定済みの依存関係からまとめてインストールします。数分かかることがあります。
+
+Node.js 18・20・22・25・26系や24.22.0以前ではセットアップ・起動を停止します。公式サイトから24系LTSを導入し、ターミナルを開き直して `node -v` を再確認してください。nvmを使用している場合は `nvm install && nvm use` でも切り替えられます。将来の24系の修正版も利用できますが、別系列への自動切り替えは行いません。
 
 #### ステップ2: APIキーを設定する
 
@@ -160,7 +163,7 @@ npm run server
 
 ```bash
 cd ai-article-imager-for-wordpress
-npm install
+npm ci
 npm run dev
 ```
 
@@ -221,3 +224,13 @@ npm run dev
 
 - [デプロイマニュアル](docs/DEPLOY_MANUAL.md) - インターネット上で公開する方法
 - [カスタマイズガイド](docs/CUSTOMIZATION_GUIDE.md) - 自社の情報を反映させる方法
+
+## 新しく配布する際の確認（配布元の管理者向け）
+
+1. Node.js公式の修正版・LTSサポート状況を確認してください。この版の最低バージョンは **24.22.1** です。
+2. `npm run setup`、`npm run build`、`npm --prefix ai-article-imager-for-wordpress run build`、`npm run test:distribution` を実行してください。外部サービスの実動作は受け渡し先の設定で別途確認してください。
+3. `npm run check:distribution` とGitleaksによる現行ファイルの確認を行い、GitHubの「Distribution checks」が全て成功したコミットを配布対象にしてください。画像や資料は機械検出だけで判断せず、提供元固有の情報がないことを目視でも確認してください。
+4. コミット済みのクリーンな作業フォルダで `npm run package:distribution` を実行し、`release/seo-content-generator-<コミットID>.zip` のみを渡してください。手元のフォルダ全体や `.git`、`.env`、認証ファイル、`node_modules`、ビルド済みフォルダは渡さないでください。ZIPは追跡済みソースから作成され、Git履歴を含みません。配布先にはリポジトリのクローンを依頼しないでください。
+5. クライアント自身のAPIキー・Google Cloudプロジェクト・WordPress・Slack等を設定してください。提供元のアカウントや設定を流用しないでください。
+
+この修正は今後の新規配布向けです。既に渡したコピーや稼働中のサービスには自動反映されません。将来の修正版へ更新する際は、最低バージョン、ロックファイル、Docker、Render設定を揃えて再確認してください。

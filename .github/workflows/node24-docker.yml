@@ -1,0 +1,30 @@
+name: Node 24 Docker
+
+on:
+  push:
+    branches: [chore/node24-lts, master]
+    paths:
+      - Dockerfile
+      - .dockerignore
+      - server/**
+      - ai-article-imager-for-wordpress/**
+      - package.json
+      - package-lock.json
+      - .github/workflows/node24-docker.yml
+      - scripts/ci/node24-docker-smoke.py
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  native-amd64:
+    # Standard public-repository runner; no larger runners, caches or artifacts.
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Build and test the three images on native Linux amd64
+        run: python3 scripts/ci/node24-docker-smoke.py

@@ -1,3 +1,4 @@
+# Keep local credentials and generated dependencies out of the build context.
 .git
 node_modules
 **/node_modules
@@ -13,3 +14,16 @@ dist
 release
 *.log
 .DS_Store
+**/.git
+.claude
+.codex
+**/.env
+**/.env.*
+!**/.env.example
+**/*credentials*.json
+**/*service-account*.json
+**/token*.json
+**/client_secret*.json
+**/application_default_credentials.json
+**/*.log
+**/.DS_Store

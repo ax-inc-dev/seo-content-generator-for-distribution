@@ -17,7 +17,6 @@ WORKDIR /app
 # 本番環境フラグとPuppeteerのダウンロードをスキップ
 ENV NODE_ENV=production
 ENV PUPPETEER_SKIP_DOWNLOAD=true
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 
 # Lockfileに従ってインストール（Cloud Runはlinux/amd64を使用）
 COPY package*.json check-node.cjs .npmrc ./
@@ -27,7 +26,7 @@ RUN PUPPETEER_SKIP_DOWNLOAD=true npm ci --omit=dev
 COPY . .
 
 # Puppeteerがインストール済みのChromiumを使用するように設定
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
+ENV PUPPETEER_SKIP_DOWNLOAD=true \
     PUPPETEER_EXECUTABLE_PATH=/usr/bin/google-chrome-stable
 
 # ポートを環境変数から取得（Cloud Runのデフォルト）
